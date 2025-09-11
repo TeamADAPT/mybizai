@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MyBizAI - Data Mapping &amp; Preview</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root overflow-x-hidden" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex h-full w-full">
+<aside class="flex h-screen w-64 flex-col border-r border-[#282e39] bg-[#181a20] p-6">
+<div class="flex items-center gap-2">
+<img alt="MyBizAI Logo" class="h-8 w-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHhEhuVebD3CR6jlCNd1OvDlgTvPEURyPb0KRRfPajeNVCAyMNypMXNWfQ0SW-Nwb_yVNrHJABsOIqTEiQZiPH3Sh3Ozslz8WfYu5Co4owsBvB0a3vfM0dZTzCQQ92D2G19XnBN7ifQKaXJzMMcMV3ojHJKeCJvw-SbovSWz0H7myYq75Djy5CzVNEhtKJgTR0Izfq96EhHgWIJq303k8RxcHMMZyCAQ1U9xOW6XSsABF4kiacWsF0KmrvThvMvovN5-BAP_Xx8PM"/>
+<h1 class="text-xl font-bold text-white">MyBizAI</h1>
+</div>
+<nav class="mt-10 flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+            Dashboard
+          </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+            Ideas
+          </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+            Execution
+          </a>
+<a class="flex items-center gap-3 rounded-md bg-[var(--primary-color)] px-3 py-2 text-sm font-medium text-white" href="#">
+<span class="material-symbols-outlined">input</span>
+            Data Import
+          </a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">settings</span>
+            Settings
+          </a>
+</nav>
+<div class="mt-auto">
+<div class="flex items-center gap-3 border-t border-[#282e39] pt-4">
+<img alt="User avatar" class="h-9 w-9 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUU-JMADgDzxu0PGNfWBT2F9tvEdxfkD79-ScDyJno5UgVliRVSPFLy3tfuaA_04YSAyhJVexZLpi6hNrVAJdLlGBRnaZll3SM-304T_1d36q25LPmIkL8QGngv4Vh45mqr-RbsZ7FUS3h1B7m97U1LDJmZ5a21PAHUeJ-OLsRDuHWS_q503zunFewuPRQaUioe_muHy5OjcQvLpCt729ib8-m9viOW3idBqGFiGatLIqFxw41E6o4ZXWpS2KwRfOE_vrupX9Cymg"/>
+<div>
+<p class="text-sm font-medium text-white">Acme Co</p>
+<p class="text-xs text-gray-400">user@acme.co</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-8">
+<div class="flex flex-col gap-8">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<h1 class="text-3xl font-bold text-white">Data Mapping &amp; Preview</h1>
+<p class="text-gray-400">
+                Map your data fields to MyBizAI's data structure and preview the data before finalizing the import.
+              </p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-[#282e39] bg-[#181a20] px-4 py-2 text-sm font-medium text-white hover:bg-[#282e39]">
+<span class="material-symbols-outlined">arrow_back</span>
+                Back
+              </button>
+<button class="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-[var(--primary-color)] px-4 py-2 text-sm font-medium text-white hover:opacity-90">
+<span class="material-symbols-outlined">done</span>
+                Finalize Import
+              </button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+<div class="rounded-md border border-[#282e39] bg-[#181a20] p-4">
+<h2 class="text-lg font-semibold text-white">1. Data Source</h2>
+<p class="mb-4 text-sm text-gray-400">Select your data source and file.</p>
+<div class="flex flex-col gap-4">
+<label class="flex flex-col">
+<p class="pb-2 text-sm font-medium text-white">Source Type</p>
+<select class="form-select w-full resize-none overflow-hidden rounded-md border border-[#3b4354] bg-[#1c1f27] p-2.5 text-white placeholder:text-gray-400 focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]">
+<option selected="">CSV File</option>
+<option>Google Sheets</option>
+<option>Database</option>
+</select>
+</label>
+<label class="flex flex-col">
+<p class="pb-2 text-sm font-medium text-white">Uploaded File</p>
+<div class="flex items-center justify-between rounded-md border border-dashed border-[#3b4354] bg-[#1c1f27] p-2.5">
+<span class="text-sm text-white">customer_data.csv</span>
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</div>
+</label>
+</div>
+</div>
+<div class="rounded-md border border-[#282e39] bg-[#181a20] p-4">
+<h2 class="text-lg font-semibold text-white">2. Field Mapping</h2>
+<p class="mb-4 text-sm text-gray-400">Drag and drop to map fields.</p>
+<div class="flex flex-col gap-4">
+<label class="flex flex-col">
+<p class="pb-2 text-sm font-medium text-white">Mapping Template</p>
+<select class="form-select w-full resize-none overflow-hidden rounded-md border border-[#3b4354] bg-[#1c1f27] p-2.5 text-white placeholder:text-gray-400 focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]">
+<option>Create New Template</option>
+<option>Saved Template 1</option>
+</select>
+</label>
+<button class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-[var(--primary-color)] py-2 text-sm font-medium text-[var(--primary-color)] hover:bg-[var(--primary-color)] hover:text-white">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                  Automap Fields
+                </button>
+</div>
+</div>
+<div class="rounded-md border border-[#282e39] bg-[#181a20] p-4">
+<h2 class="text-lg font-semibold text-white">3. Discrepancies</h2>
+<p class="mb-4 text-sm text-gray-400">Address any mapping issues.</p>
+<div class="flex items-center gap-4 rounded-md bg-yellow-900/30 p-3">
+<span class="material-symbols-outlined text-yellow-400">warning</span>
+<p class="text-sm text-yellow-400">
+                  2 fields have potential data type mismatches.
+                </p>
+<a class="ml-auto text-sm font-medium text-white underline" href="#">Review</a>
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold text-white">Data Preview</h2>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white">
+<span class="material-symbols-outlined">undo</span>
+Undo Last Change
+</button>
+<button class="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white">
+<span class="material-symbols-outlined">restart_alt</span>
+Reset Mapping
+</button>
+</div>
+</div>
+<div class="overflow-x-auto rounded-md border border-[#282e39] bg-[#181a20]">
+<table class="min-w-full divide-y divide-[#282e39] text-sm">
+<thead class="bg-[#1c1f27]">
+<tr>
+<th class="px-6 py-3 text-left font-medium text-white" scope="col">
+                      MyBizAI Field
+                    </th>
+<th class="px-6 py-3 text-left font-medium text-white" scope="col">
+                      Imported Data Field
+                    </th>
+<th class="px-6 py-3 text-left font-medium text-white" scope="col">
+                      Data Type
+                    </th>
+<th class="px-6 py-3 text-left font-medium text-white" scope="col">
+                      Preview
+                    </th>
+<th class="px-1 py-3 text-center font-medium text-white" scope="col">
+                      Status
+                    </th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#282e39]">
+<tr>
+<td class="px-6 py-4 text-white">Customer ID</td>
+<td class="px-6 py-4 text-white">Customer_ID</td>
+<td class="px-6 py-4 text-gray-400">Integer</td>
+<td class="px-6 py-4 text-gray-400">12345</td>
+<td class="px-1 py-4 text-center">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-white">Customer Name</td>
+<td class="px-6 py-4 text-white">Customer_Name</td>
+<td class="px-6 py-4 text-gray-400">String</td>
+<td class="px-6 py-4 text-gray-400">Sophia Clark</td>
+<td class="px-1 py-4 text-center">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-white">Email</td>
+<td class="px-6 py-4 text-white">Email_Address</td>
+<td class="px-6 py-4 text-gray-400">String</td>
+<td class="px-6 py-4 text-gray-400">sophia.clark@example.com</td>
+<td class="px-1 py-4 text-center">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</td>
+</tr>
+<tr class="bg-yellow-900/20">
+<td class="px-6 py-4 text-white">Phone Number</td>
+<td class="px-6 py-4 text-white">Phone_Number</td>
+<td class="px-6 py-4 text-yellow-400">
+                      Integer
+                      <span class="text-xs text-gray-500">(Detected String)</span>
+</td>
+<td class="px-6 py-4 text-gray-400">555-123-4567</td>
+<td class="px-1 py-4 text-center">
+<span class="material-symbols-outlined text-yellow-400">warning</span>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-white">Purchase Date</td>
+<td class="px-6 py-4 text-white">Purchase_Date</td>
+<td class="px-6 py-4 text-gray-400">Date</td>
+<td class="px-6 py-4 text-gray-400">2024-01-15</td>
+<td class="px-1 py-4 text-center">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

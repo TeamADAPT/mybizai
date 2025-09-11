@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-[#111318]">
+<div class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root overflow-x-hidden" style="--select-button-svg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(157,166,185)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e'); font-family: &quot;Space Grotesk&quot;, &quot;Noto Sans&quot;, sans-serif;">
+<div class="flex h-full grow flex-col">
+<div class="flex flex-1">
+<aside class="flex w-64 flex-col gap-y-6 border-r border-gray-800 bg-[#111318] p-6">
+<div class="flex items-center gap-3">
+<img alt="MybizAI Logo" class="h-8 w-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG2D4dix6EIrenmy-msAatsgSx_ybzAikkhqoljt6D2L6C0kiPdm0lFWaKyLkc0gEEbYNODR2o6nTeKDDaIRUfh9KahIWd1UQq_dth-HYdQ1KCxntsM_rqbD9AU5DshkJkXZfX9qaA8PA1mZvIGGst4oDbwSTA2xjDVQ4QRnB5gPaZn9vQjIzHVhkVGiSfmv8-hOdNFQLgzmfcDQRsopRr6LD4N8JjB9W0p9yuSSOdVs_qOYS1VMQpR9X46aAdgK21_ZdxSkReKiE"/>
+<h1 class="text-white text-xl font-bold">MybizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="text-sm font-medium">Execution</span>
+</a>
+<a class="flex items-center gap-3 rounded-md bg-[#282e39] px-3 py-2 text-white" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-sm font-medium">Team</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="text-sm font-medium">Help and Docs</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1c1f27] hover:text-white" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span class="text-sm font-medium">Feedback</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 bg-[#181a20] p-8">
+<div class="max-w-7xl mx-auto">
+<div class="mb-8">
+<h1 class="text-4xl font-bold text-white">Team Management</h1>
+<p class="mt-2 text-gray-400">Manage your AI agents and human teams, assign tasks, and track progress.</p>
+</div>
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+<div class="relative w-full sm:max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="w-full rounded-md border-gray-700 bg-[#1c1f27] py-2 pl-10 pr-4 text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="search-team" name="search-team" placeholder="Search by name or role" type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<select class="rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="filter-status" name="filter-status">
+<option value="all">All Statuses</option>
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+<select class="rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="filter-project" name="filter-project">
+<option value="all">All Projects</option>
+<option value="project-a">Project A</option>
+<option value="project-b">Project B</option>
+</select>
+</div>
+</div>
+<div class="mb-12">
+<div class="flex justify-between items-center mb-4">
+<h2 class="text-2xl font-semibold text-white">Team Overview</h2>
+<button class="flex items-center gap-2 rounded-md bg-[#135bec] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600">
+<span class="material-symbols-outlined text-base">add</span>
+<span>Create Team</span>
+</button>
+</div>
+<div class="overflow-x-auto rounded-md border border-gray-800 bg-[#111318]">
+<table class="min-w-full divide-y divide-gray-800">
+<thead class="bg-[#1c1f27]">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Team Name</th>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Members</th>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Role</th>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Status</th>
+<th class="relative px-6 py-3" scope="col"><span class="sr-only">Actions</span></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-800">
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">Marketing Team</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">3 members</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">Marketing</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-green-900/50 px-2.5 py-0.5 text-xs font-medium text-green-400">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"></circle></svg>
+                        Active
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+<a class="text-[#135bec] hover:text-blue-500" href="#">View Details</a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">Development Team</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">5 members</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">Development</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-green-900/50 px-2.5 py-0.5 text-xs font-medium text-green-400">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"></circle></svg>
+                        Active
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+<a class="text-[#135bec] hover:text-blue-500" href="#">View Details</a>
+</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">Operations Team</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2 members</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">Operations</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm">
+<span class="inline-flex items-center rounded-full bg-red-900/50 px-2.5 py-0.5 text-xs font-medium text-red-400">
+<svg class="-ml-0.5 mr-1.5 h-2 w-2 text-red-400" fill="currentColor" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"></circle></svg>
+                        Inactive
+                      </span>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+<a class="text-[#135bec] hover:text-blue-500" href="#">View Details</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-12 lg:grid-cols-2">
+<div>
+<h2 class="text-2xl font-semibold text-white mb-4">Assign Tasks</h2>
+<div class="space-y-6 rounded-md border border-gray-800 bg-[#111318] p-6">
+<div>
+<label class="block text-sm font-medium text-gray-300" for="assign-team">Team</label>
+<select class="mt-1 block w-full rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="assign-team" name="assign-team">
+<option>Select a team</option>
+<option>Marketing Team</option>
+<option>Development Team</option>
+<option>Operations Team</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-300" for="assign-task">Task</label>
+<select class="mt-1 block w-full rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="assign-task" name="assign-task">
+<option>Select a task</option>
+<option>Launch new ad campaign</option>
+<option>Develop feature X</option>
+<option>Onboard new hires</option>
+</select>
+</div>
+<div class="flex justify-end">
+<button class="flex items-center gap-2 rounded-md bg-[#135bec] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600">Assign Task</button>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-2xl font-semibold text-white mb-4">Resource Allocation</h2>
+<div class="space-y-6 rounded-md border border-gray-800 bg-[#111318] p-6">
+<div>
+<label class="block text-sm font-medium text-gray-300" for="allocate-team">Team</label>
+<select class="mt-1 block w-full rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="allocate-team" name="allocate-team">
+<option>Select a team</option>
+<option>Marketing Team</option>
+<option>Development Team</option>
+<option>Operations Team</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-300" for="resource-amount">Resource Amount ($)</label>
+<input class="mt-1 block w-full rounded-md border-gray-700 bg-[#1c1f27] text-white focus:border-[#135bec] focus:ring-[#135bec] sm:text-sm" id="resource-amount" name="resource-amount" placeholder="e.g., 5000" type="number"/>
+</div>
+<div class="flex justify-end">
+<button class="flex items-center gap-2 rounded-md bg-[#135bec] px-4 py-2 text-sm font-semibold text-white hover:bg-blue-600">Allocate</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+
+</body></html>

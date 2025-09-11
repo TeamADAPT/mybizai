@@ -1,0 +1,61 @@
+<html><head>
+<meta charset="utf-8"/>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>MyBizAI - Processing</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+      .loader-bar {
+        position: relative;
+        overflow: hidden;
+        background-color: #3b4354;
+      }
+      .loader-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        animation: shimmer 2s infinite linear;
+      }
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+    </style>
+</head>
+<body class="bg-[#111318]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex flex-col items-center justify-center min-h-screen text-white p-4">
+<div class="w-full max-w-md text-center">
+<div class="mb-8">
+<svg class="mx-auto h-12 w-auto text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.6465 14.6464C16.5922 12.6997 19.1678 11.5858 22 11.5858C27.7423 11.5858 32.4142 16.2577 32.4142 22C32.4142 24.8322 31.3003 27.4078 29.3536 29.3535L14.6465 14.6464Z" fill="currentColor"></path>
+<path d="M33.3536 33.3535C31.4078 35.3003 28.8322 36.4142 26 36.4142C20.2577 36.4142 15.5858 31.7423 15.5858 26C15.5858 23.1678 16.6997 20.5922 18.6465 18.6464L33.3536 33.3535Z" fill="currentColor"></path>
+</svg>
+<h1 class="text-3xl font-bold mt-4">MyBizAI</h1>
+</div>
+<div class="bg-[#1e2128] p-8 rounded-lg shadow-2xl">
+<h2 class="text-xl font-medium mb-2">Generating your business plan</h2>
+<p class="text-slate-400 mb-6">Our AI is crafting your personalized business strategy.</p>
+<div class="w-full rounded-full h-2.5 bg-[#3b4354] loader-bar">
+<div class="bg-[var(--primary-color)] h-2.5 rounded-full" style="width: 50%"></div>
+</div>
+<div class="mt-6 bg-[#2a2d35] p-4 rounded-lg">
+<p class="text-slate-300 text-sm">Brewing up some brilliant ideas... Did you know? The most common reason for startup failure is no market need. Our AI helps you validate your idea from the get-go!</p>
+</div>
+<p class="text-slate-500 text-sm mt-6">This may take a few moments. Please keep this window open.</p>
+</div>
+</div>
+</div>
+</body></html>

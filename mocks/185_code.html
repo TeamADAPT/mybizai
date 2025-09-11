@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #135bec;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1c1f27;
+            border-radius: 3px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #3b4354;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-[#111318]">
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="flex h-full grow">
+<aside class="flex flex-col w-64 bg-[#181B20] p-4 shrink-0">
+<div class="flex flex-col gap-y-6">
+<div class="flex items-center gap-2">
+<img alt="MyBizAI Logo" class="w-8 h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACReiPZ2AfAQVZTkhs7l7Htr3M4-X7HYwy-pZVJYU_bGR4-HZzA63vwr-NSDZQiH_XQVM12xUNo_650dfPGjtyyXoexyoRKl8p8NTIts843RTH_RonXfYVk6hN3l1_4YKRSxijWm9whk5E36hJoa1LcMaTPVgFVkFFmJSJGzcq--uMy1qhaOcUVzAdiZW8d4ozL58YuvRX8hojajmNJ3TQDS7QE5THRoH45tBqZRq8qEW4KJkXn7rf2AnKPLVD-NSBiGJQIpHX_Jo"/>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md bg-[var(--primary-color)] text-white" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="text-sm font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Help</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-md transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 flex flex-col xl:grid xl:grid-cols-3 xl:gap-6 p-6">
+<div class="xl:col-span-1 flex flex-col bg-[#181B20] rounded-lg p-6 h-[calc(100vh-48px)]">
+<div class="flex flex-col gap-6 h-full">
+<div>
+<h2 class="text-white text-2xl font-bold">Data Points</h2>
+<p class="text-[#9da6b9] text-sm">Drag &amp; drop to build your report.</p>
+</div>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#9da6b9]">search</span>
+<input class="form-input w-full rounded-md text-white border border-[#3b4354] bg-[#1c1f27] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] pl-10 pr-4 py-2" placeholder="Search data points" type="text"/>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar -mr-3 pr-3">
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">emoji_objects</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Idea Count</p>
+<p class="text-[#9da6b9] text-xs">Number of ideas generated</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">attach_money</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Revenue</p>
+<p class="text-[#9da6b9] text-xs">Total revenue generated</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">hourglass_top</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Execution Time</p>
+<p class="text-[#9da6b9] text-xs">Average time to execution</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">list_alt</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Active Projects</p>
+<p class="text-[#9da6b9] text-xs">Number of active projects</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">task_alt</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Completed Projects</p>
+<p class="text-[#9da6b9] text-xs">Number of completed projects</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-md bg-[#282e39] cursor-grab active:cursor-grabbing">
+<div class="text-white flex items-center justify-center rounded-md bg-[#3b4354] shrink-0 size-10">
+<span class="material-symbols-outlined text-xl">sentiment_satisfied</span>
+</div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">Customer Satisfaction</p>
+<p class="text-[#9da6b9] text-xs">Avg. satisfaction rating</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="xl:col-span-2 flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<h1 class="text-white text-3xl font-bold">Custom Report Builder</h1>
+<p class="text-[#9da6b9] text-base">Design and save custom reports tailored to your specific needs.</p>
+</div>
+<div class="flex flex-col bg-[#181B20] rounded-lg p-6 flex-1">
+<h3 class="text-white text-lg font-bold mb-4">Report Preview</h3>
+<div class="flex flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-[#3b4354] p-6 h-full min-h-[300px]">
+<div class="flex items-center justify-center size-16 bg-[#282e39] rounded-full">
+<span class="material-symbols-outlined text-3xl text-white">add</span>
+</div>
+<div class="text-center">
+<p class="text-white text-lg font-semibold">Drag and drop data points here</p>
+<p class="text-[#9da6b9] text-sm">Start building your report by dragging data points from the left panel.</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col bg-[#181B20] rounded-lg p-6">
+<h3 class="text-white text-lg font-bold mb-4">Report Settings</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-white" for="reportName">Report Name</label>
+<input class="form-input w-full rounded-md text-white border border-[#3b4354] bg-[#1c1f27] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]" id="reportName" placeholder="e.g. Quarterly Revenue Analysis" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium text-white" for="chartType">Chart Type</label>
+<select class="form-select w-full rounded-md text-white border border-[#3b4354] bg-[#1c1f27] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]" id="chartType">
+<option>Bar Chart</option>
+<option>Line Chart</option>
+<option>Pie Chart</option>
+<option>Table</option>
+</select>
+</div>
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="text-sm font-medium text-white" for="filters">Filters</label>
+<select class="form-select w-full rounded-md text-white border border-[#3b4354] bg-[#1c1f27] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]" id="filters">
+<option>Last 30 Days</option>
+<option>Last 90 Days</option>
+<option>This Year</option>
+<option>All Time</option>
+</select>
+</div>
+</div>
+<div class="flex justify-end mt-6 gap-3">
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[#282e39] text-white text-sm font-semibold hover:bg-[#3b4354] transition-colors">
+<span class="truncate">Save as Template</span>
+</button>
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[var(--primary-color)] text-white text-sm font-semibold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined mr-2">save</span>
+<span class="truncate">Generate &amp; Save Report</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

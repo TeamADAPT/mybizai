@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+        :root {
+          --primary-color: #135bec;
+        }
+    </style>
+</head>
+<body class="bg-[#111318]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex min-h-screen">
+<aside class="flex w-64 flex-col bg-[#181a20] text-white p-4">
+<div class="flex items-center gap-2 px-2 py-4">
+<span class="material-symbols-outlined text-3xl text-[var(--primary-color)]">auto_awesome</span>
+<h1 class="text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">folder</span>
+<span>My Projects</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">search</span>
+<span>Market Research</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span>AI Agents</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium bg-[var(--primary-color)] text-white" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span>Integrations</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help and Docs</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-[#282e39] hover:text-white" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Feedback</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-white">Partner Integrations</h2>
+<p class="text-gray-400">Connect your favorite tools to streamline your workflow and enhance your MyBizAI experience.</p>
+</div>
+<div class="mb-8 flex flex-wrap gap-4">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="w-full rounded-md border-0 bg-[#181a20] py-2 pl-10 pr-4 text-white placeholder-gray-400 focus:ring-2 focus:ring-[var(--primary-color)]" placeholder="Search integrations..." type="search"/>
+</div>
+<div class="flex gap-4">
+<select class="rounded-md border-0 bg-[#181a20] text-white focus:ring-2 focus:ring-[var(--primary-color)]">
+<option>All Categories</option>
+<option>CRM</option>
+<option>Marketing</option>
+<option>Finance</option>
+<option>Productivity</option>
+</select>
+<select class="rounded-md border-0 bg-[#181a20] text-white focus:ring-2 focus:ring-[var(--primary-color)]">
+<option>Any Status</option>
+<option>Connected</option>
+<option>Not Connected</option>
+</select>
+</div>
+</div>
+<div class="space-y-12">
+<div>
+<h3 class="text-xl font-semibold text-white mb-4">Recommended</h3>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Slack" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg8aMZge6FdX7FUQ9U384OieJ1U3YS9oaf4I0nYZuXB3k3jjhqRA1MugJksQ0khIGsFSByRHbh5R0064TSff_HPG8Ic4mqCbXZZ-QMtxHbOnBVMvLBx-J3MrWotGHiL1jF0uYYQV2OewnISoJxdyXqouU0Wo8lkebT_1_g0BJAr6UzLdI_y2Nx7OPwc8xvsRzIm9JkMkEY4fY76_j_Cwx-BldTksc9qioFCNGJZwSSHA9TcB5L16WjCDfzwgKTbRrLOLJxlcR-ajs"/>
+<span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-400">Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Slack</h4>
+<p class="text-sm text-gray-400">Receive notifications and updates directly in your Slack channels.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[#282e39] py-2 text-sm font-semibold text-white hover:bg-[#3a4150]">Manage</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Notion" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhD4V8ykQ5CMoTth20W2jDIAQELpRr5ZyU0VhwIoKwBZi-rearNHfytKMIPn7YL2R3adHr2vDRfAMGOtoE3ztltdnp6UQjWZ4Pb5UrjvuOomRW7zG-emAYvrBNO7WqMU2fQ3HK_Unjx9aUNEmFyHUUAY8JbuDE1vDipn29M04WeRSmFId5Zi0xwKyeLQ0vX6vwgVCDqZLAy20uYbB5vsYPaH8Kz6yvv5_3EImCIcf7zQNwTfeo0MdbbR_-9sR34WIcpXiEX5B7y8k"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Notion</h4>
+<p class="text-sm text-gray-400">Seamlessly integrate your project data with Notion workspaces.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Zapier" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWR3OmDFz1uqFkZFygcxOgIRjwmOj3tyK9TjWiMmHw_465Szfp2s10K6n2fkaH9DKhxiHWlprnIRHunrKIfDg6yVOH6MmnMmXbshZuQbsZffwqmt_epQ_Ejg4ycLnN81qgZVIuh13xSfT8t7AIeEVqAsPu_usP5mGatQgTDQLBCtZAcJ2gu98KunxPRefK_2NWPTvxZEc_GNwhx1hBT2i3DuI6NKivu3mlf3jDUsZal5E0HTLzux9uRGQyfpxQM-XMXHlBO1GXvJU"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Zapier</h4>
+<p class="text-sm text-gray-400">Automate tasks and workflows between MyBizAI and other apps.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="HubSpot" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD-PWdDoE9w9T76eHnIokL0Oe-NW439Jg8bJrhzph5Ka_dADqU979yFdjaL0xcfYM101BD3aWgu9wy3s8PaBcGTsDp4km5RQMUgops7ZL1xvP20ZRBSz56D1pzCJRa7_UGNaXuuTwhPABJvCKy2GT7l1EvjT4SL7rSNecHNzcRag6pSx7lzNEAQH68N91dM7epklAjThsaysZDlLKiK4mwTXRgiCn7FkrFEa4ZTdJEPwWNf-kSetpmBGwlAZwziN5GzsDYbQS1fec"/>
+<span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-400">Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">HubSpot</h4>
+<p class="text-sm text-gray-400">Sync your customer data and interactions with HubSpot CRM.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[#282e39] py-2 text-sm font-semibold text-white hover:bg-[#3a4150]">Manage</button>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-xl font-semibold text-white mb-4">All Integrations</h3>
+<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Slack" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcwp1KtaLIpdcdp-r9FY75niMsfgkRqLxnu-zS82kIEB1BQRspqQW1kvMNMz0Ma_P1fqXfQyMCOTq8_3uVWo_oaRT8A0kj5UGXhrHFfdGvxgrrRmt_roZdyMP5934t9706khBItXhV_vZec91MHRKUoGBnvC9JC7CmB_9KH9tLzF3vkPdf6FyS2aYWrM7sebLNkZAM5BD5OKxf36BrZTRBpVPiEWkeHam60a1ZDe-2HUFDHYj9xkAAuxgl5vRy34oTiieWEol7rwQ"/>
+<span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-400">Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Slack</h4>
+<p class="text-sm text-gray-400">Receive notifications and updates directly in your Slack channels.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[#282e39] py-2 text-sm font-semibold text-white hover:bg-[#3a4150]">Manage</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Notion" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDElhImX_U-KUIAG46SVxFuwqBFLD2O7LwlXrGohfhMATt9rtU90sPT9p4eFIfSkthU_zTj0S962ROpLjO93SOQC7H4Q1K6l7bAHw95wwJTz9OeF106TiqnlupNv6kPJA5-l7lCYQU0DkXWHuGygUcKFN7Nm6SBPmt7T1BP6MuCchOndnNv4XJyhhenBgbOct0CGW8JRrR2bwnp6XxeRZRGQXC7xNjZ9nCBHlXy8cWO4OwnryVxEa-TjEoExiGXsrLdn_3VIazA05s"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Notion</h4>
+<p class="text-sm text-gray-400">Seamlessly integrate your project data with Notion workspaces.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Zapier" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzmoqIUXWmM4jg1FkH4NKctNEIKMgAHzorgWp60t431PU8FWF984eGCUj29FKcHMCjCjpiewfQayUaVkg_b0vG7ddp2daiWYSkoBXJijVzv0HqYy8R54XNU_8ae6wMHv2yoCftjTKmdSNHcYh7C6R91R2Q6w4a_9iVnHhhAex-Sa8I-5oTZU7h9LMciRsObGYwB39UM41KokMKPs-CyqjRo5vkKm_a4DOWYffhOL7mxrZCaR-fj58i6x5rFN20vsDodTRj2vPU6Sg"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Zapier</h4>
+<p class="text-sm text-gray-400">Automate tasks and workflows between MyBizAI and other apps.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="HubSpot" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXIV_xFXRM-9Pt-RBtCxJhN1jaNC7xj1NhQCG0F1gDHIe6ONu9NYGQdyU_ytH-P53SXk-DfmLNb7Naq2sMGMx5hw5BL4KB-CP6uFZoisVtW9zexvRNYdc32iAdtR-kl-pcBlCbWbhBsoEJ1cTMGFrz8JpJeL7El_cx6G7nt-zfNin1vLsXN_CNOdgipyRWjc6Ey7ddR0fv-GkeOQzMaaldAIScPzz37sK3sZziAyOfDwqAlnqPVv-1xoRKd09DF_E5eO0487hHBxk"/>
+<span class="rounded-full bg-green-500/20 px-2 py-1 text-xs font-medium text-green-400">Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">HubSpot</h4>
+<p class="text-sm text-gray-400">Sync your customer data and interactions with HubSpot CRM.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[#282e39] py-2 text-sm font-semibold text-white hover:bg-[#3a4150]">Manage</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Google Drive" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4_0ELu6GE2F1yDPTm_69T5S3Jr4hgF8SGdXI3fvYiLEV4i1r1456VlHiNr_3cBnalgOdiD8mGOmaa2VgMCumOAVVdRtyWnFBw-9yTwhxTijkwXE8okh8lO1KH6MiXxt5gdtU61p0O0jespcdtJVrTjzkJr7iNhqUcUeYvOUAEH0DeV7BTtLDuzruvyE4_YMcYddqnUhuxN7lZsOrE0yCVjJDz0JvU5GVHy4Yp_X7OhJDvblOii4K3bGio74nITGHTwMsfEcfEkPg"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Google Drive</h4>
+<p class="text-sm text-gray-400">Access and manage your project files directly from Google Drive.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Trello" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiLnbiR7MG12OofGEgSwP9RnFFQ2f1LK2vRvypU85GsuPJNbi2EGOAy_JDjAXDapvRaLva1qK6PE_ze7twlxr70AbNKhjfMXlo1vOf6u1fVFr8ehdaqvcRFwIdfhF_jBH1CWFj57s_CO1knNlrYAiHoOY5CL0kwzaYx7fy0JXd8SK7c91pHMeVTRQWGuUCIYiqsqxdf97LTF393uj_KSvMxTZEsaKtpV-VzHWI4GKTqmt5vwF_QuMGv9X8Gjs37tHgLjVTegAbGAs"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Trello</h4>
+<p class="text-sm text-gray-400">Organize and track your project tasks with Trello boards.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Asana" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-XvJS1d1ej0NGRibojr0k0GiVIkVUb-DPhvAxlyp2qq5pyB1cpPMWXlieDb0iQ5T6PYskBnxeK1E7CC6_iUU0P7IucI2GpxK_Whr3w3F79hed5fYW42HJ8tG7E0jHa6n91pZ6Mq2weN4l6uuZuT6baLOaGyV7BNN5RpaKWCCHlLbzr2Btp2w82oUVh6uDLDLq5A-S1KxlSd_bd9Zxp9cJHjmCvizNaew541aoDxtzahwX1Ne-ncHSO1UgeZVoH2GswIe8RN7rAD0"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Asana</h4>
+<p class="text-sm text-gray-400">Manage your project tasks and workflows with Asana.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+<div class="flex flex-col gap-4 rounded-md bg-[#181a20] p-4">
+<div class="flex items-start justify-between">
+<img alt="Jira" class="h-12 w-12 rounded-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgHGJfBOvl9jQV1vdpPLjqYfswpffnIggT0SlVjXeGSoHUNNgDyC33es8P-YDxh09jhewZrhzwkKEBNK5Gdbvm0Dk6VEI4Dvj_oruBZu1ouMX4bWXZOa-puNUTHUGykmmyah6pjlZ6ZUwMKo3ExLFEatoRQnFh2s-9Gp9jSJYVRFF2ntvoalna8vwvdrBBDPk8zZBhsaiQSjewrwaFSP5YGKZa_b8af1HFMg9cZDFGuvN7CvQMgCujhpDRXe-QgMd8OhnCZzbNUIQ"/>
+<span class="rounded-full bg-gray-500/20 px-2 py-1 text-xs font-medium text-gray-400">Not Connected</span>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-white">Jira</h4>
+<p class="text-sm text-gray-400">Integrate your project management with Jira software.</p>
+</div>
+<button class="mt-auto w-full rounded-md bg-[var(--primary-color)] py-2 text-sm font-semibold text-white hover:bg-opacity-80">Connect</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

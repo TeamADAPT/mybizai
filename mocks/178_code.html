@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-[#111318]">
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden" style="--checkbox-tick-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(255,255,255)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3cpath d=%27M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z%27/%3e%3c/svg%3e'); font-family: Manrope, &quot;Noto Sans&quot;, sans-serif;">
+<div class="flex h-full min-h-screen">
+<aside class="flex w-64 flex-col bg-[#181A20] p-6">
+<div class="flex items-center gap-2 mb-10">
+<div class="w-8 h-8 bg-blue-600 rounded-full"></div>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-lg transition-colors" href="#">
+<svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+</svg>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-lg transition-colors" href="#">
+<svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"></path>
+</svg>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-lg transition-colors" href="#">
+<svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"></path>
+</svg>
+<span class="text-sm font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9da6b9] hover:bg-[#282e39] hover:text-white rounded-lg transition-colors" href="#">
+<svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM224,48V208a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32H208A16,16,0,0,1,224,48ZM208,208V48H48V208H208Z"></path>
+</svg>
+<span class="text-sm font-medium">Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg bg-[#282e39] text-white" href="#">
+<svg fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM112,184a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm56-8a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136a23.76,23.76,0,0,1-4.84,14.45L152,176ZM48,80V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80Z"></path>
+</svg>
+<span class="text-sm font-medium">Calendar</span>
+</a>
+</nav>
+</aside>
+<main class="flex-1 p-8">
+<div class="max-w-4xl mx-auto">
+<h1 class="text-white text-4xl font-bold tracking-tight mb-8">Calendar Integration</h1>
+<div class="bg-[#181A20] rounded-xl overflow-hidden">
+<div class="p-8 border-b border-[#282e39]">
+<h2 class="text-white text-xl font-bold mb-6">Connect Your Calendar</h2>
+<div class="space-y-6">
+<div class="flex items-center justify-between p-4 bg-[#282e39] rounded-lg">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-lg bg-[#3b4354] shrink-0 size-12">
+<svg class="text-white" fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M224,128a96,96,0,1,1-21.95-61.09,8,8,0,1,1-12.33,10.18A80,80,0,1,0,207.6,136H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128Z"></path>
+</svg>
+</div>
+<div>
+<p class="text-white font-semibold">Google Calendar</p>
+<p class="text-[#9da6b9] text-sm">Sync project deadlines and tasks.</p>
+</div>
+</div>
+<button class="flex min-w-[96px] items-center justify-center rounded-lg h-10 px-5 bg-[#135bec] text-white text-sm font-bold transition-colors hover:bg-blue-500"> Connect </button>
+</div>
+<div class="flex items-center justify-between p-4 bg-[#282e39] rounded-lg">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center rounded-lg bg-[#3b4354] shrink-0 size-12">
+<svg class="text-white" fill="currentColor" height="24" viewBox="0 0 256 256" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M88,96a32,32,0,1,0,32,32A32,32,0,0,0,88,96Zm0,48a16,16,0,1,1,16-16A16,16,0,0,1,88,144Zm128-40h-8V48a16,16,0,0,0-16-16H112A16,16,0,0,0,96,48V64H40A16,16,0,0,0,24,80v96a16,16,0,0,0,16,16H72v16a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V120A16,16,0,0,0,216,104ZM112,48h80v77.24l-40,28.89V80a16,16,0,0,0-16-16H112ZM40,176V80h96v96H40Zm48,32V192h48a16,16,0,0,0,16-16v-2.13L199.26,208Zm128-7.65L165.66,164,216,127.65Z"></path>
+</svg>
+</div>
+<div>
+<p class="text-white font-semibold">Outlook Calendar</p>
+<p class="text-[#9da6b9] text-sm">Sync project deadlines and tasks.</p>
+</div>
+</div>
+<button class="flex min-w-[96px] items-center justify-center rounded-lg h-10 px-5 bg-[#135bec] text-white text-sm font-bold transition-colors hover:bg-blue-500"> Connect </button>
+</div>
+</div>
+</div>
+<div class="p-8">
+<h2 class="text-white text-xl font-bold mb-6">Sync Preferences</h2>
+<div class="space-y-6">
+<div>
+<h3 class="text-white font-semibold mb-4">Select Calendars to Sync</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-4 bg-[#282e39] rounded-lg">
+<input checked="" class="h-5 w-5 rounded border-[#3b4354] border-2 bg-transparent text-[#135bec] checked:bg-[#135bec] checked:border-[#135bec] checked:bg-[image:--checkbox-tick-svg] focus:ring-2 focus:ring-offset-0 focus:ring-offset-[#181A20] focus:ring-[#135bec]" type="checkbox"/>
+<span class="text-white">Work Calendar</span>
+<span class="text-sm text-[#9da6b9] ml-auto">john.doe@work.com</span>
+</label>
+<label class="flex items-center gap-3 p-4 bg-[#282e39] rounded-lg">
+<input class="h-5 w-5 rounded border-[#3b4354] border-2 bg-transparent text-[#135bec] checked:bg-[#135bec] checked:border-[#135bec] checked:bg-[image:--checkbox-tick-svg] focus:ring-2 focus:ring-offset-0 focus:ring-offset-[#181A20] focus:ring-[#135bec]" type="checkbox"/>
+<span class="text-white">Personal Calendar</span>
+<span class="text-sm text-[#9da6b9] ml-auto">john.doe@personal.com</span>
+</label>
+</div>
+</div>
+<div>
+<h3 class="text-white font-semibold mb-4">Event Types</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="h-5 w-5 rounded border-[#3b4354] border-2 bg-transparent text-[#135bec] checked:bg-[#135bec] checked:border-[#135bec] checked:bg-[image:--checkbox-tick-svg] focus:ring-2 focus:ring-offset-0 focus:ring-offset-[#181A20] focus:ring-[#135bec]" type="checkbox"/>
+<span class="text-white">Sync project deadlines</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-5 w-5 rounded border-[#3b4354] border-2 bg-transparent text-[#135bec] checked:bg-[#135bec] checked:border-[#135bec] checked:bg-[image:--checkbox-tick-svg] focus:ring-2 focus:ring-offset-0 focus:ring-offset-[#181A20] focus:ring-[#135bec]" type="checkbox"/>
+<span class="text-white">Sync task due dates</span>
+</label>
+</div>
+</div>
+</div>
+<div class="flex justify-end mt-8">
+<button class="flex min-w-[140px] items-center justify-center rounded-lg h-12 px-6 bg-[#135bec] text-white text-base font-bold transition-colors hover:bg-blue-500"> Save Preferences </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

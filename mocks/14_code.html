@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>MyBizAI - Financial Projections</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #1173d4;
+        }
+    </style>
+</head>
+<body class="bg-[#111418] font-sans">
+<div class="flex min-h-screen">
+<aside class="w-64 bg-[#181C22] p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCgERL0QXEy5eDj1wrps4OxvWWcNFcR8Uwg8NJjnVqxJIYpB-9edpjp1QwyNZwIDY-ztucidMbZkAD9didpAdmK6LLX7R_EVMwoqcaXpoiV4_Z-hgR2us2Wct5kG51NQFpLjByr5AFcMkhKFWTW3IwVh7UJJcP7rFSK1KLdHGrsysys6YN8_8NN3BwLPHxfdBLGbc9r9zEs3kDdWLvdN1uj9OCN1DI9Sxh-QqVkQ1Xr1dfzNlSpnu2d3OaGHi7VA1gnRenJGy5s-DU");'></div>
+<div>
+<h1 class="text-white text-lg font-bold">MyBizAI</h1>
+<p class="text-[#9dabb9] text-sm">Financial Planning</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 text-[#9dabb9] hover:bg-[#283039] hover:text-white rounded-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9dabb9] hover:bg-[#283039] hover:text-white rounded-md" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span>Business Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-white bg-[#283039] rounded-md" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Financial Projections</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9dabb9] hover:bg-[#283039] hover:text-white rounded-md" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Marketing Plan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-[#9dabb9] hover:bg-[#283039] hover:text-white rounded-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Operations</span>
+</a>
+</nav>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="max-w-7xl mx-auto">
+<header class="mb-8">
+<h1 class="text-white text-4xl font-bold mb-2">Financial Projections</h1>
+<p class="text-[#9dabb9] text-base">Create, analyze, and visualize financial forecasts for your business ideas.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-1 space-y-8">
+<div class="bg-[#181C22] p-6 rounded-lg">
+<h2 class="text-white text-xl font-bold mb-6">Scenario Analysis</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-[#9dabb9]">Current Scenario:</span>
+<span class="text-sm font-bold text-white bg-blue-900/50 border border-blue-700 rounded-full px-3 py-1">Most Likely</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 text-center py-2 text-sm font-medium text-[#9dabb9] bg-[#283039] rounded-md hover:bg-[#3b4754] hover:text-white transition-colors">Best Case</button>
+<button class="flex-1 text-center py-2 text-sm font-medium text-[#9dabb9] bg-[#283039] rounded-md hover:bg-[#3b4754] hover:text-white transition-colors">Worst Case</button>
+<button class="flex-1 text-center py-2 text-sm font-medium text-white bg-[var(--primary-color)] rounded-md">Most Likely</button>
+</div>
+<button class="w-full flex items-center justify-center gap-2 rounded-md h-10 px-4 border border-[#3b4754] text-[#9dabb9] text-sm font-bold hover:bg-[#283039] hover:text-white transition-colors">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span>Create New Scenario</span>
+</button>
+</div>
+</div>
+<div class="bg-[#181C22] p-6 rounded-lg">
+<h2 class="text-white text-xl font-bold mb-6">Input Assumptions</h2>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-[#9dabb9] mb-2" for="revenue1">Revenue Stream 1 ($)</label>
+<input class="form-input w-full rounded-md bg-[#111418] border-[#3b4754] text-white focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]" id="revenue1" placeholder="e.g., 50000" type="text" value="75000"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#9dabb9] mb-2" for="revenue2">Revenue Stream 2 ($)</label>
+<input class="form-input w-full rounded-md bg-[#111418] border-[#3b4754] text-white focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]" id="revenue2" placeholder="e.g., 25000" type="text" value="30000"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#9dabb9] mb-2" for="expense1">Expense Category 1 ($)</label>
+<input class="form-input w-full rounded-md bg-[#111418] border-[#3b4754] text-white focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]" id="expense1" placeholder="e.g., 15000" type="text" value="20000"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#9dabb9] mb-2" for="expense2">Expense Category 2 ($)</label>
+<input class="form-input w-full rounded-md bg-[#111418] border-[#3b4754] text-white focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]" id="expense2" placeholder="e.g., 10000" type="text" value="12000"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-[#9dabb9] mb-2" for="growth">Annual Growth Rate (%)</label>
+<input class="form-input w-full rounded-md bg-[#111418] border-[#3b4754] text-white focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)]" id="growth" placeholder="e.g., 10" type="text" value="12"/>
+</div>
+<button class="w-full flex items-center justify-center gap-2 rounded-md h-10 px-4 bg-[var(--primary-color)] text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined">insights</span>
+<span>Update Projections</span>
+</button>
+</div>
+</div>
+</div>
+<div class="lg:col-span-2 space-y-8">
+<div class="bg-[#181C22] p-6 rounded-lg">
+<h2 class="text-white text-xl font-bold mb-4">Financial Statements</h2>
+<div class="border-b border-[#3b4754] mb-4">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a class="border-[var(--primary-color)] text-[var(--primary-color)] whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Profit &amp; Loss</a>
+<a class="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Cash Flow</a>
+<a class="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Balance Sheet</a>
+</nav>
+</div>
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-[#3b4754]">
+<thead class="bg-[#111418]">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" scope="col">Year</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" scope="col">Revenue</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" scope="col">Expenses</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" scope="col">Net Profit</th>
+</tr>
+</thead>
+<tbody class="bg-[#181C22] divide-y divide-[#3b4754]">
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">2024</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$620,000</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$350,000</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">$270,000</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">2025</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$694,400</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$392,000</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">$302,400</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">2026</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$777,728</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$439,040</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">$338,688</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">2027</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$871,055</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$491,725</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">$379,330</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">2028</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$975,582</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-[#9dabb9]">$550,732</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-green-400 font-semibold">$424,850</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="bg-[#181C22] p-6 rounded-lg">
+<h2 class="text-white text-xl font-bold mb-2">Visualizations</h2>
+<p class="text-[#9dabb9] text-sm mb-4">Revenue and Profit Over Time</p>
+<div class="flex items-center gap-4 mb-4">
+<p class="text-white text-3xl font-bold">$424,850</p>
+<div class="flex items-center gap-1 text-green-400">
+<span class="material-symbols-outlined text-lg">trending_up</span>
+<span class="text-sm font-medium">+12% YoY</span>
+</div>
+</div>
+<div class="h-64">
+<svg fill="none" height="100%" preserveAspectRatio="none" viewBox="0 0 500 250" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 230L50 210L100 180L150 160L200 130L250 110L300 90L350 70L400 50L450 30L500 10" opacity="0.5" stroke="#9dabb9" stroke-dasharray="4 4" stroke-width="2"></path>
+<path d="M0 200L50 185L100 160L150 145L200 120L250 100L300 85L350 70L400 60L450 50L500 40 V 250 H 0 Z" fill="url(#paint1_linear_chart_old)" opacity="0.5"></path>
+<path d="M0 180L50 160L100 135L150 115L200 90L250 75L300 60L350 50L400 40L450 30L500 20" stroke="url(#paint0_linear_chart)" stroke-width="3"></path>
+<path d="M0 180L50 160L100 135L150 115L200 90L250 75L300 60L350 50L400 40L450 30L500 20 V 250 H 0 Z" fill="url(#paint1_linear_chart)"></path>
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart" x1="0" x2="500" y1="100" y2="100">
+<stop stop-color="#1173d4"></stop>
+<stop offset="1" stop-color="#3b82f6"></stop>
+</linearGradient>
+<linearGradient gradientUnits="userSpaceOnUse" id="paint1_linear_chart" x1="250" x2="250" y1="20" y2="250">
+<stop stop-color="#1173d4" stop-opacity="0.3"></stop>
+<stop offset="1" stop-color="#111418" stop-opacity="0"></stop>
+</linearGradient>
+<linearGradient gradientUnits="userSpaceOnUse" id="paint1_linear_chart_old" x1="250" x2="250" y1="40" y2="250">
+<stop stop-color="#9dabb9" stop-opacity="0.2"></stop>
+<stop offset="1" stop-color="#111418" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between text-xs text-gray-400 mt-2">
+<span>2024</span>
+<span>2025</span>
+<span>2026</span>
+<span>2027</span>
+<span>2028</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

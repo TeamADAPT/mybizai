@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MyBizAI - Delete Project</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #135bec;
+    }
+    #countdown-timer {
+      animation: countdown 5s linear forwards;
+    }
+    @keyframes countdown {
+      0% {
+        width: 100%;
+      }
+      100% {
+        width: 0%;
+      }
+    }
+  </style>
+</head>
+<body class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282e39] px-10 py-4">
+<div class="flex items-center gap-3 text-white">
+<svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M19.7375 10.8131C20.179 10.7181 20.3432 10.7795 20.3791 10.7967C20.3938 10.8275 20.4274 10.9285 20.4041 11.1668C20.3704 11.5128 20.2251 12.0023 19.9286 12.615C19.3399 13.8315 18.2543 15.3315 16.7929 16.7929C15.3315 18.2543 13.8316 19.3399 12.615 19.9286C12.0023 20.2251 11.5127 20.3704 11.1668 20.4041C10.9285 20.4274 10.8275 20.3938 10.7967 20.379C10.7795 20.3432 10.7181 20.179 10.8131 19.7375C10.9281 19.2027 11.2344 18.4828 11.7519 17.6409C12.3787 16.6209 13.2748 15.4872 14.381 14.381C15.4872 13.2748 16.6209 12.3787 17.6409 11.7519C18.4828 11.2344 19.2027 10.9281 19.7375 10.8131ZM2.20594 14.6201L9.37985 21.794C9.94065 22.3548 10.7013 22.4589 11.3608 22.3946C12.0292 22.3295 12.7574 22.0815 13.4861 21.7289C14.9526 21.0193 16.6309 19.7833 18.2071 18.2071C19.7833 16.6309 21.0193 14.9526 21.7289 13.4861C22.0815 12.7574 22.3295 12.0292 22.3946 11.3608C22.4589 10.7013 22.3548 9.94065 21.794 9.37985L14.6201 2.20594C13.9263 1.51214 12.9382 1.51286 12.143 1.68388C11.294 1.86432 10.3667 2.2921 9.4198 2.874C8.2489 3.59358 7.00905 4.59176 5.79289 5.79289C4.59177 7.00905 3.59358 8.2489 2.87401 9.4198C2.2921 10.3667 1.86432 11.294 1.68389 12.143C1.51287 12.9382 1.51215 13.9263 2.20594 14.6201Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">MyBizAI</h2>
+</div>
+<nav class="flex flex-1 justify-center gap-8">
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-white text-sm font-bold leading-normal" href="#">Projects</a>
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Templates</a>
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Resources</a>
+</nav>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAQGohF-OcJ-GEAuRnf2WeFvex3SAbYyPsQda5gweS7A839sej6eFrVcfg2UD8eabxetOX7fAIIYjLNPXreA1JQG43e238SEr9raCs9tL1-Esfh-TVXihuZVPS8oGhPnevOkEmjXERJN2dOkH2VFuDsjVARHF2vhMUn3iVvHGuR6rt1apYqWxXZcHwuNzoSwv0steNpNa2hXLIq5JDbhHZQX90jYUjfJpvAhGn8TfSd9IUf65Fk8X3iWnWhLKU39E_0jqBTYy02BsQ");'></div>
+</header>
+<main class="flex flex-1 justify-center items-center px-4">
+<div class="flex flex-col items-center gap-6 w-full max-w-lg bg-[#181B22] p-8 rounded-2xl border border-[#282e39]">
+<div class="flex flex-col items-center gap-4 text-center">
+<div class="bg-red-500/10 p-3 rounded-full border-4 border-red-500/20">
+<span class="material-symbols-outlined text-red-500 !text-4xl"> warning </span>
+</div>
+<h1 class="text-white text-3xl font-bold">Delete Project Confirmation</h1>
+<p class="text-gray-400 text-base">
+            You are about to permanently delete the project
+            <span class="font-semibold text-white">"AI-Powered Marketing Campaign"</span>.
+            This action is irreversible and all associated data, including generated content,
+            analysis, and team collaboration history, will be lost forever.
+          </p>
+</div>
+<div class="w-full flex flex-col gap-4">
+<label class="text-sm font-medium text-gray-300" for="delete-confirm">To confirm, please type <strong class="text-white">DELETE</strong> below:</label>
+<input class="form-input w-full rounded-md text-white bg-[#1c1f27] border border-[#3b4354] focus:border-[var(--primary-color)] focus:ring-2 focus:ring-[var(--primary-color)]/50 h-12 px-4 placeholder:text-[#5a6479]" id="delete-confirm" placeholder="DELETE" type="text"/>
+</div>
+<div class="w-full flex flex-col items-center gap-4 mt-2">
+<div class="relative w-full">
+<button class="flex w-full items-center justify-center rounded-md h-12 px-6 bg-red-600 hover:bg-red-700 transition-colors text-white text-base font-bold disabled:bg-red-600/50 disabled:cursor-not-allowed group" disabled="">
+<div class="absolute inset-0 bg-red-800/50 rounded-md" id="countdown-timer"></div>
+<span class="truncate relative z-10">Delete Permanently in 5s...</span>
+</button>
+</div>
+<button class="flex w-full items-center justify-center rounded-md h-12 px-6 bg-[#282e39] hover:bg-[#343a46] transition-colors text-white text-base font-bold">
+<span class="truncate">Cancel</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

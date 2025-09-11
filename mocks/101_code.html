@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MyBizAI - Cookie Preferences</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="bg-[#111318] font-manrope text-white">
+<div class="relative flex min-h-screen flex-col">
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"></div>
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+<div class="bg-[#1C1F26] rounded-2xl shadow-2xl w-full max-w-2xl flex flex-col max-h-[90vh]">
+<header class="flex items-center justify-between p-6 border-b border-[#282e39]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-3xl text-[var(--primary-color)]"> cookie </span>
+<h2 class="text-xl font-bold">Cookie Management Preferences</h2>
+</div>
+<button class="text-gray-400 hover:text-white">
+<span class="material-symbols-outlined"> close </span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto p-6 space-y-6">
+<p class="text-gray-300">
+              We use cookies to enhance your experience, analyze our traffic, and for marketing purposes. You can make your selections below. To find out more, please read our
+              <a class="text-[var(--primary-color)] hover:underline" href="#">Cookie Policy</a>.
+            </p>
+<div class="space-y-4">
+<div class="rounded-lg border border-[#282e39] bg-[#111318]/40 p-4">
+<div class="flex items-start justify-between">
+<div class="pr-4">
+<h3 class="font-bold text-lg">Strictly Necessary Cookies</h3>
+<p class="text-sm text-gray-400 mt-1">These cookies are essential for the website to function correctly and cannot be switched off. They are used for core functionalities like security, network management, and accessibility.</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-not-allowed items-center rounded-full border-none bg-green-500/30 p-0.5 justify-end">
+<div class="h-full w-[27px] rounded-full bg-green-400" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.06) 0px 3px 1px"></div>
+<input checked="" class="invisible absolute" disabled="" type="checkbox"/>
+</label>
+<p class="text-sm text-gray-400 text-right mt-1">Always Active</p>
+</div>
+</div>
+</div>
+<div class="rounded-lg border border-[#282e39] bg-[#111318]/40 p-4">
+<div class="flex items-start justify-between">
+<div class="pr-4">
+<h3 class="font-bold text-lg">Analytics Cookies</h3>
+<p class="text-sm text-gray-400 mt-1">These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us to know which pages are the most and least popular and see how visitors move around the site.</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#282e39] p-0.5 has-[:checked]:justify-end has-[:checked]:bg-[var(--primary-color)] transition-colors">
+<div class="h-full w-[27px] rounded-full bg-white transition-transform" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.06) 0px 3px 1px"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+<div class="rounded-lg border border-[#282e39] bg-[#111318]/40 p-4">
+<div class="flex items-start justify-between">
+<div class="pr-4">
+<h3 class="font-bold text-lg">Marketing Cookies</h3>
+<p class="text-sm text-gray-400 mt-1">These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites.</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-[#282e39] p-0.5 has-[:checked]:justify-end has-[:checked]:bg-[var(--primary-color)] transition-colors">
+<div class="h-full w-[27px] rounded-full bg-white transition-transform" style="box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 8px, rgba(0, 0, 0, 0.06) 0px 3px 1px"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="flex flex-col sm:flex-row items-center justify-end gap-3 p-6 border-t border-[#282e39] bg-[#1C1F26]">
+<button class="w-full sm:w-auto flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-11 px-6 bg-[#282e39] text-white text-sm font-bold leading-normal tracking-wide hover:bg-[#343a46] transition-colors">
+<span class="truncate">Save Preferences</span>
+</button>
+<button class="w-full sm:w-auto flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-11 px-6 bg-[var(--primary-color)] text-white text-sm font-bold leading-normal tracking-wide hover:bg-blue-600 transition-colors">
+<span class="truncate">Accept All</span>
+</button>
+</footer>
+</div>
+</div>
+</div>
+
+</body></html>

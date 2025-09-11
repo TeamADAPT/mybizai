@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MybizAI - User Profile</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #135bec;
+        }
+    </style>
+</head>
+<body class="bg-[#111318]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex min-h-screen">
+<aside class="w-64 flex-shrink-0 bg-[#181A20] p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-3 mb-10">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-md size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCb5muTvdw-RMELP2RTuzs3qYprfz6AmaoL5U_adn4j6eZu70w3ufNV7ePDBeVUydDuooxktVwNJnGC9-SxxFqLNxX9mtaAtD4GqPXC6Q3ciHSCQoNBzKaOkeBqbR2n_zGZbJAF0-7gE2wr9rNYf-QmU_yg2_1JYtfyBwiz4u9C58aCz4ccHOaX5xGD6DxJ-H5Usgfc_ivB1HlU1D5LJzYJLznYvL4YiRFBD4qlcwsAKfOufB2K78AL6C6ldCt_0j6fLEqT9PB-eFQ");'></div>
+<h1 class="text-white text-xl font-bold">MybizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-[#A0AEC0] hover:bg-[#2D3748] hover:text-white rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#A0AEC0] hover:bg-[#2D3748] hover:text-white rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#A0AEC0] hover:bg-[#2D3748] hover:text-white rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="text-sm font-medium">Market Research</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#A0AEC0] hover:bg-[#2D3748] hover:text-white rounded-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<span class="text-sm font-medium">Execution</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white bg-[var(--primary-color)] rounded-md" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm font-medium">Profile</span>
+</a>
+</nav>
+</div>
+</aside>
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto">
+<div class="mb-8">
+<h1 class="text-4xl font-bold text-white mb-2">Profile</h1>
+<p class="text-gray-400">Manage your account settings and preferences.</p>
+</div>
+<div class="flex items-center gap-6 mb-12 p-6 bg-[#181A20] rounded-lg">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-24 flex-shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBSHI0jKHjOpjehICWl5y3aY5qCPujaeoFh9nS_smwRJMQQ2QAEACFmWOFnFTnXlEjYQRPWL7zMv6ZFKQb5JVuKX_z3k5nhjoic_NzHMEKtDwNPpu78XSZbQRGWHtlY2TbXx6oaCrIUb6th4kQsMn_fXC9u8UUmctAc6ltC5qJ01O2C1guRQSP1HSnd1G3mYj_spucqghZN6lU4hj19oJzeLIsTx61S1u4aUSN9RmzcDYGh4xL5i0iPcqOsehOFSGwUtgQPocjF0xY");'></div>
+<div>
+<h2 class="text-2xl font-bold text-white">Ethan Carter</h2>
+<p class="text-gray-400">ethan.carter@email.com</p>
+<p class="text-sm text-gray-500 mt-1">Joined 2 years ago</p>
+</div>
+</div>
+<div class="mb-12">
+<h3 class="text-2xl font-bold text-white mb-6">Account</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<p class="text-lg font-medium text-white">Personal Information</p>
+<p class="text-sm text-gray-400">Update your name and email address</p>
+</div>
+<button class="flex items-center justify-center rounded-md h-10 px-5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-colors duration-200">
+                                Edit
+                            </button>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<p class="text-lg font-medium text-white">Security</p>
+<p class="text-sm text-gray-400">Manage your password and security settings</p>
+</div>
+<button class="flex items-center justify-center rounded-md h-10 px-5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-colors duration-200">
+                                Edit
+                            </button>
+</div>
+</div>
+</div>
+<div class="mb-12">
+<h3 class="text-2xl font-bold text-white mb-6">Activity Summary</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex flex-col gap-2 rounded-lg p-6 bg-[#181A20] border border-transparent hover:border-[var(--primary-color)] transition-colors duration-300">
+<p class="text-gray-300 font-medium">Ideas Generated</p>
+<p class="text-4xl font-bold text-white">12</p>
+</div>
+<div class="flex flex-col gap-2 rounded-lg p-6 bg-[#181A20] border border-transparent hover:border-[var(--primary-color)] transition-colors duration-300">
+<p class="text-gray-300 font-medium">Market Research</p>
+<p class="text-4xl font-bold text-white">5</p>
+</div>
+<div class="flex flex-col gap-2 rounded-lg p-6 bg-[#181A20] border border-transparent hover:border-[var(--primary-color)] transition-colors duration-300">
+<p class="text-gray-300 font-medium">Execution Projects</p>
+<p class="text-4xl font-bold text-white">3</p>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-2xl font-bold text-white mb-6">Interaction History</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<p class="text-lg font-medium text-white">AI Agent Collaboration Log</p>
+<p class="text-sm text-gray-400">Review your past conversations and decisions with AI agents.</p>
+</div>
+<button class="flex items-center justify-center rounded-md h-10 px-5 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium transition-colors duration-200">
+                                View History
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

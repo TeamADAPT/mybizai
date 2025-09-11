@@ -1,0 +1,204 @@
+<html><head>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="bg-[#111318] text-white">
+<div class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="flex h-full flex-1">
+<aside class="flex w-64 flex-col gap-8 border-r border-r-[#1F242E] bg-[#111318] p-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[var(--primary-color)] text-3xl"> all_inclusive </span>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1F242E] hover:text-white" href="#">
+<span class="material-symbols-outlined"> home </span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1F242E] hover:text-white" href="#">
+<span class="material-symbols-outlined"> lightbulb </span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1F242E] hover:text-white" href="#">
+<span class="material-symbols-outlined"> rocket_launch </span>
+<span class="text-sm font-medium">Execution</span>
+</a>
+<a class="flex items-center gap-3 rounded-md bg-[#1F242E] px-3 py-2 text-white" href="#">
+<span class="material-symbols-outlined"> settings </span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 rounded-md px-3 py-2 text-gray-400 hover:bg-[#1F242E] hover:text-white" href="#">
+<span class="material-symbols-outlined"> help </span>
+<span class="text-sm font-medium">Help</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-2">
+<button class="flex w-full items-center justify-center gap-2 rounded-md bg-[var(--primary-color)] px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+<span class="material-symbols-outlined"> add </span>
+<span>Invite team</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto">
+<div class="p-8">
+<header class="mb-8">
+<h1 class="text-3xl font-bold leading-tight tracking-tight text-white">Settings</h1>
+<p class="mt-2 text-gray-400">Manage your account settings and preferences.</p>
+</header>
+<div class="border-b border-b-[#1F242E]">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a class="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-400 hover:border-gray-300 hover:text-gray-200" href="#"> Profile </a>
+<a class="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-400 hover:border-gray-300 hover:text-gray-200" href="#"> Billing </a>
+<a aria-current="page" class="border-b-2 border-[var(--primary-color)] px-1 pb-3 text-sm font-medium text-[var(--primary-color)]" href="#"> Integrations </a>
+<a class="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-400 hover:border-gray-300 hover:text-gray-200" href="#"> Notifications </a>
+<a class="border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-gray-400 hover:border-gray-300 hover:text-gray-200" href="#"> Security </a>
+</nav>
+</div>
+<div class="mt-8">
+<div class="mb-8">
+<h2 class="text-2xl font-bold tracking-tight text-white">Integrations Management</h2>
+<p class="mt-2 text-gray-400">Connect your MyBizAI account with other tools to streamline your workflow and enhance productivity.</p>
+</div>
+<div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"> search </span>
+<input class="w-full rounded-md border border-[#1F242E] bg-[#181C25] py-2 pl-10 pr-4 text-sm text-white placeholder-gray-400 focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)]" placeholder="Search integrations..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<select class="w-full appearance-none rounded-md border border-[#1F242E] bg-[#181C25] py-2 pl-3 pr-8 text-sm text-white focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] sm:w-auto">
+<option>All Categories</option>
+<option>Marketing</option>
+<option>Sales</option>
+<option>Productivity</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"> expand_more </span>
+</div>
+<div class="relative">
+<select class="w-full appearance-none rounded-md border border-[#1F242E] bg-[#181C25] py-2 pl-3 pr-8 text-sm text-white focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] sm:w-auto">
+<option>Any Status</option>
+<option>Connected</option>
+<option>Not Connected</option>
+</select>
+<span class="material-symbols-outlined pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"> expand_more </span>
+</div>
+</div>
+</div>
+<div class="space-y-8">
+<div>
+<h3 class="text-xl font-semibold text-white">Available Integrations</h3>
+<div class="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="flex flex-col justify-between rounded-md border border-[#1F242E] bg-[#181C25] p-6">
+<div class="flex items-start gap-4">
+<div class="flex size-10 items-center justify-center rounded-md bg-[#1F242E]">
+<span class="material-symbols-outlined text-gray-400"> group </span>
+</div>
+<div>
+<h4 class="text-base font-semibold text-white">CRM</h4>
+<p class="mt-1 text-sm text-gray-400">Sync customer data and automate workflows.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-900 px-2 py-1 text-xs font-medium text-green-300">
+<span class="size-1.5 rounded-full bg-green-400"></span>
+                          Connected
+                        </span>
+<button class="rounded-md border border-red-500/50 bg-transparent px-3 py-1.5 text-xs font-medium text-red-400 hover:border-red-500/80 hover:bg-red-500/10">
+                          Disconnect
+                        </button>
+</div>
+</div>
+<div class="flex flex-col justify-between rounded-md border border-[#1F242E] bg-[#181C25] p-6">
+<div class="flex items-start gap-4">
+<div class="flex size-10 items-center justify-center rounded-md bg-[#1F242E]">
+<span class="material-symbols-outlined text-gray-400"> campaign </span>
+</div>
+<div>
+<h4 class="text-base font-semibold text-white">Marketing Automation</h4>
+<p class="mt-1 text-sm text-gray-400">Manage campaigns and track performance.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-gray-700 px-2 py-1 text-xs font-medium text-gray-300">
+<span class="size-1.5 rounded-full bg-gray-400"></span>
+                          Not Connected
+                        </span>
+<button class="rounded-md border border-gray-600 px-3 py-1.5 text-xs font-medium text-white hover:border-gray-500 hover:bg-gray-700">Connect</button>
+</div>
+</div>
+<div class="flex flex-col justify-between rounded-md border border-[#1F242E] bg-[#181C25] p-6">
+<div class="flex items-start gap-4">
+<div class="flex size-10 items-center justify-center rounded-md bg-[#1F242E]">
+<span class="material-symbols-outlined text-gray-400"> cloud_upload </span>
+</div>
+<div>
+<h4 class="text-base font-semibold text-white">Cloud Storage</h4>
+<p class="mt-1 text-sm text-gray-400">Easily access and share files.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-green-900 px-2 py-1 text-xs font-medium text-green-300">
+<span class="size-1.5 rounded-full bg-green-400"></span>
+                          Connected
+                        </span>
+<button class="rounded-md border border-red-500/50 bg-transparent px-3 py-1.5 text-xs font-medium text-red-400 hover:border-red-500/80 hover:bg-red-500/10">
+                          Disconnect
+                        </button>
+</div>
+</div>
+<div class="flex flex-col justify-between rounded-md border border-[#1F242E] bg-[#181C25] p-6">
+<div class="flex items-start gap-4">
+<div class="flex size-10 items-center justify-center rounded-md bg-[#1F242E]">
+<span class="material-symbols-outlined text-gray-400"> mail </span>
+</div>
+<div>
+<h4 class="text-base font-semibold text-white">Email Marketing</h4>
+<p class="mt-1 text-sm text-gray-400">Send targeted emails and track engagement.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-end">
+<button class="rounded-md bg-[var(--primary-color)] px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">Connect</button>
+</div>
+</div>
+<div class="flex flex-col justify-between rounded-md border border-[#1F242E] bg-[#181C25] p-6">
+<div class="flex items-start gap-4">
+<div class="flex size-10 items-center justify-center rounded-md bg-[#1F242E]">
+<span class="material-symbols-outlined text-gray-400"> task_alt </span>
+</div>
+<div>
+<h4 class="text-base font-semibold text-white">Project Management</h4>
+<p class="mt-1 text-sm text-gray-400">Manage tasks and collaborate with your team.</p>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-end">
+<button class="rounded-md bg-[var(--primary-color)] px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">Connect</button>
+</div>
+</div>
+<div class="flex flex-col justify-between rounded-md border border-dashed border-[#1F242E] bg-transparent p-6 text-center">
+<div class="m-auto">
+<div class="flex size-10 items-center justify-center rounded-md border border-dashed border-[#1F242E] bg-[#181C25]">
+<span class="material-symbols-outlined text-gray-400"> add </span>
+</div>
+<h4 class="mt-4 text-base font-semibold text-white">Request an Integration</h4>
+<p class="mt-1 text-sm text-gray-400">Can't find your tool? Let us know.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

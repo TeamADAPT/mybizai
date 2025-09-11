@@ -1,0 +1,191 @@
+<html><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+      .switch-label:has(:checked) .switch-dot {
+        transform: translateX(100%);
+      }
+      .switch-label:has(:checked) {
+        background-color: var(--primary-color);
+      }
+    </style>
+</head>
+<body class="bg-gray-900">
+<div class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root overflow-x-hidden" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="flex flex-1">
+<aside class="flex flex-col w-64 bg-[#181A20] p-6 shrink-0">
+<div class="flex items-center gap-2 mb-10">
+<svg class="h-8 w-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M218.83,103.77l-80-75.48a1.14,1.14,0,0,1-.11-.11,16,16,0,0,0-21.53,0l-.11.11L37.17,103.77A16,16,0,0,0,32,115.55V208a16,16,0,0,0,16,16H96a16,16,0,0,0,16-16V160h32v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V115.55A16,16,0,0,0,218.83,103.77ZM208,208H160V160a16,16,0,0,0-16-16H112a16,16,0,0,0-16,16v48H48V115.55l.11-.1L128,40l79.9,75.43.11.1Z"></path>
+</svg>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M80,64a8,8,0,0,1,8-8H216a8,8,0,0,1,0,16H88A8,8,0,0,1,80,64Zm136,56H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Zm0,64H88a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16ZM44,52A12,12,0,1,0,56,64,12,12,0,0,0,44,52Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,116Zm0,64a12,12,0,1,0,12,12A12,12,0,0,0,44,180Z"></path>
+</svg>
+<span class="text-sm font-medium">Projects</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"></path>
+</svg>
+<span class="text-sm font-medium">Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path>
+</svg>
+<span class="text-sm font-medium">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-white bg-[var(--primary-color)] rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M216,130.16q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.6,107.6,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.29,107.29,0,0,0-26.25-10.86,8,8,0,0,0-7.06,1.48L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.6,107.6,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z"></path>
+</svg>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg">
+<path d="M140,180a12,12,0,1,1-12-12A12,12,0,0,1,140,180ZM128,72c-22.06,0-40,16.15-40,36v4a8,8,0,0,0,16,0v-4c0-11,10.77-20,24-20s24,9,24,20-10.77,20-24,20a8,8,0,0,0-8,8v8a8,8,0,0,0,16,0v-.72c18.24-3.35,32-17.9,32-35.28C168,88.15,150.06,72,128,72Zm104,56A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
+</svg>
+<span class="text-sm font-medium">Help</span>
+</a>
+</nav>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-4 py-2 text-gray-400 hover:bg-[#282e39] hover:text-white rounded-md" href="#">
+<svg fill="currentColor" height="24px" viewBox="0 0 256 256" width="24px" xmlns="http://www.w3.org/2000/svg"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg>
+<span class="text-sm font-medium">Invite team</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8 bg-[#111318]">
+<div class="max-w-4xl mx-auto">
+<h1 class="text-white text-4xl font-bold mb-4">Settings</h1>
+<div class="border-b border-gray-700">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a class="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Profile</a>
+<a aria-current="page" class="border-[var(--primary-color)] text-[var(--primary-color)] whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Notifications</a>
+<a class="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Security</a>
+<a class="border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" href="#">Preferences</a>
+</nav>
+</div>
+<div class="mt-8">
+<h2 class="text-2xl font-bold text-white mb-6">Notification Preferences</h2>
+<div class="space-y-6">
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Mute all notifications</h3>
+<p class="text-gray-400 text-sm">Temporarily or permanently silence all notifications from MyBizAI.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Project Updates</h3>
+<p class="text-gray-400 text-sm">Receive notifications about project progress, milestones, and deadlines.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Team Messages</h3>
+<p class="text-gray-400 text-sm">Get notified about new messages, mentions, and team activity.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">System Alerts</h3>
+<p class="text-gray-400 text-sm">Stay informed about system updates, maintenance, and new features.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Billing Notifications</h3>
+<p class="text-gray-400 text-sm">Receive notifications about billing, invoices, and payment confirmations.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Feedback &amp; Reviews</h3>
+<p class="text-gray-400 text-sm">Get notified about new comments, feedback, and reviews on your projects.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Team Management</h3>
+<p class="text-gray-400 text-sm">Receive notifications about new users joining your team or changes in team roles.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+<div class="flex items-center justify-between p-6 bg-[#181A20] rounded-lg">
+<div>
+<h3 class="text-lg font-semibold text-white">Product Updates &amp; Tips</h3>
+<p class="text-gray-400 text-sm">Stay updated on new features, tips, and best practices for using MyBizAI.</p>
+</div>
+<div class="flex items-center space-x-4">
+<label class="switch-label relative inline-flex items-center cursor-pointer h-6 w-11 rounded-full bg-gray-600 transition-colors">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<span class="switch-dot absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"></span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

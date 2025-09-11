@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MyBizAI - Marketing Campaign Planner</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-50: #eff6ff;
+            --primary-100: #dbeafe;
+            --primary-200: #bfdbfe;
+            --primary-300: #93c5fd;
+            --primary-400: #60a5fa;
+            --primary-500: #3b82f6;
+            --primary-600: #2563eb;
+            --primary-700: #1d4ed8;
+            --primary-800: #1e40af;
+            --primary-900: #1e3a8a;
+            --primary-950: #172554;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --slate-950: #020617;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--slate-900);
+            color: var(--slate-200);
+        }
+        .sidebar {
+            background-color: var(--slate-950);
+        }
+        .content-area {
+            background-color: var(--slate-900);
+        }
+        .card {
+            background-color: var(--slate-800);
+            border-radius: 0.5rem;
+            border: 1px solid var(--slate-700);
+        }
+        .input-base {
+            @apply w-full rounded-md border-slate-700 bg-slate-800 text-slate-200 placeholder-slate-400 focus:border-primary-500 focus:ring-primary-500;
+        }
+        .btn-primary {
+            @apply bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-slate-900;
+        }
+        .status-badge {
+            @apply px-2.5 py-0.5 rounded-full text-xs font-medium;
+        }
+        .status-inprogress {
+            @apply bg-yellow-500/10 text-yellow-400;
+        }
+        .status-completed {
+            @apply bg-green-500/10 text-green-400;
+        }
+        .status-planned {
+            @apply bg-blue-500/10 text-blue-400;
+        }
+        .sidebar-link {
+            @apply flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-700 hover:text-white;
+        }
+        .sidebar-link.active {
+            @apply bg-primary-600 text-white;
+        }
+    </style>
+</head>
+<body>
+<div class="flex h-screen bg-slate-950 text-slate-200">
+<aside class="w-64 flex-shrink-0 sidebar border-r border-slate-800 flex flex-col">
+<div class="h-16 flex items-center px-6">
+<h1 class="text-xl font-bold text-white">MyBizAI</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2">
+<a class="sidebar-link" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="sidebar-link" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span>Idea Generation</span>
+</a>
+<a class="sidebar-link active" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Marketing Planner</span>
+</a>
+<a class="sidebar-link" href="#">
+<span class="material-symbols-outlined">task_alt</span>
+<span>Task Manager</span>
+</a>
+<a class="sidebar-link" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Analytics</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-800">
+<div class="flex items-center gap-4">
+<img alt="User avatar" class="h-10 w-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPdfkJbfN_CgC3v6CkFnputMEyvD6Lk0GO2xOZmjZ5rK6uDF_MOMdpTIRId4qBHEXl6PeewAXjrsc1DC5YAzE2a4dtAseEgvuqGYzwLzk4qv_Xv9BZmipUdsdSNScDY0KF9QvRRmkJmUWLFo6RXWlg-e2eRcnUTCG3PoCJfVUAGJMCS16fEQozlQqpr6vI7c9kwDlaVC84kRCH0bfmZEuHkLKdNs6AP4i5iSI_8Epgb2KTUpcPjfIRcehnZgzRcWY523OB-Q07HOM"/>
+<div>
+<p class="text-sm font-medium text-white">Jane Doe</p>
+<a class="text-xs text-slate-400 hover:text-primary-400" href="#">View profile</a>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto content-area">
+<div class="p-8">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h2 class="text-3xl font-bold text-white">Marketing Campaign Planner</h2>
+<p class="mt-1 text-slate-400">Leverage AI to suggest optimal strategies and content for your campaigns.</p>
+</div>
+<button class="flex items-center gap-2 rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+<span class="material-symbols-outlined text-base">add</span>
+                        New Campaign
+                    </button>
+</div>
+<div class="card p-6 mb-8">
+<div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+<h3 class="text-lg font-semibold text-white">Campaign Performance: Q2 Product Launch</h3>
+<div class="flex items-center gap-4">
+<span class="text-sm text-slate-400">
+<span class="material-symbols-outlined text-base align-middle mr-1 text-green-400">sync</span>
+                                Last updated: Just now
+                            </span>
+<button class="flex items-center gap-2 rounded-md border border-slate-600 px-3 py-1.5 text-sm font-semibold text-slate-200 hover:bg-slate-700">
+<span class="material-symbols-outlined text-base">download</span>
+                                Export Report
+                            </button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+<div class="bg-slate-900/50 p-4 rounded-lg">
+<div class="flex items-center">
+<div class="p-2 bg-blue-500/10 rounded-md">
+<span class="material-symbols-outlined text-blue-400">visibility</span>
+</div>
+<div class="ml-4">
+<p class="text-sm text-slate-400">Reach</p>
+<p class="text-2xl font-semibold text-white">1.2M</p>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/50 p-4 rounded-lg">
+<div class="flex items-center">
+<div class="p-2 bg-yellow-500/10 rounded-md">
+<span class="material-symbols-outlined text-yellow-400">favorite</span>
+</div>
+<div class="ml-4">
+<p class="text-sm text-slate-400">Engagement</p>
+<p class="text-2xl font-semibold text-white">87K</p>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/50 p-4 rounded-lg">
+<div class="flex items-center">
+<div class="p-2 bg-green-500/10 rounded-md">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+</div>
+<div class="ml-4">
+<p class="text-sm text-slate-400">Conversions</p>
+<p class="text-2xl font-semibold text-white">5,230</p>
+</div>
+</div>
+</div>
+<div class="bg-slate-900/50 p-4 rounded-lg">
+<div class="flex items-center">
+<div class="p-2 bg-purple-500/10 rounded-md">
+<span class="material-symbols-outlined text-purple-400">monetization_on</span>
+</div>
+<div class="ml-4">
+<p class="text-sm text-slate-400">ROI</p>
+<p class="text-2xl font-semibold text-white">4.5x</p>
+</div>
+</div>
+</div>
+</div>
+<div>
+<canvas id="performanceChart"></canvas>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="lg:col-span-2 space-y-6">
+<div class="card p-6">
+<h3 class="text-lg font-semibold text-white mb-4">Campaign Overview</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-1" for="campaign-name">Campaign Name</label>
+<input class="input-base" id="campaign-name" placeholder="e.g., Q2 Product Launch" type="text" value="Q2 Product Launch"/>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-1" for="campaign-description">Campaign Description</label>
+<textarea class="input-base" id="campaign-description" placeholder="Describe the main goals and purpose of this campaign." rows="4"></textarea>
+</div>
+</div>
+</div>
+<div class="card p-6">
+<h3 class="text-lg font-semibold text-white mb-4">Targeting &amp; Budget</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-1" for="target-audience">Target Audience</label>
+<textarea class="input-base" id="target-audience" placeholder="e.g., Tech enthusiasts aged 25-40..." rows="4"></textarea>
+</div>
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-1" for="total-budget">Total Budget ($)</label>
+<input class="input-base" id="total-budget" placeholder="e.g., 5000" type="number" value="5000"/>
+</div>
+</div>
+</div>
+<div class="card p-6">
+<h3 class="text-lg font-semibold text-white mb-4">Channel Selection</h3>
+<p class="text-sm text-slate-400 mb-4">Select the channels for this campaign. AI will suggest content for selected channels.</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<label class="flex items-center p-3 border border-slate-700 rounded-md hover:bg-slate-700 cursor-pointer">
+<input checked="" class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-primary-600 focus:ring-primary-500" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-slate-200">Social Media</span>
+</label>
+<label class="flex items-center p-3 border border-slate-700 rounded-md hover:bg-slate-700 cursor-pointer">
+<input checked="" class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-primary-600 focus:ring-primary-500" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-slate-200">Email</span>
+</label>
+<label class="flex items-center p-3 border border-slate-700 rounded-md hover:bg-slate-700 cursor-pointer">
+<input checked="" class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-primary-600 focus:ring-primary-500" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-slate-200">Paid Ads</span>
+</label>
+<label class="flex items-center p-3 border border-slate-700 rounded-md hover:bg-slate-700 cursor-pointer">
+<input class="h-4 w-4 rounded border-slate-600 bg-slate-900 text-primary-600 focus:ring-primary-500" type="checkbox"/>
+<span class="ml-3 text-sm font-medium text-slate-200">Content</span>
+</label>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="card p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-semibold text-white">AI Strategy Suggestions</h3>
+<span class="material-symbols-outlined text-yellow-400">auto_awesome</span>
+</div>
+<div class="space-y-3">
+<p class="text-sm text-slate-300 bg-slate-700/50 p-3 rounded-md"><span class="font-bold text-green-400">Data-driven insight:</span> Your conversion rate is highest on Paid Ads. Consider reallocating 15% of your Social Media budget to Google Search Ads.</p>
+<p class="text-sm text-slate-300 bg-slate-700/50 p-3 rounded-md">Consider an A/B test for your email subject lines. Suggestion A: "The Future of X is Here". Suggestion B: "Your Exclusive First Look at Y".</p>
+</div>
+<button class="mt-4 w-full flex items-center justify-center gap-2 rounded-md border border-slate-600 px-3 py-2 text-sm font-semibold text-slate-200 hover:bg-slate-700">
+<span class="material-symbols-outlined text-base">refresh</span>
+                                Generate More Suggestions
+                            </button>
+</div>
+<div class="card">
+<div class="p-6 border-b border-slate-700">
+<h3 class="text-lg font-semibold text-white">Task Manager</h3>
+<p class="text-sm text-slate-400 mt-1">Key activities for your campaign.</p>
+</div>
+<div class="p-2">
+<table class="w-full text-left">
+<thead class="sr-only">
+<tr>
+<th>Task</th>
+<th>Status</th>
+<th>Assignee</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-slate-700/50 rounded-lg">
+<td class="p-4">
+<p class="font-medium text-white">Create social media posts</p>
+<p class="text-xs text-slate-400">Due: 2024-03-15</p>
+</td>
+<td class="p-4 text-center">
+<span class="status-badge status-inprogress">In Progress</span>
+</td>
+<td class="p-4 text-right">
+<div class="flex justify-end items-center -space-x-2">
+<img alt="Sarah Lee" class="h-6 w-6 rounded-full ring-2 ring-slate-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8eea6_GgXKHuHtWl6SPftonxHR8B8VT9s1dK8yteqRK4bJpXvOi2C-mo2iOgpoCqKrBix1Q2uDRsPUBNDYJ9N3wXQex2EMr0DRgoIorvmbCC72wDtEABn1eLbvNZL9Tz-VKW61KDTmTbmo48K5TlqnLNKUnc5QKs3geRCvKKtxyO1qN8bGzkl8meZjycw0l_xxqdzyGrkXEAdaURM-e0hOOatEmsRJup8SfQgL48fIgl_QU_UJP9-hOGioELYIsynQKiRj_C9hjM"/>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-700/50 rounded-lg">
+<td class="p-4">
+<p class="font-medium text-white">Design email campaign</p>
+<p class="text-xs text-slate-400">Due: 2024-03-10</p>
+</td>
+<td class="p-4 text-center">
+<span class="status-badge status-completed">Completed</span>
+</td>
+<td class="p-4 text-right">
+<div class="flex justify-end items-center -space-x-2">
+<img alt="David Chen" class="h-6 w-6 rounded-full ring-2 ring-slate-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA5__v2DDmAorjFVHksoR5Jix2adzkTnnsIM2YiLkzlhmdPrO4XH2CBbKVZz5RrwBumVxZ1HjwtUuegyXbhWGsvwXUpM0ICymhiwmFgWoCQie01A5IuVYYR4QRcusIpxhhjH6nJyolnxxC8y1ejuCzrdFxBnLf9c7cctvXoZXMVbve_svEqk3vvll3FGahSieRfFnmjJ9JQZn4QWEe2LvxQR3wX5HSXOjvCpG-APCjPbz--CaksGCGcNY1cdZkkTsRq-E7kirFP8w"/>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-700/50 rounded-lg">
+<td class="p-4">
+<p class="font-medium text-white">Launch ad campaign</p>
+<p class="text-xs text-slate-400">Due: 2024-03-20</p>
+</td>
+<td class="p-4 text-center">
+<span class="status-badge status-planned">Planned</span>
+</td>
+<td class="p-4 text-right">
+<div class="flex justify-end items-center -space-x-2">
+<img alt="Emily Wong" class="h-6 w-6 rounded-full ring-2 ring-slate-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwAMcWcofXzhSR75FHpSoM_N3rq5LU4RWB4n8kYsGaI5HAO_mmfpHbt_n0mqjzcCPVEM-gDMCRqTTxy6TOP4zL0-G0xFB8EFbKcyNK-haI6XTlw2MqP2gSUxOQv0GPuS7EbOg3UmmAl-PhHgjiwmUbnu-LZdzG88BUaNGWqbFO1Iyhd0nAAtiyZ4uJsuktQCN4CNoNPsjAYNyW7NeNn91FD5S0HXqyRYJ5gOff3VevAW3tw5IG3pwvoJp9GxJYr1tiZTrO1dzBe8k"/>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        const ctx = document.getElementById('performanceChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Conversions',
+                        data: [120, 190, 300, 500, 1200, 2150],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                    }, {
+                        label: 'Engagement',
+                        data: [10000, 15000, 25000, 30000, 45000, 87000],
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(203, 213, 225, 0.1)'
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                color: '#cbd5e1'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body></html>

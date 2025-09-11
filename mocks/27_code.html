@@ -1,0 +1,160 @@
+<html><head>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="bg-[#111318] text-white" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282e39] px-10 py-3">
+<div class="flex items-center gap-4">
+<div class="size-6 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path></svg>
+</div>
+<h2 class="text-xl font-bold tracking-tighter">MybizAI</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Ideas</a>
+<a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Execution</a>
+<a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Community</a>
+<a class="text-sm font-medium text-gray-300 hover:text-white transition-colors" href="#">Help</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-[#282e39] text-gray-300 hover:text-white hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined">
+                notifications
+              </span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIkx7OJanWyTH1V_lSVzxn-sRAoDwq2bfPQa6IGTCQKrduMnZh9HvYMcZvw0vNDTfzRmFSkFIQqLx5xZPJdTHhoekgjdF-UyyrBVkcGj1k3jLjj9pxS0VNQiUDjVnZdTNJ97PmujWtX3jr_KQv2OmjHg8_ra6koEpxaSTfYvD5s3j1sFuv28WQptceWftRyS80WFXogNeKhShembwYEdUQ-VTXwcUOEiU8orwYw2Gntjrd40KvVl3vuw2SQDmh7N3xKe6ASLRtduU");'></div>
+</div>
+</header>
+<main class="px-4 md:px-10 lg:px-40 flex-1 py-10">
+<div class="max-w-[960px] mx-auto">
+<div class="mb-10">
+<h1 class="text-3xl md:text-4xl font-bold tracking-tighter mb-2">Billing &amp; Subscription</h1>
+<p class="text-gray-400">Manage your billing information and subscription plan.</p>
+</div>
+<div class="space-y-12">
+<section>
+<h2 class="text-2xl font-bold tracking-tight mb-6">Current Plan</h2>
+<div class="rounded-lg border border-[#282e39] bg-[#1c1f27] p-6">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="flex-1">
+<p class="text-[var(--primary-color)] text-sm font-semibold mb-1">PRO PLAN</p>
+<p class="text-white text-lg font-bold">You have access to all features, unlimited ideas, and priority support.</p>
+<p class="text-gray-400 mt-1">Your plan renews on April 15, 2024.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-transparent border border-[#282e39] text-white text-sm font-medium hover:bg-[#282e39] transition-colors">
+<span>Cancel Subscription</span>
+</button>
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[var(--primary-color)] text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+<span>Upgrade Plan</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-2xl font-bold tracking-tight mb-6">Billing History</h2>
+<div class="rounded-lg border border-[#282e39] bg-[#1c1f27]">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="border-b border-[#282e39]">
+<tr>
+<th class="px-6 py-4 text-sm font-medium text-gray-300">Date</th>
+<th class="px-6 py-4 text-sm font-medium text-gray-300">Description</th>
+<th class="px-6 py-4 text-sm font-medium text-gray-300">Amount</th>
+<th class="px-6 py-4 text-sm font-medium text-gray-300">Status</th>
+<th class="px-6 py-4 text-sm font-medium text-gray-300 text-right">Receipt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-[#282e39]">
+<td class="px-6 py-4 text-sm text-gray-400">03/15/2024</td>
+<td class="px-6 py-4 text-sm text-gray-400">Monthly Subscription - Pro</td>
+<td class="px-6 py-4 text-sm text-gray-400">$29.99</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-300">
+                              Paid
+                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-right">
+<a class="font-medium text-[var(--primary-color)] hover:text-blue-400 transition-colors" href="#">Download</a>
+</td>
+</tr>
+<tr class="border-b border-[#282e39]">
+<td class="px-6 py-4 text-sm text-gray-400">02/15/2024</td>
+<td class="px-6 py-4 text-sm text-gray-400">Monthly Subscription - Pro</td>
+<td class="px-6 py-4 text-sm text-gray-400">$29.99</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-300">
+                              Paid
+                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-right">
+<a class="font-medium text-[var(--primary-color)] hover:text-blue-400 transition-colors" href="#">Download</a>
+</td>
+</tr>
+<tr class="">
+<td class="px-6 py-4 text-sm text-gray-400">01/15/2024</td>
+<td class="px-6 py-4 text-sm text-gray-400">Monthly Subscription - Pro</td>
+<td class="px-6 py-4 text-sm text-gray-400">$29.99</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-300">
+                              Paid
+                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-right">
+<a class="font-medium text-[var(--primary-color)] hover:text-blue-400 transition-colors" href="#">Download</a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-2xl font-bold tracking-tight mb-6">Payment Method</h2>
+<div class="rounded-lg border border-[#282e39] bg-[#1c1f27] p-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-white rounded-md w-12 h-8 flex items-center justify-center">
+<img alt="Visa" class="h-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARqwvmlQFttWJkmOo5SFGX8tVMloXAuU0-mLeQ22ZzioNkeqhXrW4-lFdOKjepVSF2da3ckwkIT0OsiTZf67LPdb0ayBvCpFBC6nM0QYCZRyMsje-C_B5lfUcxcGxfKZY-a_ZprvPdByi83VqX8HzMKM72Q8R1F5Es1gOpdRm14FLDmrrszwFYbQP2dOoVOtRFiu3m-syvo02rZoQ0Fq8mB5yZe1xgQewtC0u0bO9wCW9VXVHlGQIfpN97NqSWFQ__S40l6Ceuq7o"/>
+</div>
+<div>
+<p class="text-base font-medium">Visa ending in 4242</p>
+<p class="text-sm text-gray-400">Expires 03/2026</p>
+</div>
+</div>
+<button class="flex items-center justify-center rounded-md h-10 w-10 bg-transparent border border-[#282e39] text-gray-300 hover:bg-[#282e39] hover:text-white transition-colors">
+<span class="material-symbols-outlined text-xl">
+                        edit
+                      </span>
+</button>
+</div>
+<div class="mt-6 pt-6 border-t border-[#282e39]">
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-transparent border border-[#282e39] text-white text-sm font-medium hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined mr-2 text-xl">add</span>
+<span>Add Payment Method</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

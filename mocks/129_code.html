@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #135bec;
+    }
+  </style>
+</head>
+<body class="bg-[#111318]" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282e39] px-10 py-3">
+<div class="flex items-center gap-4 text-white">
+<svg class="size-8 text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex items-center gap-8">
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Ideas</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Execution</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Community</a>
+<a class="text-white/80 hover:text-white text-sm font-medium transition-colors" href="#">Help</a>
+</nav>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC9PxtdW27ifHHGJw0BrK-7vW5jqELN_ZjT1FTGXQTZvX3XY1WhYtVq_E6fivlTdp1YnDdXJaf_7VfW54bO3mW7YbQY_zUtPDylW0610RnhSaCnKmhSaN8pq8khOrX0858wYQNJNTTwbadeaaYLtW8ackBt_1utmtgX3gVRKEwuQBJt_cn6fiI-UVoiTjDEDX-6NdAQzikOdQD9-uxkaocE_cbw29yexzsqVaKAyozJYfob5O_p0KWjHHvZb0dSuN8huQb0KPm3Afw");'></div>
+</header>
+<main class="flex flex-1 justify-center py-16">
+<div class="w-full max-w-lg space-y-8">
+<div class="text-center">
+<h2 class="text-white text-3xl font-bold tracking-tight">Set up authenticator app</h2>
+<p class="text-white/70 mt-2">Use an authenticator app like Authy or Google Authenticator to generate a verification code.</p>
+</div>
+<div class="bg-[#1c1f27] border border-[#282e39] rounded-lg p-8 space-y-6" x-data="{ open: false }">
+<div class="flex flex-col md:flex-row items-center gap-6">
+<div class="flex-shrink-0">
+<div class="size-48 bg-white p-2 rounded-lg" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBwHXgRaybdnqDMA4DNQ_5jR4JvU4hov_TWyY3yM0FN_EStmzf6YPJukgEFB2BQYcJPFC-JRDM4Yu4FL_0rJb99Z-3KAPDXEBb3qAEbsAfEOor-FdrnY368PoHNmZeBNygHPuEDbIpdlb3rYkqRFFzwgX-xnjR_pTRkyEMRDoil0zqR0an1Cc8XO_TsO_XnsXEXLZBE1nAjUQYai-WaO_q4I_CrqItaWnSIRPhKB806LVBjNPOBzJxs9nVEOY3UzQGuIyZS41083YQ"); background-size: contain;'></div>
+</div>
+<div class="flex-1 space-y-4">
+<div class="space-y-2">
+<h3 class="text-white font-medium">Scan QR Code</h3>
+<p class="text-white/60 text-sm">Open your authenticator app and scan the image to the left.</p>
+</div>
+<div class="space-y-2">
+<h3 class="text-white font-medium">Or enter code manually</h3>
+<div class="flex items-center gap-2">
+<input class="form-input flex-1 resize-none overflow-hidden rounded-md text-white bg-[#111318] border border-[#3b4354] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] h-12 px-4 text-sm" readonly="" value="JBSWY3DPEHPK3PXP"/>
+<button class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-md bg-[#111318] border border-[#3b4354] text-white/60 hover:text-white hover:bg-[#282e39] transition-colors">
+<span class="material-symbols-outlined"> content_copy </span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-[#282e39]"></div>
+<div class="space-y-4">
+<p class="text-white font-medium">Enter the 6-digit code from your authenticator app.</p>
+<div class="flex items-end gap-4">
+<div class="flex-1">
+<label class="sr-only" for="verification-code">Verification code</label>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-md text-white focus:outline-0 focus:ring-2 focus:ring-[var(--primary-color)] border border-[#3b4354] bg-[#111318] h-12 placeholder:text-[#9da6b9] px-4 text-sm" id="verification-code" placeholder="Enter code"/>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-12 px-6 bg-[var(--primary-color)] text-white text-sm font-bold tracking-wide hover:bg-[#0f4acb] transition-colors">
+<span>Verify</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<a @click.prevent="open = !open" class="text-sm text-[var(--primary-color)] hover:underline" href="#">Having trouble?</a>
+</div>
+<div class="border-t border-[#282e39] pt-6 space-y-4 text-white/80 text-sm" x-show="open" x-transition="">
+<h3 class="text-white font-semibold">Troubleshooting</h3>
+<ul class="list-disc list-inside space-y-2">
+<li>
+<strong>Time Synchronization:</strong> Ensure the time on your phone is synchronized with internet time. Mismatched time can cause verification code errors.
+                </li>
+<li>
+<strong>Authenticator App Issues:</strong> If you're having trouble with one authenticator app, try using another one like Google Authenticator or Authy.
+                </li>
+<li>
+<strong>QR Code not Scanning:</strong> If the QR code is not scanning, try increasing your screen brightness or using the manual entry code.
+                </li>
+</ul>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<script defer="" src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+</body></html>

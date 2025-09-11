@@ -1,0 +1,172 @@
+<html><head>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MyBizAI - System Status</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="bg-[#111318] text-white" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="flex min-h-screen flex-col">
+<header class="sticky top-0 z-10 border-b border-solid border-b-[#282e39] bg-[#111318]/80 px-10 py-3 backdrop-blur-sm">
+<div class="flex items-center justify-between">
+<a class="flex items-center gap-4 text-white" href="#">
+<svg class="size-8 text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h1 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">MyBizAI</h1>
+</a>
+<nav class="hidden items-center gap-9 md:flex">
+<a class="text-sm font-medium text-gray-300 transition-colors hover:text-white" href="#">Dashboard</a>
+<a class="text-sm font-medium text-gray-300 transition-colors hover:text-white" href="#">Ideas</a>
+<a class="text-sm font-medium text-gray-300 transition-colors hover:text-white" href="#">Execution</a>
+<a class="text-sm font-medium text-gray-300 transition-colors hover:text-white" href="#">Community</a>
+<a class="text-sm font-medium text-gray-300 transition-colors hover:text-white" href="#">Help</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="md:hidden">
+<span class="material-symbols-outlined"> menu </span>
+</button>
+<div class="aspect-square size-10 rounded-full bg-cover bg-center bg-no-repeat" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuClf9LumA9UPt8Fq4Fvdq1rB11ahHg3cdjaLeO_68X7V2fKlrff-_QUnCZg_MUIhjj6m9LrqKbrEwI7diVoi6KRrQFbcV1a5GcaeRUz5iRfcqDzC7_4AD_e3iZgffl1ixjRnOo006R4dgPhd75aSAc3iPn6TEXdvS1HZ1JauK7R_L0QlCcdunaTcyY4vTi3f5v6SHOuSJwbSbQMOaZNGH9Me6kkJL8WTKvU_zH35cu-5Zo5977Tdi6VU8YVKlBED1OX32uQGfh3cO0");'></div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+<div class="flex flex-col gap-12">
+<div class="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+<div class="flex flex-col gap-3">
+<h2 class="text-4xl font-bold tracking-tight text-white sm:text-5xl">System Status</h2>
+<p class="max-w-2xl text-lg text-gray-400">Monitor the operational status of all MyBizAI services and components.</p>
+</div>
+<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+<a class="flex min-w-[84px] shrink-0 items-center justify-center gap-2 overflow-hidden rounded-md border border-[#282e39] bg-transparent px-4 py-2.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-[#1c1f27]" href="#">
+<span class="material-symbols-outlined"> report </span>
+<span class="truncate">Report an Incident</span>
+</a>
+<a class="flex min-w-[84px] shrink-0 items-center justify-center gap-2 overflow-hidden rounded-md bg-[var(--primary-color)] px-4 py-2.5 text-sm font-bold text-white shadow-lg transition-colors hover:bg-blue-600" href="#">
+<span class="material-symbols-outlined"> email </span>
+<span class="truncate">Subscribe to Updates</span>
+</a>
+</div>
+</div>
+<div class="rounded-lg border border-[#282e39] bg-[#1c1f27] shadow-lg">
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-[#282e39]">
+<thead class="bg-[#111318]">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Service</th>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Status</th>
+<th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400" scope="col">Last Updated</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#282e39]">
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">AI Models</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1 text-sm font-semibold text-green-400">
+<span class="material-symbols-outlined text-base"> check_circle </span>
+                          Operational
+                        </div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2024-01-26 10:00 AM</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">Database</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1 text-sm font-semibold text-green-400">
+<span class="material-symbols-outlined text-base"> check_circle </span>
+                          Operational
+                        </div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2024-01-26 10:00 AM</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">Integrations</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-yellow-500/10 px-3 py-1 text-sm font-semibold text-yellow-400">
+<span class="material-symbols-outlined text-base"> warning </span>
+                          Degraded Performance
+                        </div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2024-01-26 09:30 AM</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">User Authentication</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-1 text-sm font-semibold text-green-400">
+<span class="material-symbols-outlined text-base"> check_circle </span>
+                          Operational
+                        </div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2024-01-26 10:00 AM</td>
+</tr>
+<tr>
+<td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">API</td>
+<td class="whitespace-nowrap px-6 py-4">
+<div class="inline-flex items-center gap-2 rounded-full bg-red-500/10 px-3 py-1 text-sm font-semibold text-red-400">
+<span class="material-symbols-outlined text-base"> error </span>
+                          Outage
+                        </div>
+</td>
+<td class="whitespace-nowrap px-6 py-4 text-sm text-gray-400">2024-01-26 08:15 AM</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h3 class="text-2xl font-bold tracking-tight text-white">Historical Uptime</h3>
+<div class="rounded-lg border border-[#282e39] bg-[#1c1f27] p-6 shadow-lg">
+<div class="flex flex-col gap-6">
+<div class="flex flex-wrap items-baseline justify-between gap-4">
+<p class="text-base font-medium text-gray-300">Uptime (Last 90 Days)</p>
+<div class="flex items-baseline gap-2">
+<p class="text-4xl font-bold tracking-tight text-white">99.98%</p>
+<span class="text-sm font-medium text-green-400">+0.02%</span>
+</div>
+</div>
+<div class="h-48">
+<svg fill="none" height="100%" preserveAspectRatio="none" viewBox="0 0 472 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="var(--primary-color)" stroke-linecap="round" stroke-width="3"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V150H0V109Z" fill="url(#paint0_linear_uptime)"></path>
+<defs>
+<linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_uptime" x1="236" x2="236" y1="1" y2="150">
+<stop stop-color="var(--primary-color)" stop-opacity="0.2"></stop>
+<stop offset="1" stop-color="var(--primary-color)" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+</svg>
+</div>
+<div class="flex justify-between border-t border-gray-700 pt-2 text-xs text-gray-400">
+<span>90 days ago</span>
+<span>60 days ago</span>
+<span>30 days ago</span>
+<span>Today</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="border-t border-solid border-b-[#282e39] bg-[#111318]">
+<div class="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+<div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+<p class="text-sm text-gray-400">© 2024 MyBizAI. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="text-sm text-gray-400 hover:text-white" href="#">Terms</a>
+<a class="text-sm text-gray-400 hover:text-white" href="#">Privacy</a>
+<a class="text-sm text-gray-400 hover:text-white" href="#">Contact</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #135bec;
+    }
+  </style>
+</head>
+<body class="bg-[#111318]" style='font-family: Manrope, "Noto Sans", sans-serif;'>
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+<div class="flex flex-row h-full grow">
+<aside class="flex flex-col w-64 p-4 border-r border-[#282e39]">
+<div class="flex items-center gap-2 mb-8">
+<div class="text-white bg-blue-600 p-2 rounded-lg" data-icon="ShieldCheck" data-size="32px" data-weight="fill">
+<svg fill="currentColor" height="32px" viewBox="0 0 256 256" width="32px" xmlns="http://www.w3.org/2000/svg">
+<path d="M228.43,84.1,139.38,28.3a15.93,15.93,0,0,0-22.76,0L27.57,84.1A16,16,0,0,0,20,96.34V184a16,16,0,0,0,16,16H220a16,16,0,0,0,16-16V96.34A16,16,0,0,0,228.43,84.1ZM164.24,140.24l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,168.69l42.93-42.93a8,8,0,0,1,11.32,11.32Z"></path>
+</svg>
+</div>
+<h1 class="text-white text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-white hover:bg-[#282e39] rounded-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-white hover:bg-[#282e39] rounded-md" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<p class="text-sm font-medium">Ideas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md bg-[var(--primary-color)] text-white" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-white hover:bg-[#282e39] rounded-md" href="#">
+<span class="material-symbols-outlined">help</span>
+<p class="text-sm font-medium">Help</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-white hover:bg-[#282e39] rounded-md" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<p class="text-sm font-medium">Feedback</p>
+</a>
+</nav>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-400 hover:text-white hover:bg-[#282e39] rounded-md" href="#">
+<span class="material-symbols-outlined">rocket_launch</span>
+<p class="text-sm font-medium">Upgrade</p>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="max-w-4xl mx-auto">
+<h1 class="text-white text-3xl font-bold mb-2">Settings</h1>
+<p class="text-gray-400 mb-8">Manage your account and privacy settings.</p>
+<div class="border-b border-[#3b4354] mb-8">
+<nav class="flex gap-8 -mb-px">
+<a class="py-4 px-1 text-gray-400 hover:text-white border-b-2 border-transparent hover:border-white transition-colors" href="#">
+<p class="text-sm font-bold">General</p>
+</a>
+<a class="py-4 px-1 text-gray-400 hover:text-white border-b-2 border-transparent hover:border-white transition-colors" href="#">
+<p class="text-sm font-bold">Notifications</p>
+</a>
+<a class="py-4 px-1 text-white border-b-2 border-[var(--primary-color)]" href="#">
+<p class="text-sm font-bold">Data &amp; Privacy</p>
+</a>
+<a class="py-4 px-1 text-gray-400 hover:text-white border-b-2 border-transparent hover:border-white transition-colors" href="#">
+<p class="text-sm font-bold">Billing</p>
+</a>
+<a class="py-4 px-1 text-gray-400 hover:text-white border-b-2 border-transparent hover:border-white transition-colors" href="#">
+<p class="text-sm font-bold">API</p>
+</a>
+</nav>
+</div>
+<div class="space-y-12">
+<div>
+<h2 class="text-white text-xl font-bold mb-2">Data &amp; Privacy</h2>
+<p class="text-gray-400 mb-6">Manage your personal data, data sharing preferences, and data retention settings. You can also request data deletion.</p>
+<div class="space-y-6 divide-y divide-[#282e39]">
+<div class="pt-6">
+<h3 class="text-white text-lg font-bold mb-2">Data Sharing</h3>
+<div class="flex items-start justify-between">
+<div>
+<p class="text-white font-medium">Enable Data Sharing</p>
+<p class="text-gray-400 text-sm mt-1 max-w-md">Allow MyBizAI to share your data with third-party partners for improved service and personalized experiences.</p>
+</div>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-[#282e39] transition-colors has-[:checked]:bg-[var(--primary-color)]">
+<span class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1 has-[:checked]:translate-x-6"></span>
+<input class="absolute opacity-0 w-0 h-0" type="checkbox"/>
+</label>
+</div>
+</div>
+<div class="pt-6">
+<h3 class="text-white text-lg font-bold mb-2">Data Retention</h3>
+<div class="flex items-start justify-between">
+<div>
+<p class="text-white font-medium">Data Retention Period</p>
+<p class="text-gray-400 text-sm mt-1 max-w-md">Choose how long your data is stored on MyBizAI servers. Shorter retention periods enhance privacy but may limit access to historical data.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-white">3 months</span>
+<button class="text-gray-400 hover:text-white">
+<span class="material-symbols-outlined text-xl">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<div class="pt-6">
+<h3 class="text-white text-lg font-bold mb-2">Download My Data</h3>
+<div class="flex items-start justify-between">
+<div>
+<p class="text-white font-medium">Export Your Data</p>
+<p class="text-gray-400 text-sm mt-1 max-w-md">Download a copy of your personal data in a common, machine-readable format. This promotes data portability and user control.</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-9 px-4 bg-[#282e39] text-white hover:bg-[#3b4354] text-sm font-medium leading-normal w-fit transition-colors">
+<span class="material-symbols-outlined mr-2">download</span>
+<span class="truncate">Download Data</span>
+</button>
+</div>
+</div>
+<div class="pt-6">
+<h3 class="text-white text-lg font-bold mb-2">Data Deletion</h3>
+<div class="flex items-start justify-between">
+<div>
+<p class="text-white font-medium">Request Data Deletion</p>
+<p class="text-gray-400 text-sm mt-1 max-w-md">Permanently delete all of your personal data from MyBizAI servers. This action is irreversible and cannot be undone.</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-md h-9 px-4 bg-red-600/20 text-red-400 hover:bg-red-600/30 text-sm font-medium leading-normal w-fit transition-colors">
+<span class="truncate">Request Deletion</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div>
+<h2 class="text-white text-xl font-bold mb-4">Legal</h2>
+<div class="space-y-4 divide-y divide-[#282e39]">
+<a class="flex items-center justify-between pt-4 hover:text-[var(--primary-color)] text-white group" href="#">
+<p class="font-medium">Privacy Policy</p>
+<span class="material-symbols-outlined text-gray-400 group-hover:text-[var(--primary-color)] transition-colors">arrow_forward</span>
+</a>
+<a class="flex items-center justify-between pt-4 hover:text-[var(--primary-color)] text-white group" href="#">
+<p class="font-medium">Terms of Service</p>
+<span class="material-symbols-outlined text-gray-400 group-hover:text-[var(--primary-color)] transition-colors">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

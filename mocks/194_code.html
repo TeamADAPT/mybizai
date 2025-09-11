@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MyBizAI - Real-time Collaboration</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #135bec;
+            --background-color: #111318;
+            --surface-color: #1c1f27;
+            --text-primary: #ffffff;
+            --text-secondary: #9da6b9;
+            --border-color: #282e39;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+        }
+        .icon-btn {
+            @apply p-2 rounded-md hover:bg-gray-700 text-gray-400 hover:text-white transition-colors;
+        }
+    </style>
+</head>
+<body class="bg-[var(--background-color)]">
+<div class="flex h-screen flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[var(--border-color)] px-6 py-3">
+<div class="flex items-center gap-4">
+<div class="h-8 w-8 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-[var(--text-primary)] text-xl font-bold">MyBizAI</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-6">
+<a class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium transition-colors" href="#">My Projects</a>
+<a class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium transition-colors" href="#">Templates</a>
+<a class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium transition-colors" href="#">Community</a>
+<a class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-medium transition-colors" href="#">Help</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="icon-btn">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-2">
+<img alt="User Avatar" class="h-10 w-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0sUh3fZM7KvSBu6Jd--WON2yQwtIE1KYxZyi2__DZtcIQAK_vpDAd7DkLSQ1yF-tFvXGj46FWHQg8WXsqf-j8zGI0hLqaBMF6fq3x1xloT-AloJRyziaLiMDPFirrO2FYGjL6kQth1ogVSJJ20J0Nya-VjN-ZwvqUb51tqyzmAtUPFw-cSad0KeWLDMuDFFgr582HX6agJIhKCUlbac4uuxvpUNR_1gRIYI7OTlFzHoBfMvtOeZuprJMFabfGcKegRGfCpuJ48sg"/>
+<div class="relative">
+<img alt="User Avatar" class="h-6 w-6 rounded-full border-2 border-[var(--background-color)] -ml-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9cidTDXI-wUWiZ8LHezhIdRFFfKx2X7b_8U1n8Rm2iLsOAahcBEGJmYkcPOt4aX_uK9Nw0oqTIxNXy6wJGdYOJtkZuM4xwGbBXju7ZjXfTzwHL-0oJxejrY1t_2GvMZBNCrjv5xfGxL6Q5ltqlQNMWALJiamF8EFnH-iaf8enhX2FoCRZIIMj8yVQuG2eQ6FyrqX-EbCh9ZOkrIuiayiM69hlLedrw8TkJexwf3aIUzBTpHKh_kVEKWPiJhA0Qjxke19RAT344CU"/>
+<div class="absolute -bottom-1 -right-1 h-3 w-3 rounded-full bg-green-500 border-2 border-[var(--background-color)]"></div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<div class="flex-1 flex flex-col p-4 sm:p-6 lg:p-8">
+<div class="flex-shrink-0">
+<div class="text-sm text-[var(--text-secondary)] mb-4">
+<a class="hover:text-[var(--text-primary)]" href="#">My Projects</a>
+<span class="mx-2">/</span>
+<span class="text-[var(--text-primary)]">Project Title</span>
+</div>
+<h2 class="text-3xl font-bold tracking-tight mb-4">Business Plan: Project Title</h2>
+<div class="flex items-center justify-between border-y border-[var(--border-color)] py-2 mb-4">
+<div class="flex items-center gap-2">
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_bold</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_italic</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_underlined</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_color_text</span></button>
+<div class="w-px h-6 bg-[var(--border-color)] mx-2"></div>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_list_bulleted</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_list_numbered</span></button>
+<div class="w-px h-6 bg-[var(--border-color)] mx-2"></div>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_align_left</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_align_center</span></button>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">format_align_right</span></button>
+<div class="w-px h-6 bg-[var(--border-color)] mx-2"></div>
+<button class="icon-btn"><span class="material-symbols-outlined text-xl">image</span></button>
+</div>
+<button class="flex items-center gap-2 rounded-md bg-[var(--primary-color)] px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90">
+<span class="material-symbols-outlined text-xl">share</span>
+<span>Share</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto pr-4">
+<textarea class="h-full w-full resize-none bg-[var(--background-color)] p-4 text-base text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-none">Start writing your business plan here...
+## Executive Summary
+MyBizAI is an AI-powered platform designed to help entrepreneurs and business professionals generate, validate, and execute business ideas.
+## Competitive Analysis
+Our primary competitors include traditional business planning software and general-purpose AI writing assistants. MyBizAI differentiates itself by offering an end-to-end, agentic workflow specifically tailored for business creation.</textarea>
+</div>
+<p class="text-xs text-[var(--text-secondary)] pt-2">Last edited 2 hours ago by User A and AI Agent 1</p>
+</div>
+<aside class="w-96 flex flex-col border-l border-[var(--border-color)]">
+<div class="border-b border-[var(--border-color)]">
+<nav class="flex gap-1 px-4">
+<a class="border-b-2 border-transparent py-3 px-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]" href="#">Chat</a>
+<a class="border-b-2 border-[var(--primary-color)] py-3 px-2 text-sm font-bold text-[var(--text-primary)]" href="#">AI Co-pilot</a>
+<a class="border-b-2 border-transparent py-3 px-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)]" href="#">Comments</a>
+</nav>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-6 bg-[var(--surface-color)]">
+<div class="flex items-center gap-2 text-white">
+<span class="material-symbols-outlined text-xl text-[var(--primary-color)]">spark</span>
+<h3 class="text-lg font-bold">AI Co-pilot</h3>
+</div>
+<div class="space-y-4">
+<p class="text-sm text-[var(--text-secondary)]">Based on the "Competitive Analysis" section, here are some suggestions:</p>
+<div class="rounded-lg bg-gray-900/50 p-3">
+<p class="font-semibold text-sm mb-2 text-white">Expand on Differentiation</p>
+<p class="text-sm text-[var(--text-secondary)] mb-3">Clearly articulate how MyBizAI's agentic workflow provides a tangible advantage over competitors.</p>
+<button class="w-full text-left text-sm text-[var(--primary-color)] hover:underline">Read more »</button>
+</div>
+<div class="rounded-lg bg-gray-900/50 p-3">
+<p class="font-semibold text-sm mb-2 text-white">Add a SWOT Analysis</p>
+<p class="text-sm text-[var(--text-secondary)] mb-3">Would you like me to generate a SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis for MyBizAI?</p>
+<div class="flex gap-2">
+<button class="flex-1 rounded-md bg-[var(--primary-color)] px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90">Generate</button>
+<button class="flex-1 rounded-md bg-gray-600 px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90">Dismiss</button>
+</div>
+</div>
+<div class="rounded-lg bg-gray-900/50 p-3">
+<p class="font-semibold text-sm mb-2 text-white">Improve Readability</p>
+<p class="text-sm text-[var(--text-secondary)] mb-3">The "Executive Summary" could be more concise. I can help shorten it.</p>
+<button class="flex items-center gap-2 rounded-md bg-transparent border border-gray-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-gray-700">
+<span class="material-symbols-outlined text-sm">auto_fix</span>
+                                Rephrase Section
+                            </button>
+</div>
+</div>
+</div>
+<div class="mt-auto border-t border-[var(--border-color)] p-4 bg-[var(--surface-color)]">
+<div class="relative">
+<input class="w-full rounded-full bg-[var(--background-color)] py-2 pl-4 pr-12 text-sm text-white placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" placeholder="Ask AI Co-pilot..." type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-2">
+<button class="ml-2 flex h-7 w-7 items-center justify-center rounded-full bg-[var(--primary-color)] text-white">
+<span class="material-symbols-outlined text-lg">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+
+</body></html>

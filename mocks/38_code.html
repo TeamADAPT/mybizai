@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+      }
+    </style>
+</head>
+<body class="bg-[#111318] font-['Space_Grotesk',_'Noto_Sans',_sans-serif]">
+<div class="relative flex size-full min-h-screen flex-col dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282e39] px-10 py-3">
+<div class="flex items-center gap-4 text-white">
+<div class="size-6">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">
+              MybizAI
+            </h2>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Dashboard</a>
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">My Projects</a>
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Marketplace</a>
+<a class="text-gray-300 hover:text-white text-sm font-medium leading-normal" href="#">Community</a>
+</nav>
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-transparent hover:bg-[#282e39] text-gray-300 hover:text-white transition-colors">
+<span class="material-symbols-outlined"> notifications </span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAuKQb0Jm3augthDJezflPOGACnuQS44HgaOJXQ6-ABy-5wzjM7tDvhzfxZrj4GHQjWJyfcnzhZmfvshUlu8xBD9aIStRFClySe2P2oZXcEJkXwQ-Ndo38C1shY9wNgV_wDDfMP_7SNq_nQQjO9dNSgdLZ4yDs9QkkG0hqj5U9BoofHHaW5jDQG4Lbg6uqcy6KIm-sFtASEgu7IL6JYXio2aGMrMzi4-d_mgTwcwgpOUQ8ow_L3GVwRLaciLYYSCLS13PFEMUCtaRg");'></div>
+</div>
+</header>
+<main class="flex flex-1 justify-center items-center py-16 px-4">
+<div class="flex flex-col w-full max-w-md bg-[#181A20] p-8 rounded-lg shadow-2xl">
+<div class="text-center mb-8">
+<h2 class="text-white text-3xl font-bold tracking-tight">
+                Create New Password
+              </h2>
+<p class="text-gray-400 mt-2">
+                Your new password must be different from previous used
+                passwords.
+              </p>
+</div>
+<form class="flex flex-col gap-6">
+<div>
+<div class="relative">
+<input class="form-input peer w-full resize-none rounded-md border border-[#3b4354] bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#181A20] focus:ring-[var(--primary-color)] h-12 placeholder:text-transparent p-4 text-base font-normal leading-normal transition-all" id="new-password" placeholder="New password" type="password"/>
+<label class="absolute left-4 top-3 text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-[var(--primary-color)] pointer-events-none bg-[#181A20] px-1" for="new-password">
+                  New password
+                </label>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-sm">
+<div class="flex items-center gap-2 text-red-500">
+<span class="material-symbols-outlined text-base">cancel</span>
+<span>8 characters minimum</span>
+</div>
+<div class="flex items-center gap-2 text-red-500">
+<span class="material-symbols-outlined text-base">cancel</span>
+<span>One number</span>
+</div>
+<div class="flex items-center gap-2 text-green-500">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>One uppercase letter</span>
+</div>
+<div class="flex items-center gap-2 text-red-500">
+<span class="material-symbols-outlined text-base">cancel</span>
+<span>One special character</span>
+</div>
+</div>
+</div>
+<div class="relative">
+<input class="form-input peer w-full resize-none rounded-md border border-[#3b4354] bg-transparent text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#181A20] focus:ring-[var(--primary-color)] h-12 placeholder:text-transparent p-4 text-base font-normal leading-normal transition-all" id="confirm-password" placeholder="Confirm new password" type="password"/>
+<label class="absolute left-4 top-3 text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-[var(--primary-color)] pointer-events-none bg-[#181A20] px-1" for="confirm-password">
+                  Confirm new password
+                </label>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<p class="text-white text-sm font-medium">
+                    Password strength
+                  </p>
+<p class="text-sm font-normal text-yellow-400" id="strength-text">
+                    Medium
+                  </p>
+</div>
+<div class="w-full bg-[#3b4354] rounded-full h-2">
+<div class="h-2 rounded-full bg-yellow-400" id="strength-bar" style="width: 60%"></div>
+</div>
+</div>
+<button class="flex w-full items-center justify-center rounded-md h-12 px-4 bg-[var(--primary-color)] text-white text-base font-bold leading-normal tracking-wide hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#181A20] focus:ring-[var(--primary-color)] transition-colors" type="submit">
+                Update Password
+              </button>
+</form>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

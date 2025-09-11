@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #1173d4;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+    .group:hover .group-hover\:block {
+      display: block;
+    }
+  </style>
+</head>
+<body class="bg-[#111418]">
+<div class="relative flex size-full min-h-screen flex-col bg-[#111827] dark group/design-root" style='font-family: Inter, "Noto Sans", sans-serif;'>
+<div class="flex h-screen">
+<aside class="flex flex-col w-80 bg-[#111827] border-r border-gray-800">
+<div class="flex items-center gap-4 px-6 py-5 border-b border-gray-800">
+<div class="size-8 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold">MyBizAI</h2>
+</div>
+<div class="flex flex-col flex-1 overflow-y-auto custom-scrollbar">
+<div class="px-6 py-4">
+<h3 class="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-3">Channels</h3>
+<ul class="space-y-1">
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>General</span>
+</a>
+</li>
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md bg-[var(--primary-color)] text-white font-semibold" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>Project Alpha</span>
+</a><div class="relative"><a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md bg-[var(--primary-color)] text-white font-semibold" href="#">
+<button class="hidden group-hover:block text-gray-400 hover:text-white" onclick="event.stopPropagation(); this.nextElementSibling.classList.toggle('hidden')">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</a><div class="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10 hidden"><a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md bg-[var(--primary-color)] text-white font-semibold" href="#">
+</a><a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" href="#">Mute Channel</a>
+<a class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white" href="#">Notification Settings</a>
+</div>
+</div>
+
+</li>
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>Marketing</span>
+</a>
+</li>
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>Sales</span>
+</a>
+</li>
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>Product Development</span>
+</a>
+</li>
+<li class="group relative">
+<a class="flex items-center justify-between gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#"><span class="flex items-center gap-3"><span class="material-symbols-outlined text-xl">tag</span>Customer Support</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="px-6 py-4">
+<h3 class="text-gray-400 text-sm font-semibold uppercase tracking-wider mb-3">Direct Messages</h3>
+<ul class="space-y-1">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#">
+<div class="relative">
+<img alt="Ethan Harper" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUsS0gqPhMOvCrgSmTR3VWA9qgCdi5ONNxk5qM4yJVvcbPDRYRArVMa075_j0HsXlMp_A_8Jw28ywUWf6jJKyjytfxlykcPACFnzT1e6BQJtSPxwaG64w1UKOeYN_P4ERLnCGkBI2We6KvU882WbLY3F9tr3grRM38v6585S1ExTe4_GjkuR3Pgwa151zzkCg1yOeLfaLcLos6sQROgRqqLHQkMR9_a2rkzInhpiYgXfgcm5MA5ckdLz798oDsXLq2oqIMhJrCdxY"/>
+<span class="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-gray-800"></span>
+</div>
+                  Ethan Harper
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#">
+<div class="relative">
+<img alt="Sophia Bennett" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6IJy3PwOVLw7Mk9Uhl36EcsOpWukcTON1AfO8wUlNRdUHel1i_Uo13o9rVzCdhypNVhpfYPHnhnyGZVosu42E37h5A8HFzkZhEYrEp67Tqt55Ft_Z5R8W7rCAQuJvFzDr3DbMjU0Ox9QeoPFzHjRzolcfuNVGZ7Pk0t2x86MFI7XnoReIahDkevibkMFB5fX6UbHHCnBsheJa74-1RTebp2eemd4lycm0X0uLi9UdpjRSrutnTnnsFjtKElY25vf5szou6hxl9hA"/>
+<span class="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-gray-500 ring-2 ring-gray-800"></span>
+</div>
+                  Sophia Bennett
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#">
+<div class="relative">
+<img alt="Liam Carter" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6w5prf-arc9HI9QF8Cdl9HBTUkY1YheJjkR9JEc3wUrSqXZhy3Nuxfj9_w8KWzk-OZW8z5pZ86hSgYBoAyY_c24tYRgIW5YUjYw7wwwqEoT2-0ZdKSNiMaLBIiQYpXVkWHh2X40fRakDbNP5uTOqSSJi5xyUkps9YChmzSHgjQkZx0KLNqz9NekIkslwxPCqKHx9bmihD5FhNluesJDqULQpk6my8p14Py78bKWf0pxQfopCM5BzAHtCVnF7R8g9s2bsPjWoeZxQ"/>
+<span class="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-gray-800"></span>
+</div>
+                  Liam Carter
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white" href="#">
+<div class="relative">
+<img alt="Olivia Davis" class="h-8 w-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAzSyqKPplalc2KwQ-XvQG3FUv0NibwtUP2TeBwqqtRe1sNa2R_rw4lllhFAkCgt7tQIO5L6DxMGRfrQZxY008yOIl6r2dpzlez0M_CKQ6FxqLzl1LoSOgEAfpB-pipd-b_sksUxFP4xFqJa41Nfg-Jgm-UuPwEbwEBtNc_kve7WmXPyN4CpC69RxoL_YnpaU20ptM7JO43p-tTs4Diz4P3jhIRCgi4rGuHSrcoXY0M8MzqXxx1uAOiI1TCSv2s_o8BULPZVbYFdg"/>
+<span class="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-gray-500 ring-2 ring-gray-800"></span>
+</div>
+                  Olivia Davis
+                </a>
+</li>
+</ul>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col bg-gray-900">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-800 px-6 py-4">
+<h2 class="text-xl font-semibold text-white">Team Communication Hub</h2>
+<div class="flex items-center gap-4">
+<button class="text-gray-400 hover:text-white">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<img alt="User Avatar" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfcBoe74A_If99wE1hy8RitPLLsEWxCsLsUPhwKMDhQj9Yt0s5CWJUnjugUNRtHZIFgl-cUzDvW4xQEGVOWlyOEUOsLunV05JL-kSAOYa0auOkW6POs7jXSMS1noKWM7Gk-jH2qNGfbaK8G0-n_vjQFU_yTmlz4d3Kv21YWebCiu0IFiYRn9g8UF8aKS9FLSxycAIXuuxZv_KVWkNYc7cRGvYg0KbJY_LHPZG6JJYQdsqNdtwmDZO25WQ7r7nOOi9HphuXGvncUtY"/>
+</div>
+</header>
+<div class="flex-1 flex flex-col p-6 overflow-y-auto custom-scrollbar">
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<img alt="Ethan Harper" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-gYotXTcvu_eHqTrZssdEdoo21xaU4QAsEDaAUXFRZh3fysIRov7eVwPwo_cY_r-HrZudexlnYp-XFS1koLpJhGuByzTuobFWkLRY-0duiEd0JX0V8u6kQT76Enb8vFKh_dUgjEF4p3DbcUQpmoxHvqrL5WjsyMFwrsCH-UZQZ_8fyl_mEUvY6hXQs_o85v24ExUWcAD6R-lUNAO3Qt9-_iAoP7o8E4FLEBs4MpTqoNkOuQOZViejVsEGlVbYXhsuh2cuDt0zyPQ"/>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Ethan Harper</p>
+<p class="text-xs text-gray-500">10:00 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tl-none bg-gray-700 p-3 text-white">
+<p>Hey team, I've uploaded the latest market research report to the shared drive. Please review it before our meeting tomorrow.</p>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-4 justify-end">
+<div class="flex flex-col items-end">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Liam Carter</p>
+<p class="text-xs text-gray-500">10:02 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tr-none bg-[var(--primary-color)] p-3 text-white">
+<p>Thanks, Ethan! I'll take a look at it this afternoon.</p>
+</div>
+</div>
+<img alt="Liam Carter" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2D7yD4Fnz4p4PuyZYhIy0LHVKrxx0rKpZ8XvTFiEEDKTG13jgPQe6da_84vSBMKw8ZKAuaaTeW9Ha_t3GmiS-1fG0tnmcXPC-tnafsnkHc_p57XtGiqYT7DRU8Buu3lfC-xKFUvMhJwAS3UVMWw2xr_ezMWCYFYXBL9nXZaJtQkRLSxIdTXN1qcjEudl98TadFACV5pG5Dprmj8pHVssOfFCp64GwaDfkYiQ_9ZWFHvm8_7ifUJmVfJFm2VFxd-2upfOHavt9H5M"/>
+</div>
+<div class="flex items-start gap-4">
+<img alt="Sophia Bennett" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ9C9a4jIO2JSQd6AuWYkcJIEEisNpmQsDR5-6erkjpr-M1LJpY8AAPQUe570gg_A4nJePB9zNf9tRMUeCvdvUOSZRXBj97tD8WzPw_sMs8ORMLbNAXLHVi020LOcfdew96Ezi0oHZ0gMSp6Vy51s-Rn9Gqxol8wD3YEbVCiowwftVAKyx2WTjtYk-i7WFI9YISLYlBQ7SiZMYiD-VL2xYeeV1DSEQsUtvZFV2QpoR0nwTev6PIFUndkymgEJFgm7YLtGZiAZIbN0"/>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Sophia Bennett</p>
+<p class="text-xs text-gray-500">10:05 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tl-none bg-gray-700 p-3 text-white">
+<p>Great, I'll also review it. Are there any specific sections we should focus on?</p>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-4 justify-end">
+<div class="flex flex-col items-end">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Liam Carter</p>
+<p class="text-xs text-gray-500">10:06 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tr-none bg-[var(--primary-color)] p-3 text-white">
+<p>I think the competitive analysis and the target audience insights are the most crucial parts.</p>
+</div>
+</div>
+<img alt="Liam Carter" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoyZTieePIKwtoCSfgsfkiDylCNpjLj6CsulThiArrNWMDPHAK_s89B7PA0CJPx8iWt2ZAPMr-nFGcBdQnb0cNbm1Oj_tctfw7bWdqdC5unfq6i-iaAmy-32d8ixWQh5rSX-mo093fYkhyQkLZZKWbv2JSfSoUTJSZ39T4Oe8Hb1HlVWv0U0dOaGeMR1pvdmw09Uf00gmSl6_e79TyXLP9gfVl_r12Y7GHZj9sO220OzbXoiVZ4OgRW0B89UI9T5rn9oL6-zTmXAA"/>
+</div>
+<div class="flex items-start gap-4">
+<img alt="Olivia Davis" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWeTD1AXstewduKaDdQAWZ5F4Xo88wQgTeiHxJ9VTEr162d5H9r9fnXGgv_bSEWaHiMZ87W448xifYX664Xt_jl6TZw-9iLU4bFNfsifWsb3h4vTL4-wb8IPV8ow7DWO3yZj8mh2YoMqr24NbzgKroCph2uiAKfXEf9Htbx7UT4xlclFCPoieJFnqp2G51u1RWq3OVncH3sJMcZ5P1UhwB9gYSoS9YQYjAWQKgBuOvdAAFSb9I3NafkZlh7v5jx9WfheJk_Z26p10"/>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Olivia Davis</p>
+<p class="text-xs text-gray-500">10:10 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tl-none bg-gray-700 p-3 text-white">
+<p>Got it. I'll pay close attention to those sections.</p>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-4 justify-end">
+<div class="flex flex-col items-end">
+<div class="flex items-baseline gap-2">
+<p class="font-semibold text-white">Liam Carter</p>
+<p class="text-xs text-gray-500">10:15 AM</p>
+</div>
+<div class="mt-1 rounded-lg rounded-tr-none bg-[var(--primary-color)] p-3 text-white">
+<p>Also, I've integrated some of the AI-generated insights into the presentation slides. Let me know if you have any feedback.</p>
+</div>
+</div>
+<img alt="Liam Carter" class="h-10 w-10 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz5Laqijk0TGbfuc7XY_g5UVNBBOLTtnB5NQdg86VvoTFo30lEEHHd3byvPKnZQ1l0Idn-baQgosTPAaYsyRZipyd2yw9cxGCjpMcsoP5ozX5Bl6D3DzisTKQf5pU0IzWNM5p5Nk_-GU-uCKLghvhlrV94i3ifHbv_k1dL2U-8DRfYN_pv8e3M8uSGwFmQBZN8GFWgM4cGo2oF9IVUCu-lxF66357FhSNYn83xU54M239gb3TySZFpuJw8RQkJuTfB_D49berSHs4"/>
+</div>
+</div>
+</div>
+<div class="px-6 py-4 bg-gray-900 border-t border-gray-800">
+<div class="relative">
+<input class="w-full bg-gray-800 border-gray-700 rounded-lg py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent pr-24" placeholder="Type your message..." type="text"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-3">
+<button class="text-gray-400 hover:text-white mr-2"><span class="material-symbols-outlined">attach_file</span></button>
+<button class="text-gray-400 hover:text-white mr-2"><span class="material-symbols-outlined">image</span></button>
+<button class="px-4 py-2 bg-[var(--primary-color)] text-white rounded-md font-semibold">Send</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>

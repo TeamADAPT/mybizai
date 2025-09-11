@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MybizAI - Password Reset Confirmation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Noto+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #135bec;
+        }
+        body {
+            font-family: 'Space Grotesk', 'Noto Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#111318] text-white">
+<div class="flex min-h-screen flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#282e39] px-10 py-4">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 4H17.3334V17.3334H30.6666V30.6666H44V44H4V4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tighter">MybizAI</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
+<a class="hover:text-white transition-colors" href="#">Dashboard</a>
+<a class="hover:text-white transition-colors" href="#">Ideas</a>
+<a class="hover:text-white transition-colors" href="#">Agents</a>
+<a class="hover:text-white transition-colors" href="#">Marketplace</a>
+<a class="hover:text-white transition-colors" href="#">Docs</a>
+<a class="hover:text-white transition-colors" href="#">Help</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="md:hidden">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVY7Gv6TJLhtuENeEQ97JLTMrqD8Hxxiq6ZycMCLIBaboKgE9pjItICpbqUIFjk-R3y467QnYlWqjzTZBqh5aQE2bzSEWkNvly8UgO9zOFUJSOo3lVeW3Kn60CCTq1yyL9FhwlIIUfezciEo3LnTCAcnYNclXA16FUW0aCwYEbOgXrerxul4BzsBXlvDt7OzZ2WGF_-nmRm1kR8sS3DiiUazLFcXSwB5YRTtlIRsogfVllt_6I36o13PMqfbcyqAunauDPVd0rySw");'></div>
+</div>
+</header>
+<main class="flex flex-1 items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="w-full max-w-md space-y-8">
+<div class="text-center">
+<div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10">
+<span class="material-symbols-outlined text-4xl text-green-500">mark_email_read</span>
+</div>
+<h2 class="mt-6 text-3xl font-bold tracking-tight text-white">Check your email</h2>
+<p class="mt-2 text-gray-400">
+                        We've sent a password reset link to your registered email address.
+                    </p>
+<p class="mt-1 text-sm text-gray-500">Please also check your spam folder.</p>
+</div>
+<div class="mt-8 text-center">
+<a class="text-sm font-medium text-[var(--primary-color)] hover:text-blue-500" href="#">
+                        Back to Login
+                    </a>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

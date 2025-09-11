@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+<body class="bg-gray-900">
+<div class="relative flex size-full min-h-screen flex-col bg-[#111318] dark group/design-root" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex-grow flex items-center justify-center">
+<div class="bg-[#181A20] rounded-xl shadow-2xl w-full max-w-md p-8 m-4">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-white text-2xl font-bold">Share Idea</h2>
+<button class="text-gray-400 hover:text-white">
+<span class="material-symbols-outlined"> close </span>
+</button>
+</div>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-medium text-gray-300 mb-2" for="collaborator">Invite Collaborators</label>
+<div class="flex gap-3">
+<input class="form-input flex-grow w-full min-w-0 resize-none overflow-hidden rounded-md text-white focus:outline-0 focus:ring-2 focus:ring-[#135bec] border border-[#3b4354] bg-[#1c1f27] h-12 placeholder:text-gray-500 p-3 text-sm" id="collaborator" placeholder="Enter collaborator's email or name" type="email"/>
+<div class="relative">
+<select class="form-select appearance-none block w-full pl-3 pr-10 py-2 h-12 text-sm text-white bg-[#282e39] border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#135bec] focus:border-[#135bec]">
+<option>Can Edit</option>
+<option>Can View</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+<span class="material-symbols-outlined text-sm"> expand_more </span>
+</div>
+</div>
+<button class="flex items-center justify-center rounded-md h-12 px-4 bg-[#135bec] text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined mr-2"> person_add </span>
+                Invite
+              </button>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-sm font-medium text-gray-300">Privacy Settings</h3>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400"> public </span>
+<div>
+<p class="text-white">Public Link</p>
+<p class="text-xs text-gray-500">Anyone with the link can view</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gray-400"> group </span>
+<div>
+<p class="text-white">Team Access</p>
+<p class="text-xs text-gray-500">Only team members can access</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+</div>
+<div class="relative flex items-center">
+<div class="flex-grow border-t border-gray-700"></div>
+<span class="flex-shrink mx-4 text-gray-500 text-sm">OR</span>
+<div class="flex-grow border-t border-gray-700"></div>
+</div>
+<div>
+<button class="w-full flex items-center justify-center gap-2 rounded-md h-12 px-4 bg-[#282e39] text-white text-sm font-bold hover:bg-gray-700 transition-colors">
+<span class="material-symbols-outlined"> link </span>
+              Generate Shareable Link
+            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

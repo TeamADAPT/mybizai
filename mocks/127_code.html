@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Manrope%3Awght%40400%3B500%3B700%3B800&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MyBizAI - 2FA Setup</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+    :root {
+      --primary-color: #135bec;
+      --radio-dot-svg: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='rgb(255,255,255)' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+    }
+    .group:hover .group-hover\:block {
+      display: block;
+    }
+    .peer:checked~.peer-checked\:max-h-96 {
+      max-height: 24rem;
+    }
+  </style>
+</head>
+<body class="bg-[#111318] font-manrope text-white">
+<div class="flex min-h-screen flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#282e39] px-10 py-4">
+<div class="flex items-center gap-3">
+<svg class="h-8 w-8 text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+<h1 class="text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex items-center gap-8 text-sm font-medium text-gray-300">
+<a class="hover:text-white" href="#">Dashboard</a>
+<a class="hover:text-white" href="#">My Businesses</a>
+<a class="hover:text-white" href="#">Market Research</a>
+<a class="hover:text-white" href="#">AI Tools</a>
+<a class="hover:text-white" href="#">Learn</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-[#282e39] text-gray-400 transition-colors hover:bg-[#3b4354] hover:text-white">
+<span class="material-symbols-outlined"> help </span>
+</button>
+<div class="group relative">
+<button class="h-10 w-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAKgHtaM4tKxQwMvj9KgYBf5mTuqSZZ38OM9yVAUXKt83MPwUNx4F68-8lSc68VM_Zf2-TmiUTG5KqYutp8NcWicS20a0Q1WQ_JRGFnvTnbO1JMKOYYc61PwutkNWJl9VlqzwIVmfoq_2zgHMcyM-CSgObG0iZn-qPzmQJPLjKqQste62rdsBgzoKm1BJ3yqZO-3xOKK6Hi3z8KO-Mi7Gk6qfu9IoGHLeopMBws6Qza9VmlTVIIzznpj8g9onc4YxQqfQV3OxrJg38");'></button>
+<div class="group-hover:block absolute right-0 top-full mt-2 hidden w-48 rounded-md bg-[#282e39] shadow-lg">
+<a class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#3b4354] hover:text-white" href="#">Profile</a>
+<a class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#3b4354] hover:text-white" href="#">Settings</a>
+<a class="block px-4 py-2 text-sm text-gray-300 hover:bg-[#3b4354] hover:text-white" href="#">Logout</a>
+</div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 items-center justify-center py-16">
+<div class="w-full max-w-lg rounded-xl bg-[#1c1f26] p-8 shadow-2xl">
+<div class="text-center">
+<h2 class="text-3xl font-bold tracking-tight text-white">Two-Factor Authentication</h2>
+<p class="mt-2 text-base text-gray-400">Enhance your account security by enabling 2FA.</p>
+</div>
+<div class="mt-8 space-y-6">
+<p class="text-center text-sm font-medium text-gray-300">Select your preferred method:</p>
+<div class="space-y-4">
+<div>
+<input checked="" class="peer hidden" id="authenticator" name="2fa-method" type="radio"/>
+<label class="flex cursor-pointer flex-wrap items-start gap-4 rounded-lg border-2 border-[#3b4354] p-4 transition-all peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--primary-color)]/10" for="authenticator">
+<div class="flex h-6 items-center">
+<div class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#3b4354] peer-checked:border-[var(--primary-color)]">
+<span class="h-2 w-2 rounded-full bg-transparent peer-checked:bg-white"></span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-semibold text-white">Authenticator App</p>
+<p class="text-sm text-gray-400">Use an app like Authy or Google Authenticator.</p>
+</div>
+<span class="material-symbols-outlined text-3xl text-gray-500"> qr_code_scanner </span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-sm text-gray-400 peer-checked:hidden">
+<span>Why choose this method?</span>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</div>
+</div>
+</label>
+<div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-96">
+<div class="border-l-2 border-[var(--primary-color)] pl-6 pt-4 ml-3">
+<h3 class="font-semibold text-white">Authenticator App Details</h3>
+<ul class="mt-2 list-disc space-y-2 pl-5 text-sm text-gray-400">
+<li><span class="font-medium text-gray-300">Highest Security:</span> Generates a unique, time-sensitive code on your device. Not vulnerable to phone number porting attacks.</li>
+<li><span class="font-medium text-gray-300">Convenience:</span> Works offline. Once set up, you only need your device with the app.</li>
+<li><span class="font-medium text-gray-300">Requirements:</span> A smartphone with an authenticator app installed (e.g., Google Authenticator, Authy, Microsoft Authenticator).</li>
+</ul>
+</div>
+</div>
+</div>
+<div>
+<input class="peer hidden" id="sms" name="2fa-method" type="radio"/>
+<label class="flex cursor-pointer flex-wrap items-start gap-4 rounded-lg border-2 border-[#3b4354] p-4 transition-all peer-checked:border-[var(--primary-color)] peer-checked:bg-[var(--primary-color)]/10" for="sms">
+<div class="flex h-6 items-center">
+<div class="flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#3b4354] peer-checked:border-[var(--primary-color)]">
+<span class="h-2 w-2 rounded-full bg-transparent peer-checked:bg-white"></span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-semibold text-white">SMS Text Message</p>
+<p class="text-sm text-gray-400">Receive codes via text message.</p>
+</div>
+<span class="material-symbols-outlined text-3xl text-gray-500"> sms </span>
+</div>
+<div class="mt-2 flex items-center gap-1.5 text-sm text-gray-400 peer-checked:hidden">
+<span>Why choose this method?</span>
+<span class="material-symbols-outlined text-base">expand_more</span>
+</div>
+</div>
+</label>
+<div class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out peer-checked:max-h-96">
+<div class="border-l-2 border-[var(--primary-color)] pl-6 pt-4 ml-3">
+<h3 class="font-semibold text-white">SMS Text Message Details</h3>
+<ul class="mt-2 list-disc space-y-2 pl-5 text-sm text-gray-400">
+<li><span class="font-medium text-gray-300">Good Security:</span> Better than no 2FA. Adds an extra layer of protection to your account.</li>
+<li><span class="font-medium text-gray-300">Convenience:</span> Easy to set up and use; no separate app needed.</li>
+<li><span class="font-medium text-gray-300">Security Note:</span> Potentially vulnerable to SIM swapping or phone number porting attacks. Less secure than an authenticator app.</li>
+<li><span class="font-medium text-gray-300">Requirements:</span> A reliable mobile phone number and cellular service.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-4">
+<button class="flex min-w-[120px] items-center justify-center rounded-lg bg-[var(--primary-color)] px-6 py-3 text-sm font-bold text-white transition-transform hover:scale-105">
+            Continue
+          </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

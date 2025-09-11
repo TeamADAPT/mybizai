@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B600%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #1173d4;
+      }
+      .swot-chart {
+        --swot-strengths: 70%;
+        --swot-weaknesses: 40%;
+        --swot-opportunities: 85%;
+        --swot-threats: 55%;
+      }
+    </style>
+</head>
+<body class="bg-[#111418] font-sans text-white">
+<div class="flex min-h-screen">
+<aside class="w-64 flex-shrink-0 bg-[#181C20] p-6 flex flex-col justify-between">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-2">
+<svg class="text-[var(--primary-color)]" fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+<path d="M2 17l10 5 10-5"></path>
+<path d="M2 12l10 5 10-5"></path>
+</svg>
+<h1 class="text-xl font-bold">MyBizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md bg-[#283039] text-white" href="#">
+<span class="material-symbols-outlined text-[var(--primary-color)]">psychology</span>
+<span class="text-sm font-medium">Brainstorm</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">list_alt</span>
+<span class="text-sm font-medium">Plan</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">rocket_launch</span>
+<span class="text-sm font-medium">Execute</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">school</span>
+<span class="text-sm font-medium">Learn</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">help</span>
+<span class="text-sm font-medium">Help and docs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">feedback</span>
+<span class="text-sm font-medium">Feedback</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md hover:bg-[#283039] transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-400">group_add</span>
+<span class="text-sm font-medium">Invite team</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="max-w-4xl mx-auto">
+<header class="mb-8">
+<h1 class="text-3xl font-bold">Competitive Analysis Tool</h1>
+<p class="text-gray-400 mt-1">Leverage AI to generate insights on your competitors.</p>
+</header>
+<section class="mb-8">
+<div class="bg-[#181C20] p-6 rounded-lg">
+<div class="flex flex-col sm:flex-row items-end gap-4">
+<div class="flex-1 w-full">
+<label class="block text-sm font-medium text-gray-300 mb-2" for="competitor-name">Competitor Name or Website</label>
+<input class="form-input w-full rounded-md border border-[#3b4754] bg-[#1c2127] focus:border-[var(--primary-color)] focus:ring-[var(--primary-color)] placeholder:text-[#6b7280] py-3 px-4" id="competitor-name" placeholder="e.g., Competitor Inc. or competitor.com" value=""/>
+</div>
+<button class="w-full sm:w-auto flex items-center justify-center rounded-md h-12 px-6 bg-[var(--primary-color)] text-white text-sm font-semibold tracking-wide hover:bg-[#1067bd] transition-colors">
+<span class="material-symbols-outlined mr-2">auto_awesome</span>
+<span>Analyze with AI</span>
+</button>
+</div>
+<div class="mt-4 pt-4 border-t border-[#283039] flex flex-col sm:flex-row items-center gap-4">
+<p class="text-sm text-gray-400">Or import data from external sources:</p>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[#283039] text-white text-sm font-medium hover:bg-[#3b4754] transition-colors">
+<span class="material-symbols-outlined mr-2 text-base">database</span>
+<span>Public Databases</span>
+</button>
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[#283039] text-white text-sm font-medium hover:bg-[#3b4754] transition-colors">
+<span class="material-symbols-outlined mr-2 text-base">travel_explore</span>
+<span>Web Scraper</span>
+</button>
+<button class="flex items-center justify-center rounded-md h-10 px-4 bg-[#283039] text-white text-sm font-medium hover:bg-[#3b4754] transition-colors">
+<span class="material-symbols-outlined mr-2 text-base">description</span>
+<span>Industry Reports</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section class="mb-8">
+<h2 class="text-2xl font-bold mb-4">Analysis Results for <span class="text-[var(--primary-color)]">Innovate Co.</span></h2>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="bg-[#181C20] p-6 rounded-lg">
+<h3 class="font-semibold mb-4 text-lg">SWOT Analysis</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between items-center mb-1">
+<p class="text-sm font-medium text-green-400">Strengths</p>
+<span class="text-xs font-semibold text-green-400">Strong</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2.5">
+<div class="bg-green-500 h-2.5 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<p class="text-sm font-medium text-red-400">Weaknesses</p>
+<span class="text-xs font-semibold text-red-400">Moderate</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2.5">
+<div class="bg-red-500 h-2.5 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<p class="text-sm font-medium text-blue-400">Opportunities</p>
+<span class="text-xs font-semibold text-blue-400">High</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2.5">
+<div class="bg-blue-500 h-2.5 rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<p class="text-sm font-medium text-yellow-400">Threats</p>
+<span class="text-xs font-semibold text-yellow-400">Significant</span>
+</div>
+<div class="w-full bg-gray-700 rounded-full h-2.5">
+<div class="bg-yellow-500 h-2.5 rounded-full" style="width: 60%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-[#181C20] p-6 rounded-lg">
+<h3 class="font-semibold mb-4 text-lg">Key Insights</h3>
+<ul class="space-y-3 text-gray-300 text-sm">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-green-400 text-base">check_circle</span>
+<span>Strong brand recognition and loyal customer base.</span>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-red-400 text-base">cancel</span>
+<span>Outdated technology stack may hinder innovation.</span>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-blue-400 text-base">trending_up</span>
+<span>Growing market for sustainable products presents expansion opportunities.</span>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-yellow-400 text-base">warning</span>
+<span>New market entrants with aggressive pricing strategies pose a threat.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<h2 class="text-2xl font-bold mb-4">AI-Generated Strategic Recommendations</h2>
+<div class="bg-[#181C20] p-6 rounded-lg">
+<div class="prose prose-invert max-w-none prose-p:text-gray-300 prose-li:text-gray-300">
+<p>Based on the analysis, we recommend the following strategic actions:</p>
+<ol>
+<li>
+<strong>Capitalize on Strengths:</strong> Launch a marketing campaign highlighting your brand's heritage and customer loyalty to reinforce your market position.
+                  </li>
+<li>
+<strong>Address Weaknesses:</strong> Allocate budget for a phased modernization of your technology infrastructure to improve efficiency and enable future growth.
+                  </li>
+<li>
+<strong>Seize Opportunities:</strong> Develop and launch a new line of eco-friendly products to capture the growing demand for sustainability.
+                  </li>
+<li><strong>Mitigate Threats:</strong> Introduce a tiered pricing model or a value-focused product line to compete with new low-cost alternatives without devaluing your core offerings.
+                  </li>
+</ol>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+
+</body></html>

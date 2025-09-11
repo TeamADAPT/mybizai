@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Space+Grotesk%3Awght%40400%3B500%3B700" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>MybizAI - Collaborative Brainstorming</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #135bec;
+        --secondary-color: #282e39;
+        --text-primary: #ffffff;
+        --text-secondary: #9da6b9;
+        --background-primary: #111318;
+        --border-color: #3b4354;
+      }
+    </style>
+</head>
+<body class="bg-[var(--background-primary)]" style='font-family: "Space Grotesk", "Noto Sans", sans-serif;'>
+<div class="flex min-h-screen">
+<aside class="w-72 bg-[var(--background-primary)] p-6 flex flex-col justify-between border-r border-[var(--border-color)]">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-2">
+<svg class="h-8 w-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.102L16.5 21.75l-.398-1.648a3.375 3.375 0 00-2.455-2.456L12 17.25l1.648-.398a3.375 3.375 0 002.455-2.456L16.5 12.75l.398 1.648a3.375 3.375 0 002.456 2.456L20.25 18l-1.648.398a3.375 3.375 0 00-2.456 2.456z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<h1 class="text-white text-xl font-bold">MybizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white bg-[var(--secondary-color)]" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">timeline</span>
+<span class="text-sm font-medium">Roadmaps</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">check_box</span>
+<span class="text-sm font-medium">Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<button class="flex w-full items-center justify-center gap-2 rounded-md h-12 bg-[var(--primary-color)] text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">New Idea</span>
+</button>
+</aside>
+<main class="flex-1 p-8">
+<header class="flex justify-between items-center mb-8">
+<h1 class="text-white text-4xl font-bold">Ideas</h1>
+<div class="w-1/3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)]">search</span>
+<input class="form-input w-full rounded-md border-none bg-[var(--secondary-color)] text-white placeholder:text-[var(--text-secondary)] pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]" placeholder="Search ideas..." type="search"/>
+</div>
+</div>
+</header>
+<div class="border-b border-[var(--border-color)] mb-6">
+<nav class="flex gap-8 -mb-px">
+<a class="py-3 px-1 border-b-2 border-[var(--primary-color)] text-white text-sm font-bold" href="#">All</a>
+<a class="py-3 px-1 border-b-2 border-transparent text-[var(--text-secondary)] hover:text-white hover:border-white transition-colors text-sm font-bold" href="#">In Progress</a>
+<a class="py-3 px-1 border-b-2 border-transparent text-[var(--text-secondary)] hover:text-white hover:border-white transition-colors text-sm font-bold" href="#">Completed</a>
+</nav>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
+<div class="bg-[var(--secondary-color)] rounded-lg overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
+<div class="h-48 bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDflkncRz0P9-bBYuOlh72dhXCnich4dO561VVJCsS-hU60rQI18nBhQFvkaurh_-wg5QxESKgqT9d3Hymhvj8onE5EmBFg5xx2EWbur6EN5IdAAezEc6jq7-FFtv7JlC7vnqYw6i6N_dapakUU_tH-AaSdGAwQOjowC2wlILUt55ZjBdFEksbJKUfzQ0vN7h300hzkspiMQcZmST7PnKqrh_tRexiXvJ8u5J5d6XVKviLUe2rM2GQejorUaaxdMXg5VqMq-urzzy8");'></div>
+<div class="p-6">
+<h3 class="text-white text-lg font-bold mb-2">Eco-Friendly Cleaning Service</h3>
+<p class="text-[var(--text-secondary)] text-sm">
+                A cleaning service using only sustainable and eco-friendly products, targeting environmentally conscious consumers.
+              </p>
+</div>
+</div>
+<div class="bg-[var(--secondary-color)] rounded-lg overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
+<div class="h-48 bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7AKAIkQ3tx1Cs6jOP_FrnKnIKKgGs7yPcOS73UdrvC0vQeaZ0Hi-jUkR0bFg6R4rZzfNvZIXgBqxz5RN9WHHlK_6TqDchXH6t1aB17vopQJ2CYjokl5WjcWVQKUovvGL_OxNDvrM1IDMRpKh2z494fiPOZXBsqzz0-U9kKNzBby5D-lpq8co-D1Kr_Qxhu9B1ZEzwXBtTbAVSpXeOz7A7DLfvCbd1yj4is3Qw-GkjPrOp0M0RgwLku0yUpgSnwFtYjvXg4mFbKjk");'></div>
+<div class="p-6">
+<h3 class="text-white text-lg font-bold mb-2">Personalized Meal Prep Delivery</h3>
+<p class="text-[var(--text-secondary)] text-sm">
+                A meal prep service that offers customized meal plans based on dietary preferences and health goals, delivered weekly.
+              </p>
+</div>
+</div>
+<div class="bg-[var(--secondary-color)] rounded-lg overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
+<div class="h-48 bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAst12q-8Zzw1Or2GoBLaO3GI7I2j9f-1KRuPYQ9MDhNLMYLJaKvN_SGqvjZPAEnfuPaONCLaXY0QuwQ0mblQJxd69sSGiCypQBTArqNWWftWe4xVpWX8wcbNvJ_JN_zbJYrJnN4VcLpZ0JgIZDg6tmNHEVG79KFyQPVXfv2KZcobXf0oND67GyPG1M6mUYtEBm9UXBPNma9KI1V8DtkHpMgC7SWFIYkvLrYd5_qjVXCJmtuWxmhdgsfEjHbvEPOUlSrMHNhZ8gB9g");'></div>
+<div class="p-6">
+<h3 class="text-white text-lg font-bold mb-2">Virtual Event Planning Platform</h3>
+<p class="text-[var(--text-secondary)] text-sm">
+                A platform for planning and hosting virtual events, offering tools for scheduling, ticketing, and interactive features.
+              </p>
+</div>
+</div>
+<div class="bg-[var(--secondary-color)] rounded-lg overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
+<div class="h-48 bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAfhewqSld-WiiXkghYmj80IMNOIDfEzrFfGd_nrLIDbNEEtl1dznJU96vOUs6tTfZBseh8d2L6FZyxyPARXxlrmMsOUQXy95CkHVYuHTvxV0ZfW2Y-Jp8zQbhql9_thcX9sou77UCx1PnTYzS6NIC0kDQHhMdNb1OWzQgBMrgdyRWwKTaocOVAZ2YshRBlDTLMrFme8lXINRyiUb2zNV2jNIydcsAtIK67OBH6FtFigYTvxOEWVphnkZA_SzLJ4BDhw300cHSTrNQ");'></div>
+<div class="p-6">
+<h3 class="text-white text-lg font-bold mb-2">Subscription Box for Pet Owners</h3>
+<p class="text-[var(--text-secondary)] text-sm">A monthly subscription box tailored to pet owners, featuring toys, treats, and other pet essentials.</p>
+</div>
+</div>
+<div class="bg-[var(--secondary-color)] rounded-lg overflow-hidden group transform hover:-translate-y-1 transition-transform duration-300">
+<div class="h-48 bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuATHHSCOEfGhR4-O6heuXM8K5HwC4GPyhxTfeuzPeujRPOi-zFi0myUH8JH3yPrqFd_xlgD05u-2h19HnD2is8RcEnZ0pB4PUepBqwW6i1hoJR5ZRihPZQfjswxQcEii0nQn9vG7_aDWbotr4K5BKXknTk8aNdZaZGuZENwx6v70al9wpk7pUEd1j379BxMIuu82DUwO_neP-KNH2_14bDK9hcnxm5c_1BTIcduCN1TIBzONQ3FhPT_bButtBKrr5pdKWGPwSIRaU0");'></div>
+<div class="p-6">
+<h3 class="text-white text-lg font-bold mb-2">Online Language Exchange Community</h3>
+<p class="text-[var(--text-secondary)] text-sm">
+                A community platform connecting language learners for practice and cultural exchange through video calls and messaging.
+              </p>
+</div>
+</div>
+<div class="border-2 border-dashed border-[var(--border-color)] rounded-lg flex flex-col items-center justify-center text-center p-6 hover:bg-[var(--secondary-color)] hover:border-solid hover:border-[var(--primary-color)] transition-all duration-300 cursor-pointer">
+<div class="bg-gray-700/50 p-3 rounded-full mb-4">
+<span class="material-symbols-outlined text-4xl text-[var(--primary-color)]">add</span>
+</div>
+<h3 class="text-white text-lg font-bold mb-2">Brainstorm a New Idea</h3>
+<p class="text-[var(--text-secondary)] text-sm">Let our AI help you generate and refine your next big business concept.</p>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>

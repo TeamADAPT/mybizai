@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MybizAI - New Idea Generation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #135bec;
+            --secondary-color: #282e39;
+            --text-primary: #ffffff;
+            --text-secondary: #9da6b9;
+            --background-primary: #111318;
+            --border-color: #3b4354;
+        }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[var(--background-primary)] text-[var(--text-primary)]">
+<div class="flex min-h-screen">
+<aside class="w-64 bg-[var(--background-primary)] p-6 flex flex-col justify-between border-r border-[var(--border-color)]">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-2">
+<svg class="h-8 w-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.102L16.5 21.75l-.398-1.648a3.375 3.375 0 00-2.455-2.456L12 17.25l1.648-.398a3.375 3.375 0 002.455-2.456L16.5 12.75l.398 1.648a3.375 3.375 0 002.456 2.456L20.25 18l-1.648.398a3.375 3.375 0 00-2.456 2.456z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<h1 class="text-white text-xl font-bold">MybizAI</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-sm font-medium">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white bg-[var(--secondary-color)]" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="text-sm font-medium">Ideas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">timeline</span>
+<span class="text-sm font-medium">Roadmaps</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">check_box</span>
+<span class="text-sm font-medium">Tasks</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-md text-white hover:bg-[var(--secondary-color)] transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<button class="flex w-full items-center justify-center gap-2 rounded-md h-12 bg-[var(--primary-color)] text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">New Idea</span>
+</button>
+</aside>
+<main class="flex-1 p-8 xl:p-12">
+<div class="max-w-4xl mx-auto">
+<header class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-8">
+<h1 class="text-3xl lg:text-4xl font-bold text-white">New Idea Generation</h1>
+<div class="flex items-center gap-4">
+<button class="text-sm text-[var(--text-secondary)] hover:text-white transition-colors">Discard</button>
+<button class="px-6 py-2 bg-[var(--primary-color)] text-white text-sm font-bold rounded-md hover:bg-blue-600 transition-colors">Save Idea</button>
+</div>
+</header>
+<div class="space-y-8">
+<div class="bg-[var(--secondary-color)] p-6 rounded-lg border border-[var(--border-color)]">
+<label class="block text-lg font-semibold text-white mb-3" for="idea-input">What's your initial idea?</label>
+<div class="relative">
+<textarea class="form-textarea w-full bg-[var(--background-primary)] border border-[var(--border-color)] rounded-md text-white placeholder:text-[var(--text-secondary)] focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all" id="idea-input" placeholder="e.g., 'An app that uses AI to create personalized travel itineraries'" rows="4"></textarea>
+<button class="absolute bottom-4 right-4 bg-[var(--primary-color)] p-2 rounded-full hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined text-white">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-[var(--secondary-color)] p-6 rounded-lg border border-[var(--border-color)]">
+<h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[var(--primary-color)]">auto_awesome</span>
+                            AI Generated Suggestions
+                        </h2>
+<div class="space-y-4">
+<div class="p-4 bg-[var(--background-primary)] rounded-md border border-[var(--border-color)]">
+<h3 class="font-semibold text-white">Market Analysis</h3>
+<p class="text-[var(--text-secondary)] text-sm mt-1">The global travel tech market is projected to reach $12.5 billion by 2028. Key competitors include TripIt, Wanderlog, and Google Trips. A key differentiator could be hyper-personalization using deep learning models.</p>
+</div>
+<div class="p-4 bg-[var(--background-primary)] rounded-md border border-[var(--border-color)]">
+<h3 class="font-semibold text-white">Potential Features</h3>
+<p class="text-[var(--text-secondary)] text-sm mt-1">Real-time flight and hotel booking integration, collaborative trip planning, offline map access, and AI-powered recommendations for local attractions and dining.</p>
+</div>
+<div class="p-4 bg-[var(--background-primary)] rounded-md border border-[var(--border-color)]">
+<h3 class="font-semibold text-white">Monetization Strategies</h3>
+<p class="text-[var(--text-secondary)] text-sm mt-1">Freemium model with a premium subscription for advanced features. Affiliate commissions from bookings and targeted advertising for local businesses.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
