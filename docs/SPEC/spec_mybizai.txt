@@ -1,0 +1,242 @@
+use the files in the repo /mocks dir only without deviating for v.1
+
+use shadcn/ui components where ever possible, along with other components, databases and options provided.
+
+
+look in the /mocks and /docs/plans dirs to understand the project.
+
+our task:
+
+The bleeding-edge, production stack
+
+Framework & runtime: Next.js (App Router, RSC) on Bun. Fast dev server, server actions, file-based routing, saasfly template. zero nonsense.
+
+Language & types: TypeScript everywhere. No exceptions.
+
+Design system layer: shadcn/ui (Radix primitives), Tailwind, and tailwind-variants for variants and tokens. Icons via lucide-react.
+
+State & data fetching: TanStack Query for async server state. Minimal client state with Zustand when you must. Anything global beyond that is a smell.
+
+API contract: tRPC with Zod schemas. End-to-end types without the GraphQL overhead cosplay.
+
+Forms: React Hook Form + @hookform/resolvers/zod. Fast, typed, and doesn’t fight you.
+
+Database & ORM: PostgreSQL + Drizzle ORM. Simple, typed SQL that won’t gaslight you at 2 a.m. Use Drizzle Kit for migrations.
+
+Auth: Lucia. Lightweight, framework-friendly, and typed. Session cookies over JWT unless you truly need stateless.
+
+File uploads: UploadThing wired to Next Route Handlers. Works, ships fast, no drama.
+
+Realtime: tRPC websockets. Keep it in the same type universe, skip the “which socket lib” bike shed.
+
+Animations & polish: Framer Motion. Sprinkle, don’t drown.
+
+i18n: next-intl. File-based messages that don’t feel like punishment.
+
+Analytics & events: PostHog for product analytics. Funnels, feature flags, heatmaps without handing your soul to ad tech.
+
+Errors & traces: Sentry + OpenTelemetry. Know what exploded and why, with actual spans instead of vibes.
+
+Testing: Vitest (unit), @testing-library/react (component), Playwright (E2E), axe-core (a11y checks). Green tests or it doesn’t ship.
+
+DX & quality: Biome (formatter + linter), Husky or lefthook for pre-commit, changesets for versioning. Turborepo for workspaces/monorepo. pnpm if you want deterministic installs over Bun’s youthful enthusiasm.
+
+Email & templates: React Email. You write React once, it renders in Outlook’s weird universe.
+
+Feature flags: Unleash. Flip things on safely, like an adult.
+
+How it fits together (so your repo isn’t chaos)
+
+/app: Next App Router routes, server actions for mutations, route handlers for APIs tRPC can call internally.
+
+/server: tRPC routers, Zod schemas, Drizzle models, auth utils. One typesafe boundary, many happy neurons.
+
+/components: shadcn/ui primitives extended with tailwind-variants. Keep them presentational.
+
+**/features/**x: Vertical slices that combine UI + hooks + queries. No cross-feature imports unless shared.
+
+/lib: clients, config, analytics, sentry, otel, helpers.
+
+/tests: Playwright and Vitest live here with sensible fixtures and test data.
+
+Sensible defaults and opinions you’ll thank me for later
+
+Prefer RSC + server actions for writes; cache reads with TanStack Query where interactivity matters.
+
+Zod at the edges only. Don’t carpet your domain with runtime validation you don’t need.
+
+Drizzle migrations checked into git. No “state drift” mysteries.
+
+Keep a design tokens file and wire tailwind-variants to it. Consistency is a feature.
+
+Add a /storybook only if your team does real design-dev collaboration. Otherwise use Ladle or skip it.
+
+Deployment on Ubuntu (since you’re not playing serverless)
+
+Build with pnpm build (or bun build), run Next standalone behind Caddy or Nginx, process manager via systemd.
+
+Postgres via system packages or a managed instance you actually trust. Drizzle migrates on boot in a controlled step, not on every request.
+
+Wire Sentry DSN and OTel exporter envs from systemd units. Logs to journald plus your aggregator of choice.
+
+Upgrade hooks you’ll want on day two
+
+RUM + Core Web Vitals shipped to PostHog.
+
+Progressive hydration for heavy pages.
+
+Image pipelines: next/image with sharp, responsive sizes set correctly.
+
+A11y gates: axe in CI, kill the build on critical.
+
+Rate limiting on route handlers with a tiny Redis bucket
+
+regardless of what the docs say...the app is MyBizAI
+
+"Empowering entrepreneurs with a fully autonomous business ecosystem that evolves and grows, enabling hands-free management and maximized income generation."
+
+"Create, Automate, Thrive with MyBizAI"
+
+Innovative: Harnessing cutting-edge AI technology to create and manage businesses.
+Autonomous: Hands-free management, with AI agents handling every aspect.
+Scalable: Flexible solutions that grow with your business.
+Efficient: Streamlined processes for optimal performance and profitability.
+Logo Design Concepts:
+
+Concept 1: A stylized infinity symbol combined with a business graph, representing limitless potential and growth.
+Concept 2: A minimalist design featuring a circuit board pattern forming a business icon, highlighting the AI-driven nature.
+Concept 3: clean interwoven chains or twisted wire in a minimal icon
+
+
+
+
+
+
+
+we are using the following, along with the above, use the tools and compnents below to fully enhance the project. 
+
+Saasfly
+
+An easy-to-use and enterprise-grade Next.js boilerplate.
+
+You don't need to buy templates anymore; Saasfly provides a complete, open-source solution for building SaaS applications quickly and easily.
+
+Nextify provides a complete Enterprise SaaS solution. Contact us at contact@nextify.ltd if you're interested in discussing your project, or if you'd simply like to have a conversation with us, please feel free to reach out.
+
+❤️ We provide free technical support and deployment services to non-profit organizations.
+
+🙌 All profits obtained from our open source projects will be entirely dedicated to supporting open source initiatives and charitable causes.
+
+⚡ Live Demo
+Try it out for yourself!
+
+Demo Server (Location: Washington - USA): https://show.saasfly.io
+
+See more documentation at https://document.saasfly.io
+
+🌟 Star History
+
+Sponsors
+🚀 Getting Started
+🖱 One Click Template
+
+📋 Prerequisites
+Before you start, make sure you have the following installed:
+
+Bun & Node.js & Git
+
+Linux
+
+  curl -sL https://gist.github.com/tianzx/874662fb204d32390bc2f2e9e4d2df0a/raw -o ~/downloaded_script.sh && chmod +x ~/downloaded_script.sh && source ~/downloaded_script.sh
+MacOS
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  brew install git
+  brew install oven-sh/bun/bun
+  brew install nvm
+PostgreSQL
+
+You can use Vercel Postgres or a local PostgreSQL server(add POSTGRES_URL env in .env.local)
+
+   POSTGRES_URL = ''
+Installation
+To get started with this boilerplate, we offer two options:
+
+Use the bun create command(🌟Strongly recommend🌟):
+
+bun create saasfly 
+Manually clone the repository:
+
+git clone https://github.com/saasfly/saasfly.git
+cd saasfly
+bun install
+Setup
+Follow these steps to set up your project:
+
+Set up the environment variables:
+
+cp .env.example .env.local
+// (you must have a database prepared before running this command)
+bun db:push
+Run the development server:
+
+bun run dev:web
+Open http://localhost:3000 in your browser to see the result.
+
+(Optional alpha)bun run tailwind-config-viewer Open http://localhost:3333 in your browser to see your Tailwind CSS configuration
+
+Other Notes
+We are using Clerk as the default authentication provider after 1st June 2025.
+
+You can find the NextAuth implementation here ( https://github.com/saasfly/saasfly/tree/feature-nextauth ) .
+
+🥺 Project Roadmap
+Admin Dashboard Page (in alpha !!!)
+Only provide static page now and we plan to integrate with headless arch
+You can provide your admin account and change ADMIN_EMAIL="admin@saasfly.io,root@saasfly.io" in .env.local and access host:port/admin/dashboard
+Based on security concerns, we will not provide online demos for the time being.
+Consider integrating Payload CMS.
+⭐ Features
+🐭 Frameworks
+Next.js - The React Framework for the Web (with App Directory)
+NextAuth.js - Authentication for Next.js
+Kysely - The type-safe SQL query builder for TypeScript
+Prisma - Next-generation ORM for Node.js and TypeScript, used as a schema management tool
+React-email - A React renderer for creating beautiful emails using React components
+🐮 Platforms
+Clerk - The most comprehensive User Management Platform
+Vercel – Deploy your Next.js app with ease
+Stripe – Payment processing for internet businesses
+Resend – Email marketing platform for developers
+🐯 Enterprise Features
+i18n - Support for internationalization
+SEO - Search engine optimization
+MonoRepo - Monorepo for better code management
+T3 Env - Manage your environment variables with ease
+🐰 Data Fetching
+trpc – End-to-end typesafe APIs made easy
+tanstack/react-query – Hooks for fetching, caching and updating asynchronous data in React
+🐲 Global State Management
+Zustand – Small, fast and scalable state management for React
+🐒 UI
+Tailwind CSS – Utility-first CSS framework for rapid UI development
+Shadcn/ui – Re-usable components built using Radix UI and Tailwind CSS
+Framer Motion – Motion library for React to animate components with ease
+Lucide – Beautifully simple, pixel-perfect icons
+next/font – Optimize custom fonts and remove external network requests for improved performance
+🐴 Code Quality
+TypeScript – Static type checker for end-to-end type safety
+Prettier – Opinionated code formatter for consistent code style
+ESLint – Pluggable linter for Next.js and TypeScript
+Husky – Git hooks made easy
+🐑 Performance
+Vercel Analytics – Real-time performance metrics for your Next.js app
+bun.sh – npm alternative for faster and more reliable package management
+🐘 Database
+PostgreSQL – The world's most advanced open source database
+📦 Apps and Packages
+web: The main Next.js application
+ui: Shared UI components
+db: Database schema and utilities
+auth: Authentication utilities
+email: Email templates and utilities
