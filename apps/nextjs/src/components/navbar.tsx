@@ -10,7 +10,7 @@ import { Button } from "@saasfly/ui/button";
 
 import { MainNav } from "./main-nav";
 import { LocaleChange } from "~/components/locale-change";
-import { GitHubStar } from "~/components/github-star";
+import { ThemeSwitch } from "~/components/theme-switch";
 import { useSigninModal } from "~/hooks/use-signin-modal";
 import { UserAccountNav } from "./user-account-nav";
 
@@ -65,7 +65,7 @@ export function NavBar({
                   className={cn(
                     "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
                     item.href.startsWith(`/${segment}`)
-                      ? "text-blue-500 font-semibold"
+                      ? "text-brand-orange font-semibold"
                       : "",
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
@@ -76,17 +76,19 @@ export function NavBar({
             </nav>
           ) : null}
 
-          <div className="w-[1px] h-8 bg-accent"></div>
+          <div className="hidden h-8 w-px bg-border sm:block" />
 
           {rightElements}
 
-          <div className="hidden md:flex lg:flex xl:flex">
-            <GitHubStar />
-          </div>
+          <ThemeSwitch />
           <LocaleChange url={"/"} />
           {!user ? (
             <Link href={`/${lang}/login-clerk`}>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+              >
                 {typeof marketing.login === "string"
                   ? marketing.login
                   : "Default Login Text"}
@@ -102,7 +104,7 @@ export function NavBar({
             />
           ) : (
             <Button
-              className="px-3"
+              className="rounded-full bg-brand-orange px-4 text-brand-midnight hover:bg-brand-orange-soft"
               variant="default"
               size="sm"
               onClick={signInModal.onOpen}
