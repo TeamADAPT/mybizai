@@ -70,7 +70,8 @@ export const metadata = {
   },
   icons: {
     icon: "/images/brand/mybizai-mark.svg",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/images/brand/mybizai-mark.svg",
+    apple: "/images/brand/mybizai-mark.svg",
   },
   metadataBase: new URL(siteConfig.url),
 };

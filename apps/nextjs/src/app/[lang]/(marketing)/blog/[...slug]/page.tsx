@@ -19,6 +19,7 @@ import { absoluteUrl, formatDate } from "~/lib/utils";
 
 interface PostPageProps {
   params: {
+    lang?: string;
     slug: string[];
   };
 }
@@ -84,6 +85,7 @@ export function generateStaticParams(): PostPageProps["params"][] {
 
 export default function PostPage({ params }: PostPageProps) {
   const post = getPostFromParams(params);
+  const lang = params.lang ?? "en";
 
   if (!post) {
     notFound();
@@ -96,25 +98,25 @@ export default function PostPage({ params }: PostPageProps) {
   return (
     <article className="container relative max-w-3xl py-6 lg:py-10">
       <Link
-        href="/blog"
+        href={`/${lang}/blog`}
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute left-[-200px] top-14 hidden xl:inline-flex",
+          "absolute left-[-200px] top-14 hidden text-muted-foreground xl:inline-flex",
         )}
       >
         <Icons.ChevronLeft className="mr-2 h-4 w-4" />
-        See all posts
+        All insights
       </Link>
       <div>
         {post.date && (
           <time
             dateTime={post.date}
-            className="block text-sm text-muted-foreground"
+            className="block font-mono text-[11px] uppercase tracking-[0.16em] text-brand-gold"
           >
-            Published on {formatDate(post.date)}
+            {formatDate(post.date)}
           </time>
         )}
-        <h1 className="font-heading mt-2 inline-block text-4xl leading-tight lg:text-5xl">
+        <h1 className="mt-2 inline-block font-display text-4xl tracking-tight lg:text-5xl">
           <Balancer>{post.title}</Balancer>
         </h1>
         {authors?.length ? (
@@ -151,16 +153,22 @@ export default function PostPage({ params }: PostPageProps) {
           alt={post.title}
           width={720}
           height={405}
-          className="my-8 rounded-md border bg-muted transition-colors"
+          className="my-8 rounded-2xl border border-border bg-muted transition-colors"
           priority
         />
       )}
       <Mdx code={post.body.code} />
-      <hr className="mt-12" />
+      <hr className="mt-12 border-border" />
       <div className="flex justify-center py-6 lg:py-10">
-        <Link href="/blog" className={cn(buttonVariants({ variant: "ghost" }))}>
+        <Link
+          href={`/${lang}/blog`}
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10",
+          )}
+        >
           <Icons.ChevronLeft className="mr-2 h-4 w-4" />
-          See all posts
+          All insights
         </Link>
       </div>
     </article>

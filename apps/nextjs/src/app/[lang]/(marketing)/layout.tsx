@@ -21,8 +21,15 @@ export default async function MarketingLayout({
   const dict = await getDictionary(lang);
   const user = await getCurrentUser();
   return (
-    <div className="flex min-h-screen flex-col">
-      <Suspense fallback="...">
+    <div className="relative flex min-h-screen flex-col">
+      <div className="pointer-events-none absolute inset-0 bg-hero-wash opacity-30" />
+      <Suspense
+        fallback={
+          <div className="flex h-16 items-center border-b border-border px-4 text-sm text-muted-foreground">
+            Loading…
+          </div>
+        }
+      >
         <NavBar
           items={
             (await getMarketingConfig({ params: { lang: `${lang}` } })).mainNav
@@ -35,9 +42,9 @@ export default async function MarketingLayout({
         />
       </Suspense>
       <ModalProvider dict={dict.login} />
-      <main className="flex-1">{children}</main>
+      <main className="relative z-10 flex-1">{children}</main>
       <SiteFooter
-        className="border-t border-border"
+        className="relative z-10 border-t border-border"
         params={{ lang: `${lang}` }}
         dict={dict.common}
       />
