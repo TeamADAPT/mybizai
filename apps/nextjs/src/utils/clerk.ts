@@ -1,6 +1,6 @@
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import Negotiator from "negotiator";
 
 import { i18n } from "~/config/i18n-config";
@@ -12,6 +12,9 @@ const noRedirectRoute = ["/api(.*)", "/trpc(.*)", "/admin"];
 
 export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?signin(.*)"),
+  new RegExp("/(\\w{2}/)?login(.*)"),
+  new RegExp("/(\\w{2}/)?login-clerk(.*)"),
+  new RegExp("/(\\w{2}/)?register(.*)"),
   new RegExp("/(\\w{2}/)?terms(.*)"),
   new RegExp("/(\\w{2}/)?privacy(.*)"),
   new RegExp("/(\\w{2}/)?docs(.*)"),
@@ -19,14 +22,25 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?pricing(.*)"),
   new RegExp("/(\\w{2}/)?design(.*)"),
   new RegExp("^/\\w{2}$"), // root with locale
-])
+]);
+
+/** True when CLERK_SECRET_KEY looks like a real key (not .env.example placeholders). */
+export function hasValidClerkSecret(
+  secret = process.env.CLERK_SECRET_KEY ?? "",
+): boolean {
+  if (!secret.startsWith("sk_")) return false;
+  if (/^sk_(test|live)_x+$/i.test(secret)) return false;
+  if (secret.includes("xxxxxxxx")) return false;
+  if (secret.length < 20) return false;
+  return true;
+}
 
 export function getLocale(request: NextRequest): string | undefined {
-  // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
-  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+  request.headers.forEach((value, key) => {
+    negotiatorHeaders[key] = value;
+  });
   const locales = Array.from(i18n.locales);
-  // Use negotiator and intl-localematcher to get best locale
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
     locales,
   );
@@ -43,24 +57,21 @@ export function isNoNeedProcess(request: NextRequest): boolean {
   return noNeedProcessRoute.some((route) => new RegExp(route).test(pathname));
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
-export const middleware = clerkMiddleware(async (auth, req: NextRequest) => {
+function withLocaleRedirect(req: NextRequest): NextResponse | null {
   if (isNoNeedProcess(req)) {
     return null;
   }
 
-  const isWebhooksRoute = req.nextUrl.pathname.startsWith("/api/webhooks/");
-  if (isWebhooksRoute) {
+  if (req.nextUrl.pathname.startsWith("/api/webhooks/")) {
     return NextResponse.next();
   }
+
   const pathname = req.nextUrl.pathname;
-  // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = i18n.locales.every(
     (locale) =>
       !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`,
   );
-  // Redirect if there is no locale
+
   if (!isNoRedirect(req) && pathnameIsMissingLocale) {
     const locale = getLocale(req);
     return NextResponse.redirect(
@@ -71,16 +82,32 @@ export const middleware = clerkMiddleware(async (auth, req: NextRequest) => {
     );
   }
 
+  return null;
+}
+
+/** Locale-only middleware used when Clerk keys are missing/placeholder (Cloud Preview). */
+async function previewSafeMiddleware(req: NextRequest) {
+  const redirected = withLocaleRedirect(req);
+  if (redirected) return redirected;
+  return NextResponse.next();
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error Clerk callback typing
+const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
+  const redirected = withLocaleRedirect(req);
+  if (redirected) return redirected;
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  // @ts-expect-error Clerk matcher typing
   if (isPublicRoute(req)) {
     return null;
   }
 
-  const { userId, sessionClaims } = await auth()
+  const { userId, sessionClaims } = await auth();
 
   const isAuth = !!userId;
-  let isAdmin = false
+  let isAdmin = false;
   if (env.ADMIN_EMAIL) {
     const adminEmails = env.ADMIN_EMAIL.split(",");
     if (sessionClaims?.user?.email) {
@@ -113,7 +140,14 @@ export const middleware = clerkMiddleware(async (auth, req: NextRequest) => {
       from += req.nextUrl.search;
     }
     return NextResponse.redirect(
-      new URL(`/${locale}/login-clerk?from=${encodeURIComponent(from)}`, req.url),
+      new URL(
+        `/${locale}/login-clerk?from=${encodeURIComponent(from)}`,
+        req.url,
+      ),
     );
   }
-})
+});
+
+export const middleware = hasValidClerkSecret()
+  ? clerkAwareMiddleware
+  : previewSafeMiddleware;
