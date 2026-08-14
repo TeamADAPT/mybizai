@@ -53,6 +53,12 @@ export function UserAccountNav({
           <Link href={`/${lang}/dashboard`}>{dict.dashboard}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
+          <Link href={`/${lang}/shell`}>Shell</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={`/${lang}/brand-kit`}>Brand kit</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href={`/${lang}/dashboard/billing`}>{dict.billing}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
