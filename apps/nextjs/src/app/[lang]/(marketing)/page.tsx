@@ -7,8 +7,12 @@ import * as Icons from "@saasfly/ui/icons";
 
 import { BrandCapabilities } from "~/components/brand-capabilities";
 import { BrandLogo } from "~/components/brand-logo";
+import { Comments } from "~/components/comments";
+import { FeaturesGrid } from "~/components/features-grid";
+import { RightsideMarketing } from "~/components/rightside-marketing";
 import type { Locale } from "~/config/i18n-config";
 import { brand } from "~/config/brand";
+import { getDictionary } from "~/lib/get-dictionary";
 
 export default async function IndexPage({
   params: { lang },
@@ -17,6 +21,7 @@ export default async function IndexPage({
     lang: Locale;
   };
 }) {
+  const dict = await getDictionary(lang);
   return (
     <>
       <section className="relative isolate min-h-[88vh] overflow-hidden">
@@ -68,7 +73,7 @@ export default async function IndexPage({
         </div>
       </section>
 
-      <section className="container py-20">
+      <section id="approach" className="container scroll-mt-24 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
             How it moves
@@ -111,6 +116,48 @@ export default async function IndexPage({
         </div>
       </section>
 
+      <section className="container py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
+            Pathways
+          </p>
+          <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
+            Design. Execute. Access.
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Three doors into the platform — pick the surface that matches your
+            next move.
+          </p>
+        </div>
+        <div className="mt-10">
+          <RightsideMarketing
+            dict={dict.marketing.right_side}
+            lang={lang}
+          />
+        </div>
+      </section>
+
+      <section className="container py-16">
+        <FeaturesGrid dict={dict.marketing.features_grid} />
+      </section>
+
+      <section className="container py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
+            Operators
+          </p>
+          <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">
+            What operators are saying
+          </h2>
+          <p className="mt-3 text-muted-foreground">
+            Founders and teams using autonomous execution with a personal touch.
+          </p>
+        </div>
+        <div className="mt-10">
+          <Comments />
+        </div>
+      </section>
+
       <section className="container py-20 text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
           {brand.parent}
@@ -118,6 +165,21 @@ export default async function IndexPage({
         <p className="mt-3 font-display text-2xl tracking-tight md:text-3xl">
           Private access. Personal touch.
         </p>
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link href={`/${lang}/login-clerk`}>
+            <Button className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
+              Request private access
+            </Button>
+          </Link>
+          <Link href={`/${lang}/brand-kit`}>
+            <Button
+              variant="outline"
+              className="rounded-full border-brand-gold/60 text-brand-gold hover:bg-brand-gold/10"
+            >
+              Build your brand kit
+            </Button>
+          </Link>
+        </div>
       </section>
     </>
   );

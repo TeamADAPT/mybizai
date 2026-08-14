@@ -48,25 +48,33 @@ export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
   async function onSubmit(data: FormData) {
     setIsSaving(true);
 
-    const response = await trpc.customer.updateUserName.mutate({
-      name: data.name,
-      userId: user.id,
-    });
-    setIsSaving(false);
+    try {
+      const response = await trpc.customer.updateUserName.mutate({
+        name: data.name,
+        userId: user.id,
+      });
 
-    if (!response?.success) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your name was not updated. Please try again.",
+      if (!response?.success) {
+        return toast({
+          title: "Something went wrong.",
+          description: "Your name was not updated. Please try again.",
+          variant: "destructive",
+        });
+      }
+
+      toast({
+        description: "Your name has been updated.",
+      });
+      router.refresh();
+    } catch {
+      toast({
+        title: "Could not save",
+        description: "Workspace API unavailable in this environment.",
         variant: "destructive",
       });
+    } finally {
+      setIsSaving(false);
     }
-
-    toast({
-      description: "Your name has been updated.",
-    });
-
-    router.refresh();
   }
 
   return (
@@ -75,34 +83,40 @@ export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
       onSubmit={handleSubmit(onSubmit)}
       {...props}
     >
-      <Card>
+      <Card className="border-brand-gold/25 bg-brand-ink/40">
         <CardHeader>
-          <CardTitle>Your Name</CardTitle>
+          <CardTitle className="font-display text-2xl font-light tracking-tight">
+            Display name
+          </CardTitle>
           <CardDescription>
-            Please enter your full name or a display name you are comfortable
-            with.
+            Shown in the assist dock and workspace chrome.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-1">
+          <div className="grid max-w-md gap-2">
             <Label className="sr-only" htmlFor="name">
               Name
             </Label>
             <Input
               id="name"
-              className="w-[400px]"
+              className="rounded-full border-border bg-background/70"
               size={32}
               {...register("name")}
             />
             {errors?.name && (
-              <p className="px-1 text-xs text-red-600">{errors.name.message}</p>
+              <p className="px-1 text-xs text-brand-orange">
+                {errors.name.message}
+              </p>
             )}
           </div>
         </CardContent>
         <CardFooter>
           <button
             type="submit"
-            className={cn(buttonVariants(), className)}
+            className={cn(
+              buttonVariants(),
+              "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
+            )}
             disabled={isSaving}
           >
             {isSaving && (

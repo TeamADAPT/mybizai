@@ -4,12 +4,16 @@ export const getDocsConfig = (_lang: string): DocsConfig => {
   return {
     mainNav: [
       {
-        title: "Documentation",
-        href: `/docs`,
+        title: "Design",
+        href: `/design`,
       },
       {
-        title: "Guides",
-        href: `/guides`,
+        title: "Shell",
+        href: `/shell`,
+      },
+      {
+        title: "Brand kit",
+        href: `/brand-kit`,
       },
     ],
     sidebarNav: [
@@ -24,76 +28,34 @@ export const getDocsConfig = (_lang: string): DocsConfig => {
         ],
       },
       {
-        id: "documentation",
-        title: "Documentation",
+        id: "product",
+        title: "Product",
         items: [
           {
-            title: "Introduction",
-            href: `/docs/documentation`,
+            title: "Design foundation",
+            href: `/design`,
           },
           {
-            title: "Contentlayer",
-            href: `/docs/in-progress`,
-            disabled: true,
+            title: "Product shell",
+            href: `/shell`,
           },
           {
-            title: "Components",
-            href: `/docs/documentation/components`,
+            title: "Brand Identity Kit",
+            href: `/brand-kit`,
           },
           {
-            title: "Code Blocks",
-            href: `/docs/documentation/code-blocks`,
-          },
-          {
-            title: "Style Guide",
-            href: `/docs/documentation/style-guide`,
+            title: "Pricing",
+            href: `/pricing`,
           },
         ],
       },
       {
-        id: "blog",
-        title: "Blog",
+        id: "access",
+        title: "Access",
         items: [
           {
-            title: "Introduction",
-            href: `/docs/in-progress`,
-            disabled: true,
-          },
-        ],
-      },
-      {
-        id: "dashboard",
-        title: "Dashboard",
-        items: [
-          {
-            title: "Introduction",
-            href: "/docs/in-progress",
-            disabled: true,
-          },
-          {
-            title: "Layouts",
-            href: "/docs/in-progress",
-            disabled: true,
-          },
-          {
-            title: "Server Components",
-            href: "/docs/in-progress",
-            disabled: true,
-          },
-          {
-            title: "Authentication",
-            href: "/docs/in-progress",
-            disabled: true,
-          },
-          {
-            title: "Database with Prisma",
-            href: "/docs/in-progress",
-            disabled: true,
-          },
-          {
-            title: "API Routes",
-            href: "/docs/in-progress",
-            disabled: true,
+            title: "Private access",
+            href: `/login-clerk`,
           },
         ],
       },

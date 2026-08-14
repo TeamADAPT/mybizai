@@ -21,20 +21,31 @@ export function PricingFaq({
 }) {
   const pricingFaqData = priceFaqDataMap[lang];
   return (
-    <section className="container max-w-3xl py-2">
-      <div className="mb-14 space-y-6 text-center">
-        <h1 className="font-heading text-center text-3xl md:text-5xl">
+    <section className="container max-w-3xl py-12 md:py-16">
+      <div className="mb-10 space-y-4 text-center">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
+          Access details
+        </p>
+        <h2 className="font-display text-3xl tracking-tight md:text-4xl">
           <Balancer>{dict.faq}</Balancer>
-        </h1>
-        <p className="text-md text-muted-foreground">
+        </h2>
+        <p className="text-sm text-muted-foreground md:text-base">
           <Balancer>{dict.faq_detail}</Balancer>
         </p>
       </div>
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion type="single" collapsible className="w-full border-t border-border">
         {pricingFaqData?.map((faqItem) => (
-          <AccordionItem key={faqItem.id} value={faqItem.id}>
-            <AccordionTrigger>{faqItem.question}</AccordionTrigger>
-            <AccordionContent>{faqItem.answer}</AccordionContent>
+          <AccordionItem
+            key={faqItem.id}
+            value={faqItem.id}
+            className="border-b border-border"
+          >
+            <AccordionTrigger className="text-left font-medium hover:text-brand-orange hover:no-underline">
+              {faqItem.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+              {faqItem.answer}
+            </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 
 import { Button } from "@saasfly/ui/button";
@@ -20,73 +20,136 @@ const modules = [
   { id: "finance", label: "Financial Projections" },
 ] as const;
 
-const canvases: Record<
-  (typeof modules)[number]["id"],
-  { title: string; lead: string; bullets: string[] }
-> = {
+type ModuleId = (typeof modules)[number]["id"];
+
+type Canvas = {
+  title: string;
+  lead: string;
+  metrics: { label: string; value: string }[];
+  bullets: string[];
+  prompt: string;
+};
+
+const canvases: Record<ModuleId, Canvas> = {
   dashboard: {
     title: "Autonomous logistics overview",
     lead: "Live status across agents, approvals, and revenue loops.",
-    bullets: [
-      "3 plans awaiting your approval",
-      "12 agents running · 2 need guidance",
-      "Weekly ARR delta tracking +2.4%",
+    metrics: [
+      { label: "Awaiting approval", value: "3" },
+      { label: "Agents running", value: "12" },
+      { label: "ARR delta", value: "+2.4%" },
     ],
+    bullets: [
+      "Assist dock queued · logistics campaign brief",
+      "2 agents need guidance on inventory routing",
+      "Private-access pipeline healthy",
+    ],
+    prompt: "Summarize what needs my approval before end of day.",
   },
   businesses: {
     title: "Businesses in flight",
     lead: "Each venture gets its own ADAPT stack — shared intelligence, separate execution.",
+    metrics: [
+      { label: "Active", value: "2" },
+      { label: "Ready", value: "1" },
+      { label: "Paused", value: "0" },
+    ],
     bullets: [
       "Fifth Avenue demo · Brand kit ready",
       "Logistics pilot · Ops agents active",
       "Archive / pause without losing history",
     ],
+    prompt: "Spin up a third venture focused on boutique hospitality.",
   },
   research: {
     title: "Market research",
     lead: "Competitive maps and demand signals, distilled for decision — not dashboards for their own sake.",
+    metrics: [
+      { label: "Segments", value: "8" },
+      { label: "Whitespace", value: "3" },
+      { label: "Confidence", value: "High" },
+    ],
     bullets: [
       "Segment heat · coastal SMB logistics",
       "Competitor whitespace · agency vs SaaS",
       "Prompt to deepen any cell",
     ],
+    prompt: "Deepen competitor whitespace for agency vs SaaS.",
   },
   brand: {
     title: "Brand identity kit",
     lead: "Cobalt, orange, gold — locked tokens with consistency checks.",
-    bullets: [
-      "Primary · Ultramarine #120a8f",
-      "Action · Dark Orange #ff8c00",
-      "Emphasis · Gold #d4af37",
+    metrics: [
+      { label: "Primary", value: "#120a8f" },
+      { label: "Action", value: "#ff8c00" },
+      { label: "Emphasis", value: "#d4af37" },
     ],
+    bullets: [
+      "Instrument Serif display · Manrope UI",
+      "Gold emphasis only — never primary fill",
+      "Export kit when the system feels locked",
+    ],
+    prompt: "Check brand voice against Fifth Avenue hospitality tone.",
   },
   marketing: {
     title: "Campaign architect",
     lead: "Multi-channel plans that execute after you approve the brief.",
+    metrics: [
+      { label: "Channels", value: "3" },
+      { label: "Budget", value: "$12k" },
+      { label: "Status", value: "Draft" },
+    ],
     bullets: [
       "Private-access launch sequence",
       "LinkedIn + email + landing sync",
       "Budget reallocation via prompt",
     ],
+    prompt: "Increase social ad budget 20% and re-run the logistics campaign.",
   },
   finance: {
     title: "Financial projections",
     lead: "Scenario runs with intervention points — you stay above the math.",
+    metrics: [
+      { label: "Runway", value: "14 mo" },
+      { label: "Burn", value: "$48k" },
+      { label: "Scenario", value: "Base" },
+    ],
     bullets: [
       "Base / stretch / conservative",
       "Cash runway with agent cost lines",
       "Export for investors when ready",
     ],
+    prompt: "Show stretch scenario with agent costs +15%.",
   },
 };
 
 export function ProductShell({ lang }: { lang: string }) {
-  const [active, setActive] =
-    useState<(typeof modules)[number]["id"]>("brand");
+  const [active, setActive] = useState<ModuleId>("brand");
+  const [status, setStatus] = useState<string | null>(null);
+  const [prompt, setPrompt] = useState(canvases.brand.prompt);
+  const [pending, startTransition] = useTransition();
   const canvas = canvases[active];
 
+  function selectModule(id: ModuleId) {
+    setActive(id);
+    setPrompt(canvases[id].prompt);
+    setStatus(null);
+  }
+
+  function approvePlan() {
+    startTransition(() => {
+      setStatus(`Approved · ${canvas.title} queued for ADAPT execute.`);
+    });
+  }
+
+  function sendPrompt() {
+    startTransition(() => {
+      setStatus(`Prompt sent · “${prompt.slice(0, 72)}${prompt.length > 72 ? "…" : ""}”`);
+    });
+  }
+
   return (
-    <div className="min-h-[85vh] rounded-2xl border border-border bg-brand-midnight/80 text-foreground shadow-2xl shadow-brand-cobalt/20 overflow-hidden">
+    <div className="min-h-[85vh] overflow-hidden rounded-2xl border border-border bg-brand-midnight/80 text-foreground shadow-2xl shadow-brand-cobalt/20">
       <div className="flex min-h-[85vh] flex-col md:flex-row">
         <aside className="flex w-full flex-col border-b border-border md:w-60 md:border-b-0 md:border-r">
           <div className="flex items-center gap-2 border-b border-border px-4 py-4">
@@ -97,7 +160,7 @@ export function ProductShell({ lang }: { lang: string }) {
               <button
                 key={mod.id}
                 type="button"
-                onClick={() => setActive(mod.id)}
+                onClick={() => selectModule(mod.id)}
                 className={
                   active === mod.id
                     ? "whitespace-nowrap rounded-lg bg-brand-orange/15 px-3 py-2 text-left text-sm font-medium text-brand-orange"
@@ -109,7 +172,7 @@ export function ProductShell({ lang }: { lang: string }) {
             ))}
           </nav>
           <p className="mt-auto hidden px-4 py-4 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold/70 md:block">
-            Wireframe · product shell
+            Interactive · product shell
           </p>
         </aside>
 
@@ -133,6 +196,23 @@ export function ProductShell({ lang }: { lang: string }) {
 
           <main className="flex-1 space-y-8 px-4 py-8 md:px-8">
             <p className="max-w-2xl text-muted-foreground">{canvas.lead}</p>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {canvas.metrics.map((m) => (
+                <div
+                  key={m.label}
+                  className="rounded-2xl border border-brand-gold/20 bg-brand-ink/50 p-4"
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+                    {m.label}
+                  </p>
+                  <p className="mt-2 font-display text-3xl tracking-tight">
+                    {m.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+
             <ul className="space-y-3">
               {canvas.bullets.map((item) => (
                 <li
@@ -144,13 +224,31 @@ export function ProductShell({ lang }: { lang: string }) {
                 </li>
               ))}
             </ul>
+
+            {status ? (
+              <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange">
+                {status}
+              </p>
+            ) : null}
+
             <div className="flex flex-wrap gap-3">
-              <Button className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
+              <Button
+                className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
+                onClick={approvePlan}
+                disabled={pending}
+              >
                 Approve plan
               </Button>
               <Button
                 variant="outline"
                 className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+                asChild
+              >
+                <Link href={`/${lang}/brand-kit`}>Open brand kit</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                className="rounded-full"
                 asChild
               >
                 <Link href={`/${lang}/design`}>Design tokens</Link>
@@ -159,19 +257,31 @@ export function ProductShell({ lang }: { lang: string }) {
           </main>
 
           <footer className="border-t border-border bg-brand-ink/80 px-4 py-3 md:px-6">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0 flex-1">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="min-w-0 flex-1 space-y-2">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
                   AI assist dock
                 </p>
                 <TextGenerateEffect
-                  words="Increase social ad budget 20% and re-run the logistics campaign scenario."
-                  className="!mt-1 text-left text-sm font-normal"
+                  key={active}
+                  words={canvas.prompt}
+                  className="!mt-0 text-left text-sm font-normal"
+                />
+                <label className="sr-only" htmlFor="assist-prompt">
+                  Prompt
+                </label>
+                <input
+                  id="assist-prompt"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="w-full rounded-full border border-border bg-background/60 px-4 py-2 text-sm outline-none focus:border-brand-orange"
                 />
               </div>
               <Button
                 size="sm"
                 className="shrink-0 rounded-full bg-brand-cobalt-soft text-white hover:bg-brand-cobalt"
+                onClick={sendPrompt}
+                disabled={pending || !prompt.trim()}
               >
                 Send prompt
               </Button>

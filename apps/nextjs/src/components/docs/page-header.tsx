@@ -13,13 +13,20 @@ export function DocsPageHeader({
 }: DocsPageHeaderProps) {
   return (
     <>
-      <div className={cn("space-y-4", className)} {...props}>
-        <h1 className="font-heading inline-block text-4xl lg:text-5xl">
+      <div className={cn("space-y-3", className)} {...props}>
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
+          Docs
+        </p>
+        <h1 className="inline-block font-display text-4xl tracking-tight lg:text-5xl">
           {heading}
         </h1>
-        {text && <p className="text-xl text-muted-foreground">{text}</p>}
+        {text ? (
+          <p className="max-w-2xl text-base text-muted-foreground md:text-lg">
+            {text}
+          </p>
+        ) : null}
       </div>
-      <hr className="my-4" />
+      <hr className="my-6 border-border" />
     </>
   );
 }

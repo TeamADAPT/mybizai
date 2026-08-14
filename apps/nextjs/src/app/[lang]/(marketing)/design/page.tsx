@@ -272,10 +272,9 @@ export default function DesignFoundationPage({
                 <code className="font-mono text-foreground">config/brand.ts</code>.
               </p>
               <p>
-                Next: swap the SVG mark for the production 3D logo asset, then
-                restyle marketing + dashboard chrome against these wireframes
-                with motion-heavy UI primitives already in{" "}
-                <code className="font-mono text-foreground">@saasfly/ui</code>.
+                Marketing, pricing, auth, dashboard chrome, brand kit, and
+                product shell now follow these tokens. Next: swap the SVG mark
+                for the production 3D logo asset when ready.
               </p>
               <p className="text-xs">
                 Parent: {brand.parent} · Tagline: {brand.tagline}

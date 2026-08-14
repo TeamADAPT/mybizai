@@ -1,35 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import * as Icons from "@saasfly/ui/icons";
 
 export function CodeCopy() {
-  const [copied, setCopied] = useState(false)
-  const command = "bun create saasfly"
+  const [copied, setCopied] = useState(false);
+  const command = "bun run dev:web";
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(command)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      await navigator.clipboard.writeText(command);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy text: ", err)
+      console.error("Failed to copy text: ", err);
     }
-  }
+  };
 
   return (
-    <div className="rounded-full h-12 px-3 flex items-center justify-between max-w-xl bg-neutral-200 dark:bg-neutral-700/40">
-      <div className="flex items-center space-x-2 font-mono text-neutral-700 dark:text-neutral-300">
-        <span>$</span>
+    <div className="flex h-12 max-w-xl items-center justify-between rounded-full border border-brand-gold/30 bg-brand-ink/60 px-4">
+      <div className="flex items-center space-x-2 font-mono text-sm text-brand-orange">
+        <span className="text-brand-gold">$</span>
         <span>{command}</span>
       </div>
       <button
         onClick={copyToClipboard}
-        className="p-1.5 hover:bg-gray-200 dark:hover:bg-neutral-800 rounded-md transition-colors ml-2"
+        className="ml-2 rounded-full p-1.5 transition-colors hover:bg-brand-orange/15"
         aria-label="Copy to clipboard"
+        type="button"
       >
-        {copied ? <Icons.Check className="w-4 h-4 text-neutral-700 dark:text-neutral-300" /> : <Icons.Copy className={`w-4 h-4 text-neutral-700 dark:text-neutral-300`} />}
+        {copied ? (
+          <Icons.Check className="h-4 w-4 text-brand-orange" />
+        ) : (
+          <Icons.Copy className="h-4 w-4 text-brand-gold" />
+        )}
       </button>
     </div>
-  )
+  );
 }

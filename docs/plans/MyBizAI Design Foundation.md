@@ -52,8 +52,23 @@ Living notes for frontend design. Implementation: `/[lang]/design` and `apps/nex
 - `animate-mark-spin` — slow logo presence
 - `animate-cta-glow` — orange CTA pulse
 
+## Surfaces restyled (this pass)
+
+- Marketing home, Design foundation, Product shell, Brand Identity Kit
+- Pricing cards + FAQ, Auth (login / login-clerk / register)
+- Dashboard chrome + overview, Billing form
+- Nav / footer / modals / i18n dictionaries (en, zh, ja, ko)
+
+## Acceleration pass
+
+- Interactive product shell (module metrics, approve + assist prompt)
+- Brand kit JSON export
+- Billing / settings / admin operator console rebrand
+- zh / ja / ko pricing + FAQ aligned to Access / Architect / Fifth Avenue
+- Home operator comments + closing CTA
+
 ## Next polish
 
 - Drop production 3D logo raster/WebP over SVG mark
-- Restyle dashboard / brand-kit screens from stitch mocks onto these tokens
-- Layer `@saasfly/ui` motion primitives (sparkles, glowing-effect, text-reveal) on feature sections
+- Wire live ADAPT agent data into dashboard overview
+- Clerk production app name (replace “My Application”)

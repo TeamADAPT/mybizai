@@ -20,16 +20,25 @@ interface BlogPostsProps {
 }
 
 export function BlogPosts({ posts }: BlogPostsProps) {
+  if (!posts.length) {
+    return null;
+  }
+
   return (
-    <div className="container space-y-10 py-6 md:py-10">
+    <div className="container space-y-12 py-10 md:py-14">
       <section>
-        <h2 className="font-heading mb-4 text-3xl">Last Post</h2>
-        <article className="relative grid grid-cols-1 gap-6 md:grid-cols-2">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
+          Latest
+        </p>
+        <h2 className="mt-2 font-display text-3xl tracking-tight">
+          Featured note
+        </h2>
+        <article className="relative mt-6 grid grid-cols-1 gap-6 overflow-hidden rounded-2xl border border-brand-gold/25 bg-brand-ink/40 p-4 md:grid-cols-2 md:p-6">
           <div>
             {posts[0]?.image && (
               <Image
                 alt={posts[0].title}
-                className="w-full rounded-lg border object-cover object-center md:h-64 lg:h-72"
+                className="w-full rounded-xl border border-border object-cover object-center md:h-64 lg:h-72"
                 height={452}
                 src={posts[0].image}
                 width={804}
@@ -37,7 +46,7 @@ export function BlogPosts({ posts }: BlogPostsProps) {
             )}
           </div>
           <div className="flex flex-col justify-center">
-            <h3 className="font-heading mb-2 text-2xl md:text-4xl">
+            <h3 className="mb-2 font-display text-2xl tracking-tight md:text-4xl">
               <Balancer>{posts[0]?.title}</Balancer>
             </h3>
             {posts[0]?.description && (
@@ -53,12 +62,12 @@ export function BlogPosts({ posts }: BlogPostsProps) {
       </section>
 
       <section>
-        <h2 className="font-heading mb-4 text-3xl">Blog Posts</h2>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 className="font-display text-3xl tracking-tight">More notes</h2>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.slice(1).map((post) => (
             <article
               key={post._id}
-              className="group relative flex flex-col space-y-2"
+              className="group relative flex flex-col space-y-3 rounded-2xl border border-border bg-card/40 p-3 transition hover:border-brand-gold/40"
             >
               {post.image && (
                 <Image
@@ -66,19 +75,19 @@ export function BlogPosts({ posts }: BlogPostsProps) {
                   src={post.image}
                   width={804}
                   height={452}
-                  className="rounded-md border bg-muted transition-colors"
+                  className="rounded-xl border border-border bg-muted transition-colors"
                 />
               )}
-              <h2 className="font-heading line-clamp-1 text-2xl">
+              <h2 className="line-clamp-2 font-display text-2xl tracking-tight">
                 {post.title}
               </h2>
               {post.description && (
-                <p className="line-clamp-1 text-muted-foreground">
+                <p className="line-clamp-2 text-sm text-muted-foreground">
                   {post.description}
                 </p>
               )}
               {post.date && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   {formatDate(post.date)}
                 </p>
               )}
