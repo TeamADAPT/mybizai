@@ -4,133 +4,134 @@ interface FAQItem {
   answer: string;
 }
 
+const enFaqs: FAQItem[] = [
+  {
+    id: "item-1",
+    question: "What does the Access plan include?",
+    answer:
+      "Access is free — one business workspace, core brainstorm and plan approval, and starter brand-kit tokens. No monthly or annual charge.",
+  },
+  {
+    id: "item-2",
+    question: "How much is the Architect plan?",
+    answer:
+      "Architect is $30/month (or $288/year). It unlocks up to three workspaces and the full Brainstorm → Architect → Execute loop with brand, marketing, and finance modules.",
+  },
+  {
+    id: "item-3",
+    question: "What is Fifth Avenue tier?",
+    answer:
+      "Fifth Avenue is our private operator plan at $60/month (or $600/year): up to ten workspaces, real-time agent monitoring, custom brand systems, and a walkthrough with Fifth Avenue Intelligence Group.",
+  },
+  {
+    id: "item-4",
+    question: "Do you offer annual billing?",
+    answer:
+      "Yes. Architect annual is $288; Fifth Avenue annual is $600 — savings versus month-to-month.",
+  },
+  {
+    id: "item-5",
+    question: "Is there a trial before upgrading?",
+    answer:
+      "Paid plans can be explored in sandbox mode without charges. For a private walkthrough, request access and we’ll schedule time with the team.",
+  },
+];
+
 export const priceFaqDataMap: Record<string, FAQItem[]> = {
+  en: enFaqs,
   zh: [
     {
       id: "item-1",
-      question: "免费计划的费用是多少？",
+      question: "Access 计划包含什么？",
       answer:
-        "我们的免费计划完全免费，没有月费或年费。这是一个开始使用和探索我们基本功能的好方法。",
+        "Access 免费：1 个业务工作区、核心头脑风暴与计划审批、品牌套件入门令牌。无月费或年费。",
     },
     {
       id: "item-2",
-      question: "专业月度计划的费用是多少？",
+      question: "Architect 计划费用？",
       answer:
-        "专业月度计划的价格是每月30美元。它提供了访问我们核心功能的权限，并且是按月计费的。",
+        "Architect 为每月 $30（或每年 $288），解锁最多 3 个工作区以及完整 Brainstorm → Architect → Execute 循环。",
     },
     {
       id: "item-3",
-      question: "商务月度计划的价格是多少？",
+      question: "什么是 Fifth Avenue？",
       answer:
-        "商务月度计划的价格是每月60美元。它提供高级功能，并且也是按月计费，增加了灵活性。",
+        "Fifth Avenue 为私密运营者计划，每月 $60（或每年 $600）：最多 10 个工作区、实时智能体监控、自定义品牌，并与 Fifth Avenue Intelligence Group 进行演示。",
     },
     {
       id: "item-4",
-      question: "你们提供年度订阅计划吗？",
-      answer:
-        "是的，我们提供年度订阅计划，以便更多的节省。专业年度计划的费用是每年288美元，商务年度计划是每年600美元。",
+      question: "是否提供年付？",
+      answer: "是。Architect 年付 $288；Fifth Avenue 年付 $600，比月付更省。",
     },
     {
       id: "item-5",
-      question: "付费计划有试用期吗？",
+      question: "升级前有试用吗？",
       answer:
-        "我们为专业月度和专业年度计划提供14天的免费试用期。这是一个在承诺付费订阅之前体验所有功能的好方法。",
-    },
-  ],
-  en: [
-    {
-      id: "item-1",
-      question: "What does the Access plan include?",
-      answer:
-        "Access is free — one business workspace, core brainstorm and plan approval, and starter brand-kit tokens. No monthly or annual charge.",
-    },
-    {
-      id: "item-2",
-      question: "How much is the Architect plan?",
-      answer:
-        "Architect is $30/month (or $288/year). It unlocks up to three workspaces and the full Brainstorm → Architect → Execute loop with brand, marketing, and finance modules.",
-    },
-    {
-      id: "item-3",
-      question: "What is Fifth Avenue tier?",
-      answer:
-        "Fifth Avenue is our private operator plan at $60/month (or $600/year): up to ten workspaces, real-time agent monitoring, custom brand systems, and a walkthrough with Fifth Avenue Intelligence Group.",
-    },
-    {
-      id: "item-4",
-      question: "Do you offer annual billing?",
-      answer:
-        "Yes. Architect annual is $288; Fifth Avenue annual is $600 — savings versus month-to-month.",
-    },
-    {
-      id: "item-5",
-      question: "Is there a trial before upgrading?",
-      answer:
-        "Paid plans can be explored in sandbox mode without charges. For a private walkthrough, request access and we’ll schedule time with the team.",
+        "付费计划可在沙盒模式体验且不扣费。需要私密演示请申请访问，我们将安排时间。",
     },
   ],
   ja: [
     {
       id: "item-1",
-      question: "無料プランの費用はいくらですか？",
+      question: "Access プランに含まれるものは？",
       answer:
-        "私たちの無料プランは完全に無料で、月額料金や年間料金はかかりません。基本的な機能を使い始めるには最適な方法です。",
+        "Access は無料。ワークスペース 1 つ、コア・ブレインストームとプラン承認、ブランドキットのスタータートークン。月額・年額なし。",
     },
     {
       id: "item-2",
-      question: "プロ月額プランの費用はいくらですか？",
+      question: "Architect の料金は？",
       answer:
-        "プロ月額プランは月に30ドルで、核心機能へのアクセスを提供し、月額で課金されます。",
+        "Architect は月額 $30（年額 $288）。最大 3 ワークスペースと Brainstorm → Architect → Execute の全ループ。",
     },
     {
       id: "item-3",
-      question: "ビジネス月額プランの価格はいくらですか？",
+      question: "Fifth Avenue とは？",
       answer:
-        "ビジネス月額プランは月に60ドルで、高度な機能を提供し、柔軟性を高めるために月額で課金されます。",
+        "プライベート運営者プラン。月額 $60（年額 $600）。最大 10 ワークスペース、リアルタイム監視、カスタムブランド、Fifth Avenue Intelligence Group との説明会。",
     },
     {
       id: "item-4",
-      question: "年間サブスクリプションプランを提供していますか？",
+      question: "年額請求はありますか？",
       answer:
-        "はい、さらなる節約のために年間サブスクリプションプランを提供しています。プロ年間プランは年間288ドル、ビジネス年間プランは年間600ドルです。",
+        "はい。Architect 年額 $288、Fifth Avenue 年額 $600 で月額よりお得です。",
     },
     {
       id: "item-5",
-      question: "有料プランには試用期間がありますか？",
+      question: "アップグレード前のトライアルは？",
       answer:
-        "プロ月額プランとプロ年間プランの両方に14日間の無料トライアルを提供しています。これは、有料サブスクリプションを行う前に全ての機能を体験するのに最適な方法です。",
+        "有料プランはサンドボックスで課金なしに試せます。プライベート説明はアクセス申請から。",
     },
   ],
   ko: [
     {
       id: "item-1",
-      question: "무료 플랜의 비용은 얼마인가요?",
+      question: "Access 플랜에는 무엇이 포함되나요?",
       answer:
-        "저희 무료 플랜은 완전히 무료이며, 월간 또는 연간 요금이 없습니다. 기본 기능을 시작하고 탐색하는 데 좋은 방법입니다.",
+        "Access는 무료입니다. 워크스페이스 1개, 핵심 브레인스토밍과 계획 승인, 브랜드 키트 스타터 토큰. 월/연 요금 없음.",
     },
     {
       id: "item-2",
-      question: "프로 월간 플랜의 비용은 얼마인가요?",
+      question: "Architect 요금은?",
       answer:
-        "프로 월간 플랜은 월 30달러입니다. 이 플랜은 핵심 기능에 대한 접근을 제공하며 월간으로 청구됩니다.",
+        "Architect는 월 $30(연 $288). 최대 3개 워크스페이스와 전체 Brainstorm → Architect → Execute 루프.",
     },
     {
       id: "item-3",
-      question: "비즈니스 월간 플랜의 가격은 얼마인가요?",
+      question: "Fifth Avenue란?",
       answer:
-        "비즈니스 월간 플랜은 월 60달러입니다. 이 플랜은 고급 기능을 제공하며 유연성을 더하기 위해 월간으로 청구됩니다.",
+        "프라이빗 운영자 플랜. 월 $60(연 $600). 최대 10개 워크스페이스, 실시간 모니터링, 커스텀 브랜드, Fifth Avenue Intelligence Group 워크스루.",
     },
     {
       id: "item-4",
-      question: "연간 구독 플랜을 제공하나요?",
+      question: "연간 결제가 있나요?",
       answer:
-        "네, 더 큰 절약을 위해 연간 구독 플랜을 제공합니다. 프로 연간 플랜은 연 288달러이며, 비즈니스 연간 플랜은 연 600달러입니다.",
+        "네. Architect 연 $288, Fifth Avenue 연 $600으로 월간보다 절약됩니다.",
     },
     {
       id: "item-5",
-      question: "유료 플랜에는 체험 기간이 있나요?",
+      question: "업그레이드 전 체험이 있나요?",
       answer:
-        "저희는 프로 월간 및 프로 연간 플랜에 대해 14일 무료 체험 기간을 제공합니다. 유료 구독을 하기 전에 모든 기능을 경험할 수 있는 좋은 방법입니다.",
+        "유료 플랜은 샌드박스에서 과금 없이 탐색할 수 있습니다. 프라이빗 워크스루는 액세스 신청으로 예약하세요.",
     },
   ],
 };

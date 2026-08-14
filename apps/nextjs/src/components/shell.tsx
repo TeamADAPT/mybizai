@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { cn } from "@saasfly/ui";
+
 export function DashboardShell(props: {
   title?: string;
   description?: React.ReactNode;
@@ -10,23 +12,26 @@ export function DashboardShell(props: {
 }) {
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="font-cal text-xl font-semibold leading-none">
-            {props.title}
-          </h1>
-          {typeof props.description === "string" ? (
-            <h2 className="text-base text-muted-foreground">
-              {props.description}
-            </h2>
-          ) : (
-            props.description
-          )}
+      {(props.title || props.description || props.headerAction) && (
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            {props.title ? (
+              <h1 className="font-display text-3xl tracking-tight md:text-4xl">
+                {props.title}
+              </h1>
+            ) : null}
+            {typeof props.description === "string" ? (
+              <p className="text-sm text-muted-foreground md:text-base">
+                {props.description}
+              </p>
+            ) : (
+              props.description
+            )}
+          </div>
+          {props.headerAction}
         </div>
-        {props.headerAction}
-      </div>
-      {/*{props.breadcrumb && <Breadcrumbs />}*/}
-      <div className={props.className}>{props.children}</div>
+      )}
+      <div className={cn(props.className)}>{props.children}</div>
     </div>
   );
 }

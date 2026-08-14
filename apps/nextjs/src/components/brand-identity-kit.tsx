@@ -41,8 +41,43 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
   const [voice, setVoice] = useState(
     "Professional, trustworthy, and innovative — Fifth Avenue precision with autonomous warmth.",
   );
+  const [exported, setExported] = useState(false);
 
   const selected = colorChoices.find((c) => c.id === primary) ?? colorChoices[0];
+
+  function exportKit() {
+    const payload = {
+      brand: brand.name,
+      parent: brand.parent,
+      primary: { id: selected.id, hex: selected.hex, label: selected.label },
+      palette: {
+        cobalt: brandHex.cobalt,
+        orange: brandHex.orange,
+        gold: brandHex.gold,
+        midnight: brandHex.midnight,
+        chalk: brandHex.chalk,
+      },
+      typography: {
+        display: typography.display.family,
+        sans: typography.sans.family,
+        mono: typography.mono.family,
+      },
+      logoStyle: logo,
+      voice,
+      exportedAt: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `mybizai-brand-kit-${selected.id}-${logo}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setExported(true);
+    window.setTimeout(() => setExported(false), 2500);
+  }
 
   return (
     <div className="mx-auto max-w-3xl space-y-14">
@@ -75,7 +110,7 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
               onClick={() => setPrimary(choice.id)}
               className={
                 primary === choice.id
-                  ? "h-16 w-16 rounded-full ring-2 ring-brand-orange ring-offset-2 ring-offset-background scale-110 transition"
+                  ? "h-16 w-16 scale-110 rounded-full ring-2 ring-brand-orange ring-offset-2 ring-offset-background transition"
                   : "h-16 w-16 rounded-full ring-2 ring-transparent transition hover:scale-105"
               }
               style={{ backgroundColor: choice.hex }}
@@ -158,12 +193,27 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
           {selected.label} + {logo} + Instrument Serif reads innovative and
           stable. Gold remains emphasis-only — matches the Architecture mock.
         </p>
+        {exported ? (
+          <p className="mt-4 text-sm text-brand-orange">
+            Downloaded brand kit JSON.
+          </p>
+        ) : null}
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
+          <Button
+            className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
+            onClick={exportKit}
+          >
             Export brand kit
           </Button>
-          <Button variant="outline" className="rounded-full border-brand-gold/50 text-brand-gold" asChild>
+          <Button
+            variant="outline"
+            className="rounded-full border-brand-gold/50 text-brand-gold"
+            asChild
+          >
             <Link href={`/${lang}/design`}>Open design foundation</Link>
+          </Button>
+          <Button variant="ghost" className="rounded-full" asChild>
+            <Link href={`/${lang}/shell`}>Preview in shell</Link>
           </Button>
         </div>
       </section>

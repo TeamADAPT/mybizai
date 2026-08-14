@@ -34,6 +34,24 @@ const overview = [
   },
 ];
 
+const modules = [
+  {
+    title: "Brand Identity",
+    href: "brand-kit",
+    note: "Colors, type, logo, voice",
+  },
+  {
+    title: "Marketing Plan",
+    href: "shell",
+    note: "Campaign architect in the shell",
+  },
+  {
+    title: "Financial Projections",
+    href: "shell",
+    note: "Scenario runs with intervention",
+  },
+];
+
 export default async function DashboardPage({
   params: { lang },
 }: {
@@ -61,7 +79,7 @@ export default async function DashboardPage({
         </Link>
       </DashboardHeader>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 md:grid-cols-3">
         {overview.map((card) => (
           <div
             key={card.label}
@@ -86,6 +104,18 @@ export default async function DashboardPage({
           {brand.mission} Jump into Brand kit, Marketing, or Finance from the
           shell — or continue approvals from the assist dock.
         </p>
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {modules.map((mod) => (
+            <Link
+              key={mod.title}
+              href={`/${lang}/${mod.href}`}
+              className="rounded-2xl border border-border bg-brand-ink/30 p-4 transition hover:border-brand-orange/50"
+            >
+              <p className="font-display text-lg tracking-tight">{mod.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{mod.note}</p>
+            </Link>
+          ))}
+        </div>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link href={`/${lang}/brand-kit`}>
             <Button
@@ -98,6 +128,11 @@ export default async function DashboardPage({
           <Link href={`/${lang}/design`}>
             <Button variant="ghost" className="rounded-full">
               Design tokens
+            </Button>
+          </Link>
+          <Link href={`/${lang}/pricing`}>
+            <Button variant="ghost" className="rounded-full">
+              Plans
             </Button>
           </Link>
         </div>
