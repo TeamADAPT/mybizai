@@ -52,8 +52,15 @@ Living notes for frontend design. Implementation: `/[lang]/design` and `apps/nex
 - `animate-mark-spin` — slow logo presence
 - `animate-cta-glow` — orange CTA pulse
 
+## Surfaces restyled (this pass)
+
+- Marketing home, Design foundation, Product shell, Brand Identity Kit
+- Pricing cards + FAQ, Auth (login / login-clerk / register)
+- Dashboard chrome + overview, Billing form
+- Nav / footer / modals / i18n dictionaries (en, zh, ja, ko)
+
 ## Next polish
 
 - Drop production 3D logo raster/WebP over SVG mark
-- Restyle dashboard / brand-kit screens from stitch mocks onto these tokens
-- Layer `@saasfly/ui` motion primitives (sparkles, glowing-effect, text-reveal) on feature sections
+- Wire live ADAPT agent data into dashboard overview
+- Layer additional motion primitives on deeper product modules

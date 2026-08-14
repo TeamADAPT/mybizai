@@ -68,7 +68,7 @@ export default async function IndexPage({
         </div>
       </section>
 
-      <section className="container py-20">
+      <section id="approach" className="container scroll-mt-24 py-20">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
             How it moves

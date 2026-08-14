@@ -45,17 +45,18 @@ export function PricingCards({
     setIsYearly(!isYearly);
   };
   return (
-    <section className="container flex flex-col items-center text-center">
+    <section className="container relative flex flex-col items-center py-16 text-center">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-hero-wash opacity-50" />
       <div className="mx-auto mb-10 flex w-full flex-col gap-5">
-        <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
           {dict.pricing}
         </p>
-        <h2 className="font-heading text-3xl leading-[1.1] md:text-5xl">
+        <h2 className="font-display text-3xl leading-[1.1] tracking-tight md:text-5xl">
           {dict.slogan}
         </h2>
       </div>
 
-      <div className="mb-4 flex items-center gap-5">
+      <div className="mb-4 flex items-center gap-5 text-sm">
         <span>{dict.monthly_bill}</span>
         <Switch
           checked={isYearly}
@@ -94,11 +95,15 @@ export function PricingCards({
             id: string;
           }) => (
             <div
-              className="relative flex flex-col overflow-hidden rounded-xl border"
+              className={
+                offer?.id === "pro"
+                  ? "relative flex flex-col overflow-hidden rounded-2xl border border-brand-orange/50 bg-brand-ink/40"
+                  : "relative flex flex-col overflow-hidden rounded-2xl border border-brand-gold/25 bg-card/40"
+              }
               key={offer?.title}
             >
-              <div className="min-h-[150px] items-start space-y-4 bg-secondary/70 p-6">
-                <p className="font-urban flex text-sm font-bold uppercase tracking-wider text-muted-foreground">
+              <div className="min-h-[150px] items-start space-y-4 p-6">
+                <p className="flex text-sm font-bold uppercase tracking-wider text-brand-gold">
                   {offer?.title}
                 </p>
 
@@ -134,7 +139,7 @@ export function PricingCards({
                 <ul className="space-y-2 text-left text-sm font-medium leading-normal">
                   {offer?.benefits.map((feature) => (
                     <li className="flex items-start" key={feature}>
-                      <Icons.Check className="mr-3 h-5 w-5 shrink-0" />
+                      <Icons.Check className="mr-3 h-5 w-5 shrink-0 text-brand-orange" />
                       <p>{feature}</p>
                     </li>
                   ))}
@@ -156,7 +161,8 @@ export function PricingCards({
                     <Link
                       href="/dashboard"
                       className={buttonVariants({
-                        className: "w-full",
+                        className:
+                          "w-full rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
                         variant: "default",
                       })}
                     >
@@ -171,7 +177,12 @@ export function PricingCards({
                     />
                   )
                 ) : (
-                  <Button onClick={signInModal.onOpen}>{dict.signup}</Button>
+                  <Button
+                    onClick={signInModal.onOpen}
+                    className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
+                  >
+                    {dict.signup}
+                  </Button>
                 )}
               </div>
             </div>
@@ -183,10 +194,10 @@ export function PricingCards({
         <Balancer>
           Email{" "}
           <a
-            className="font-medium text-primary hover:underline"
-            href="mailto:support@saasfly.io"
+            className="font-medium text-brand-orange hover:underline"
+            href="mailto:access@mybizai.ai"
           >
-            support@saasfly.io
+            access@mybizai.ai
           </a>{" "}
           {dict.contact}
           <br />

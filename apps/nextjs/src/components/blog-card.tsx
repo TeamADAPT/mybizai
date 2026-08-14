@@ -41,11 +41,11 @@ export function XBlogArticle() {
 
 const blogContent = {
   slug: "Making-Sense-of-React-Server-Components",
-  author: "Nextify",
+  author: "MyBizAI",
   date: "26th March, 2024",
-  title: "Making Sense of React Server Components",
+  title: "Brainstorm to execute without losing the brand",
   description:
-    "So, here's something that makes me feel old: React celebrated its 10th birthday this year!",
+    "How ADAPT keeps Fifth Avenue voice intact while agents ship the work.",
   image:
     "https://cdn.sanity.io/images/tpb4obti/production/50c13f886c039225be4e7e99023b8f1e2b4161b9-1792x1024.png",
   authorAvatar:

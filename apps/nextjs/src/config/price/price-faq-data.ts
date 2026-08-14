@@ -40,33 +40,33 @@ export const priceFaqDataMap: Record<string, FAQItem[]> = {
   en: [
     {
       id: "item-1",
-      question: "What is the cost of the free plan?",
+      question: "What does the Access plan include?",
       answer:
-        "Our free plan is completely free, with no monthly or annual charges. It's a great way to get started and explore our basic features.",
+        "Access is free — one business workspace, core brainstorm and plan approval, and starter brand-kit tokens. No monthly or annual charge.",
     },
     {
       id: "item-2",
-      question: "How much does the Pro Monthly plan cost?",
+      question: "How much is the Architect plan?",
       answer:
-        "The Pro Monthly plan is priced at $30 per month. It provides access to our core features and is billed on a monthly basis.",
+        "Architect is $30/month (or $288/year). It unlocks up to three workspaces and the full Brainstorm → Architect → Execute loop with brand, marketing, and finance modules.",
     },
     {
       id: "item-3",
-      question: "What is the price of the Business Monthly plan?",
+      question: "What is Fifth Avenue tier?",
       answer:
-        "The Business Monthly plan is available for $60 per month. It offers advanced features and is billed on a monthly basis for added flexibility.",
+        "Fifth Avenue is our private operator plan at $60/month (or $600/year): up to ten workspaces, real-time agent monitoring, custom brand systems, and a walkthrough with Fifth Avenue Intelligence Group.",
     },
     {
       id: "item-4",
-      question: "Do you offer any annual subscription plans?",
+      question: "Do you offer annual billing?",
       answer:
-        "Yes, we offer annual subscription plans for even more savings. The Pro Annual plan is $288 per year, and the Business Annual plan is $600 per year.",
+        "Yes. Architect annual is $288; Fifth Avenue annual is $600 — savings versus month-to-month.",
     },
     {
       id: "item-5",
-      question: "Is there a trial period for the paid plans?",
+      question: "Is there a trial before upgrading?",
       answer:
-        "We offer a 14-day free trial for both the Pro Monthly and Pro Annual plans. It's a great way to experience all the features before committing to a paid subscription.",
+        "Paid plans can be explored in sandbox mode without charges. For a private walkthrough, request access and we’ll schedule time with the team.",
     },
   ],
   ja: [

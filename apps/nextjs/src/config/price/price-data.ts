@@ -84,18 +84,17 @@ export const priceDataMap: Record<string, SubscriptionPlanTranslation[]> = {
   en: [
     {
       id: "starter",
-      title: "Starter",
-      description: "For Beginners",
+      title: "Access",
+      description: "Begin the journey",
       benefits: [
-        "Up to 1 cluster per month",
-        "Basic analytics and reporting",
-        "Access to basic features",
+        "1 active business workspace",
+        "Core brainstorm + plan approval",
+        "Brand kit starter tokens",
       ],
       limitations: [
-        "No priority access to new features",
-        "Limited customer support",
-        "No custom branding",
-        "Limited access to business resources",
+        "No multi-agent orchestration",
+        "Standard support window",
+        "No custom gold emphasis themes",
       ],
       prices: {
         monthly: 0,
@@ -108,19 +107,16 @@ export const priceDataMap: Record<string, SubscriptionPlanTranslation[]> = {
     },
     {
       id: "pro",
-      title: "Pro",
-      description: "Unlock Advanced Features",
+      title: "Architect",
+      description: "Scale with ADAPT",
       benefits: [
-        "Up to 3 clusters per month",
-        "Advanced analytics and reporting",
-        "Access to business templates",
-        "Priority customer support",
-        "Exclusive webinars and training",
+        "Up to 3 business workspaces",
+        "Full Brainstorm → Architect → Execute loop",
+        "Brand, marketing, and finance modules",
+        "Priority guidance from the assist dock",
+        "Academy + webinar access",
       ],
-      limitations: [
-        "No custom branding",
-        "Limited access to business resources",
-      ],
+      limitations: ["Limited white-glove configuration"],
       prices: {
         monthly: 30,
         yearly: 288,
@@ -132,14 +128,14 @@ export const priceDataMap: Record<string, SubscriptionPlanTranslation[]> = {
     },
     {
       id: "business",
-      title: "Business",
-      description: "For Power Users",
+      title: "Fifth Avenue",
+      description: "Private operator tier",
       benefits: [
-        "Up to 10 clusters per month",
-        "Real-time analytics and reporting",
-        "Access to all templates, including custom branding",
-        "24/7 business customer support",
-        "Personalized configuration and account management",
+        "Up to 10 workspaces",
+        "Real-time agent monitoring",
+        "Custom brand systems + gold emphasis",
+        "Dedicated configuration support",
+        "Private walkthrough with Fifth Avenue Intelligence Group",
       ],
       limitations: [],
       prices: {

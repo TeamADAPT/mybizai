@@ -35,7 +35,6 @@ export function BillingForm({
     event.preventDefault();
     setIsLoading(!isLoading);
 
-    // Get a Stripe session URL.
     const response = await fetch("/api/users/stripe");
 
     if (!response?.ok) {
@@ -46,9 +45,6 @@ export function BillingForm({
       });
     }
 
-    // Redirect to the Stripe session.
-    // This could be a checkout page for initial upgrade.
-    // Or portal to manage existing subscription.
     const session = await response.json();
     if (session) {
       window.location.href = session.url;
@@ -57,30 +53,37 @@ export function BillingForm({
 
   return (
     <form className={cn(className)} onSubmit={onSubmit} {...props}>
-      <Card>
+      <Card className="border-brand-gold/25 bg-brand-ink/40">
         <CardHeader>
-          <CardTitle>Subscription Plan</CardTitle>
+          <CardTitle className="font-display text-2xl font-light tracking-tight">
+            Subscription
+          </CardTitle>
           <CardDescription>
             You are currently on the <strong>{subscriptionPlan?.title}</strong>{" "}
             plan.
           </CardDescription>
         </CardHeader>
-        <CardContent>{subscriptionPlan?.description}</CardContent>
+        <CardContent className="text-sm text-muted-foreground">
+          {subscriptionPlan?.description}
+        </CardContent>
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
           <button
             type="submit"
-            className={cn(buttonVariants())}
+            className={cn(
+              buttonVariants(),
+              "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
+            )}
             disabled={isLoading}
           >
             {isLoading && (
               <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             {subscriptionPlan?.isPaid
-              ? "Manage Subscription"
-              : "Upgrade to PRO"}
+              ? "Manage subscription"
+              : "Upgrade plan"}
           </button>
           {subscriptionPlan?.isPaid ? (
-            <p className="rounded-full text-xs font-medium">
+            <p className="rounded-full text-xs font-medium text-muted-foreground">
               {subscriptionPlan?.isCanceled
                 ? "Your plan will be canceled on "
                 : "Your plan renews on "}

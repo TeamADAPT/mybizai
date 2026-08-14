@@ -7,6 +7,6 @@ export const siteConfig = {
   url: "https://mybizai.ai",
   ogImage: "",
   links: {
-    github: "https://github.com/saasfly/saasfly",
+    github: "https://github.com/TeamADAPT/mybizai",
   },
 };

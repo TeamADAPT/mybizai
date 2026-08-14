@@ -6,24 +6,25 @@ import { HoverEffect } from "@saasfly/ui/card-hover-effect";
 
 export const projects = [
   {
-    title: "Kubernetes",
+    title: "Brainstorm",
     description:
-      "Kubernetes is an open-source container-orchestration system for automating computer application deployment, scaling, and management.",
-    link: "/",
+      "Prompt an idea. ADAPT co-plans industry, market, and positioning with you.",
+    link: "/#approach",
   },
   {
-    title: "DevOps + FinOps",
+    title: "Architect",
     description:
-      "DevOps is a set of practices that combines software development and IT operations. FinOps is the practice of bringing financial accountability to the variable spend model of cloud.",
-    link: "/",
+      "Approve the plan — brand, ops, marketing, and finance assemble as one system.",
+    link: "/shell",
   },
   {
-    title: "AI First",
+    title: "Execute",
     description:
-      "AI-first is a strategy that leverages artificial intelligence to improve products and services.",
-    link: "/",
+      "Agents ship the work while you monitor from the assist dock and intervene when needed.",
+    link: "/shell",
   },
 ];
+
 export function HoverEffects() {
   return <HoverEffect items={projects} />;
 }

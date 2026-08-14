@@ -1,30 +1,39 @@
 import React from "react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { authOptions, getCurrentUser } from "@saasfly/auth";
-import {
-  Table,
-  TableCaption,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@saasfly/ui/table";
+import { Button } from "@saasfly/ui/button";
+import * as Icons from "@saasfly/ui/icons";
 
-import { EmptyPlaceholder } from "~/components/empty-placeholder";
 import { DashboardHeader } from "~/components/header";
-import { K8sCreateButton } from "~/components/k8s/cluster-create-button";
-import { ClusterItem } from "~/components/k8s/cluster-item";
 import { DashboardShell } from "~/components/shell";
 import type { Locale } from "~/config/i18n-config";
+import { brand } from "~/config/brand";
 import { getDictionary } from "~/lib/get-dictionary";
-import { trpc } from "~/trpc/server";
-import type { ClustersArray } from "~/types/k8s";
 
 export const metadata = {
-  title: "Dashboard",
+  title: "Workspace",
 };
 
-// export type ClusterType = RouterOutputs["k8s"]["getClusters"][number];
+const overview = [
+  {
+    label: "Plans awaiting approval",
+    value: "3",
+    hint: "Review in the assist dock",
+  },
+  {
+    label: "Agents running",
+    value: "12",
+    hint: "2 need guidance",
+  },
+  {
+    label: "Weekly ARR delta",
+    value: "+2.4%",
+    hint: "Across active workspaces",
+  },
+];
+
 export default async function DashboardPage({
   params: { lang },
 }: {
@@ -32,71 +41,67 @@ export default async function DashboardPage({
     lang: Locale;
   };
 }) {
-  //don't need to check auth here, because we have a global auth check in _app.tsx
   const user = await getCurrentUser();
   if (!user) {
     redirect(authOptions?.pages?.signIn ?? "/login-clerk");
   }
-  const customer = await trpc.customer.queryCustomer.query({
-    userId: user.id,
-  });
-  if (!customer) {
-    await trpc.customer.insertCustomer.mutate({
-      userId: user.id,
-    });
-  }
-  // const accout
-  const result: ClustersArray = await trpc.k8s.getClusters.query();
-  if (result) {
-    const clusters = result;
-    const dict = await getDictionary(lang);
-    return (
-      <DashboardShell>
-        <DashboardHeader
-          heading="kubernetes"
-          text={dict.common.dashboard.title_text}
-        >
-          <K8sCreateButton dict={dict.business} />
-        </DashboardHeader>
-        <div>
-          {clusters.length ? (
-            <div className="divide-y divide-border rounded-md border">
-              <div className="flex items-center justify-between p-4">
-                <Table className="divide-y divide-gray-200">
-                  <TableCaption>A list of your k8s cluster .</TableCaption>
-                  <TableHeader>
-                    <TableRow className="hover:bg-gray-50">
-                      <TableHead className="w-[100px]">Name</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>UpdatedAt</TableHead>
-                      <TableHead>Plan</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>ACTION</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  {clusters.map((cluster) => (
-                    <ClusterItem
-                      key={String(cluster.id)}
-                      cluster={cluster}
-                    ></ClusterItem>
-                  ))}
-                </Table>
-              </div>
-            </div>
-          ) : (
-            <EmptyPlaceholder>
-              {/*<EmptyPlaceholder.Icon />*/}
-              <EmptyPlaceholder.Title>
-                {dict.business.k8s.no_cluster_title}
-              </EmptyPlaceholder.Title>
-              <EmptyPlaceholder.Description>
-                {dict.business.k8s.no_cluster_content}
-              </EmptyPlaceholder.Description>
-              <K8sCreateButton variant="outline" dict={dict.business} />
-            </EmptyPlaceholder>
-          )}
+  const dict = await getDictionary(lang);
+
+  return (
+    <DashboardShell>
+      <DashboardHeader
+        heading="Overview"
+        text={dict.common.dashboard.title_text}
+      >
+        <Link href={`/${lang}/shell`}>
+          <Button className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
+            Open product shell
+            <Icons.ArrowRight className="h-4 w-4" />
+          </Button>
+        </Link>
+      </DashboardHeader>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {overview.map((card) => (
+          <div
+            key={card.label}
+            className="rounded-2xl border border-brand-gold/25 bg-brand-ink/40 p-5"
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+              {card.label}
+            </p>
+            <p className="mt-3 font-display text-4xl tracking-tight">
+              {card.value}
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">{card.hint}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-border bg-card/40 p-6">
+        <h2 className="font-display text-2xl tracking-tight">
+          Welcome back{user.name ? `, ${user.name}` : ""}
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          {brand.mission} Jump into Brand kit, Marketing, or Finance from the
+          shell — or continue approvals from the assist dock.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link href={`/${lang}/brand-kit`}>
+            <Button
+              variant="outline"
+              className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+            >
+              Brand identity kit
+            </Button>
+          </Link>
+          <Link href={`/${lang}/design`}>
+            <Button variant="ghost" className="rounded-full">
+              Design tokens
+            </Button>
+          </Link>
         </div>
-      </DashboardShell>
-    );
-  }
+      </div>
+    </DashboardShell>
+  );
 }
