@@ -1,0 +1,13 @@
+{
+  "name": "MyBizAI",
+  "snapshot": "snapshot-20260814-8f47ecaf-a822-4c89-b4b9-421bd4de5218",
+  "agentCanUpdateSnapshot": true,
+  "install": "export PATH=\"$HOME/.bun/bin:$PATH\"\ncommand -v bun >/dev/null || curl -fsSL https://bun.sh/install | bash\nexport PATH=\"$HOME/.bun/bin:$PATH\"\nbun install\ntest -f .env.local || cp .env.example .env.local",
+  "start": "export PATH=\"$HOME/.bun/bin:$PATH\"\nbun run dev:web",
+  "ports": [
+    {
+      "name": "Next.js",
+      "port": 3000
+    }
+  ]
+}

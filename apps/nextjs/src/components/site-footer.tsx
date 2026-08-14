@@ -1,9 +1,10 @@
 import * as React from "react";
-import Image from "next/image";
 
 import { cn } from "@saasfly/ui";
 
-import { ModeToggle } from "~/components/mode-toggle";
+import { BrandLogo } from "~/components/brand-logo";
+import { ThemeSwitch } from "~/components/theme-switch";
+import { brand } from "~/config/brand";
 
 function getCopyrightText(
   dict: Record<string, string | Record<string, string>>,
@@ -25,20 +26,16 @@ export function SiteFooter({
   dict: Record<string, string | Record<string, string>>;
 }) {
   return (
-    <footer className={cn(className)}>
+    <footer className={cn("border-t border-border bg-background", className)}>
       <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
-        <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
-          <Image
-            src="/images/avatars/saasfly-logo.svg"
-            width="36"
-            height="36"
-            alt=""
-          />
-          <p className="text-center text-sm leading-loose md:text-left">
-            {getCopyrightText(dict)}
-          </p>
+        <div className="flex flex-col items-center gap-3 px-8 md:flex-row md:gap-3 md:px-0">
+          <BrandLogo showWordmark size="sm" />
+          <div className="text-center text-sm leading-relaxed text-muted-foreground md:text-left">
+            <p>{getCopyrightText(dict)}</p>
+            <p className="text-xs text-brand-gold/80">{brand.parent}</p>
+          </div>
         </div>
-        <ModeToggle />
+        <ThemeSwitch showLabel />
       </div>
     </footer>
   );

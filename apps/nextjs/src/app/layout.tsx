@@ -1,6 +1,9 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { Inter as FontSans } from "next/font/google";
-import localFont from "next/font/local";
+import {
+  IBM_Plex_Mono as FontMono,
+  Instrument_Serif as FontDisplay,
+  Manrope as FontSans,
+} from "next/font/google";
 
 import "~/styles/globals.css";
 
@@ -13,21 +16,25 @@ import { Toaster } from "@saasfly/ui/toaster";
 
 import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
+import { brand } from "~/config/brand";
 import { i18n } from "~/config/i18n-config";
 import { siteConfig } from "~/config/site";
-
-// import { Suspense } from "react";
-// import { PostHogPageview } from "~/config/providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-// Font files can be colocated inside of `pages`
-const fontHeading = localFont({
-  src: "../styles/fonts/CalSans-SemiBold.woff2",
-  variable: "--font-heading",
+const fontDisplay = FontDisplay({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display",
+});
+
+const fontMono = FontMono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export function generateStaticParams() {
@@ -41,20 +48,18 @@ export const metadata = {
   },
   description: siteConfig.description,
   keywords: [
-    "Next.js",
-    "Shadcn ui",
-    "Sass",
-    "Fast ",
-    "Simple ",
-    "Easy",
-    "Cloud Native",
+    "MyBizAI",
+    "ADAPT",
+    "Autonomous business",
+    "AI agents",
+    "Fifth Avenue Intelligence Group",
   ],
   authors: [
     {
-      name: "saasfly",
+      name: brand.parent,
     },
   ],
-  creator: "Saasfly",
+  creator: brand.name,
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -64,12 +69,10 @@ export const metadata = {
     siteName: siteConfig.name,
   },
   icons: {
-    icon: "/logo.svg",
-    // shortcut: "/favicon-16x16.png",
+    icon: "/images/brand/mybizai-mark.svg",
     apple: "/apple-touch-icon.png",
   },
-  metadataBase: new URL("https://show.saasfly.io/"),
-  // manifest: `${siteConfig.url}/site.webmanifest`,
+  metadataBase: new URL(siteConfig.url),
 };
 
 export default function RootLayout({
@@ -81,20 +84,19 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
-        {/*<Suspense>*/}
-        {/*  <PostHogPageview />*/}
-        {/*</Suspense>*/}
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
             fontSans.variable,
-            fontHeading.variable,
+            fontDisplay.variable,
+            fontMono.variable,
           )}
         >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem={false}
+            enableSystem
+            disableTransitionOnChange
           >
             <NextDevtoolsProvider>{children}</NextDevtoolsProvider>
             <Analytics />
