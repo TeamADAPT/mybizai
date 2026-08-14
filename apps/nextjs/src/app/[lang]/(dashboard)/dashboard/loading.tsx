@@ -6,10 +6,10 @@ export default function DashboardLoading() {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="kubernetes"
-        text="Create and manage clusters."
-      ></DashboardHeader>
-      <div className="divide-border-200 divide-y rounded-md border">
+        heading="Overview"
+        text="Loading workspace signals…"
+      />
+      <div className="mt-6 divide-y divide-border overflow-hidden rounded-2xl border border-brand-gold/20">
         <BasicItemSkeleton />
         <BasicItemSkeleton />
         <BasicItemSkeleton />
