@@ -38,6 +38,12 @@ export function MainNav({ items, children, params: { lang } }: MainNavProps) {
         >
           Design
         </Link>
+        <Link
+          href={`/${lang}/shell`}
+          className="hidden text-xs font-medium uppercase tracking-[0.16em] text-brand-orange/90 transition-colors hover:text-brand-orange md:inline-flex"
+        >
+          Shell
+        </Link>
       </div>
 
       <button
