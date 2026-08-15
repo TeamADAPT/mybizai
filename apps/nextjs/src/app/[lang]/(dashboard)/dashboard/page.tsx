@@ -36,6 +36,11 @@ const overview = [
 
 const modules = [
   {
+    title: "Ideas",
+    href: "ideas",
+    note: "Brainstorm and keep venture seeds",
+  },
+  {
     title: "Brand Identity",
     href: "brand-kit",
     note: "Colors, type, logo, voice",
@@ -56,14 +61,9 @@ const modules = [
     note: "Base / stretch / conservative",
   },
   {
-    title: "Academy",
-    href: "academy",
-    note: "Operator lessons tied to the playbook",
-  },
-  {
-    title: "Onboarding",
-    href: "onboarding",
-    note: "First-run checklist after access",
+    title: "Marketplace",
+    href: "marketplace",
+    note: "Install ADAPT agent skills",
   },
 ];
 

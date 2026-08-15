@@ -44,6 +44,7 @@ const steps = [
 ];
 
 const studios = [
+  { href: "ideas", label: "Ideas" },
   { href: "research", label: "Research" },
   { href: "plan", label: "Plan" },
   { href: "campaigns", label: "Campaigns" },

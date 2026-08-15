@@ -27,7 +27,7 @@ const studioRoutes: Partial<Record<ModuleId, string>> = {
   brand: "brand-kit",
   marketing: "campaigns",
   finance: "finance",
-  businesses: "plan",
+  businesses: "ideas",
 };
 
 type Canvas = {
