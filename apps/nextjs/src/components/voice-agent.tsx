@@ -9,6 +9,8 @@ import {
   IMMERSIVE_INSTRUCTIONS,
   STUDIO_INSTRUCTIONS,
   extractJourneyHint,
+  type PresencePhase,
+  type StudioId,
 } from "~/lib/voice-guide";
 import { useVentureLoop } from "~/hooks/use-venture-loop";
 
@@ -16,13 +18,19 @@ const SAMPLE_RATE = 24000;
 
 type VoiceBackend = "xai" | "browser";
 
-type VoiceStatus =
+export type VoiceStatus =
   | "idle"
   | "connecting"
   | "listening"
   | "speaking"
   | "error"
   | "unavailable";
+
+export type VoiceAgentPresentation =
+  | "presence"
+  | "dock"
+  | "hidden"
+  | "studio";
 
 type TranscriptLine = {
   id: string;
@@ -78,7 +86,11 @@ type SpeechRecognitionLike = {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
-  onresult: ((event: { results: ArrayLike<{ 0: { transcript: string }; isFinal: boolean }> }) => void) | null;
+  onresult:
+    | ((event: {
+        results: ArrayLike<{ 0: { transcript: string }; isFinal: boolean }>;
+      }) => void)
+    | null;
   onerror: ((event: { error?: string }) => void) | null;
   onend: (() => void) | null;
   start: () => void;
@@ -97,21 +109,42 @@ function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
 export function VoiceAgent({
   compact = false,
   variant = "studio",
+  presentation: presentationProp,
+  presencePhase = "building",
+  onPresencePhase,
+  onGuestName,
+  onSessionLive,
+  onJourney,
   onJourneyFill,
   onStatusChange,
   chatOpen = false,
+  lang: _lang = "en",
 }: {
   compact?: boolean;
   variant?: "studio" | "immersive";
+  presentation?: VoiceAgentPresentation;
+  presencePhase?: PresencePhase;
+  onPresencePhase?: (phase: PresencePhase) => void;
+  onGuestName?: (name: string) => void;
+  onSessionLive?: (live: boolean) => void;
+  onJourney?: (studio: StudioId, value: string) => void;
   onJourneyFill?: (
     step: import("~/lib/voice-guide").JourneyStepId,
     value: string,
   ) => void;
   onStatusChange?: (status: VoiceStatus) => void;
   chatOpen?: boolean;
+  lang?: string;
 }) {
-  const immersive = variant === "immersive";
-  const instructions = immersive ? IMMERSIVE_INSTRUCTIONS : STUDIO_INSTRUCTIONS;
+  const presentation: VoiceAgentPresentation =
+    presentationProp ??
+    (variant === "immersive" ? "presence" : "studio");
+  const guideMode =
+    presentation === "presence" || presentation === "dock";
+  const instructions = guideMode
+    ? IMMERSIVE_INSTRUCTIONS
+    : STUDIO_INSTRUCTIONS;
+
   const {
     buildQueue,
     queueBuildBrief,
@@ -132,7 +165,6 @@ export function VoiceAgent({
   const [error, setError] = useState<string | null>(null);
   const [lines, setLines] = useState<TranscriptLine[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [quietNote, setQuietNote] = useState<string | null>(null);
 
   const wsRef = useRef<WebSocket | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -142,7 +174,12 @@ export function VoiceAgent({
   const assistantBufferRef = useRef("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const browserBusyRef = useRef(false);
+  const presencePhaseRef = useRef(presencePhase);
   const [speakLevel, setSpeakLevel] = useState(0);
+
+  useEffect(() => {
+    presencePhaseRef.current = presencePhase;
+  }, [presencePhase]);
 
   useEffect(() => {
     void fetch("/api/providers")
@@ -157,6 +194,14 @@ export function VoiceAgent({
   useEffect(() => {
     onStatusChange?.(status);
   }, [onStatusChange, status]);
+
+  useEffect(() => {
+    const live =
+      status === "listening" ||
+      status === "speaking" ||
+      status === "connecting";
+    onSessionLive?.(live);
+  }, [onSessionLive, status]);
 
   useEffect(() => {
     if (status !== "speaking") {
@@ -181,8 +226,16 @@ export function VoiceAgent({
 
   const applyJourneyCapture = useCallback(
     (transcript: string) => {
-      if (!immersive) return;
-      const hint = extractJourneyHint(transcript);
+      if (!guideMode) return;
+      const hint = extractJourneyHint(transcript, presencePhaseRef.current);
+
+      if (hint.phase === "intent" && hint.value) {
+        onGuestName?.(hint.value);
+        onPresencePhase?.("intent");
+        presencePhaseRef.current = "intent";
+        return;
+      }
+
       if (!hint.step || !hint.value) return;
 
       if (hint.step === "idea") {
@@ -192,8 +245,12 @@ export function VoiceAgent({
           angle: hint.value,
           kept: true,
         });
-        setQuietNote(`Idea saved · ${hint.value}`);
         onJourneyFill?.("idea", hint.value);
+        if (hint.navigate) onJourney?.("idea", hint.value);
+        if (hint.phase) {
+          onPresencePhase?.(hint.phase);
+          presencePhaseRef.current = hint.phase;
+        }
         return;
       }
       if (hint.step === "research") {
@@ -201,14 +258,14 @@ export function VoiceAgent({
           notes: hint.value,
           deepenedSignals: ["Voice capture"],
         });
-        setQuietNote("Research noted");
         onJourneyFill?.("research", hint.value);
+        if (hint.navigate) onJourney?.("research", hint.value);
         return;
       }
       if (hint.step === "plan") {
         setPlanVision(hint.value);
-        setQuietNote("Plan updated");
         onJourneyFill?.("plan", hint.value);
+        if (hint.navigate) onJourney?.("plan", hint.value);
         return;
       }
       if (hint.step === "brand") {
@@ -219,8 +276,8 @@ export function VoiceAgent({
           logoStyle: brandKit.logoStyle,
           voice: hint.value,
         });
-        setQuietNote("Brand feel saved");
         onJourneyFill?.("brand", hint.value);
+        if (hint.navigate) onJourney?.("brand", hint.value);
         return;
       }
       if (hint.step === "venture") {
@@ -239,8 +296,8 @@ export function VoiceAgent({
           note: planVision || seed.angle,
           seededFromIdeaId: seed.id,
         });
-        setQuietNote(`Venture ready · ${seed.title}`);
         onJourneyFill?.("venture", seed.title);
+        if (hint.navigate) onJourney?.("venture", seed.title);
       }
     },
     [
@@ -250,9 +307,12 @@ export function VoiceAgent({
       brandKit.primaryId,
       brandKit.primaryLabel,
       createVenture,
+      guideMode,
       ideas,
-      immersive,
+      onGuestName,
+      onJourney,
       onJourneyFill,
+      onPresencePhase,
       planVision,
       pushResearchToPlan,
       saveBrandKit,
@@ -269,7 +329,7 @@ export function VoiceAgent({
         context: `${refined}\n\nPlan vision: ${planVision}`,
       });
 
-      if (immersive) {
+      if (guideMode) {
         try {
           const res = await fetch("/api/coding/tasks", {
             method: "POST",
@@ -281,17 +341,12 @@ export function VoiceAgent({
             }),
           });
           if (res.ok) {
-            setQuietNote("Building quietly in the background");
             appendLine(
               "system",
               "We’re handling that build for you in the background.",
             );
           } else {
-            setQuietNote("Build queued — we’ll finish it shortly");
-            appendLine(
-              "system",
-              `Queued for build · “${brief.title}”`,
-            );
+            appendLine("system", `Queued for build · “${brief.title}”`);
           }
         } catch {
           appendLine("system", `Queued for build · “${brief.title}”`);
@@ -305,7 +360,7 @@ export function VoiceAgent({
       );
       return brief;
     },
-    [appendLine, immersive, planVision, queueBuildBrief, runAssist],
+    [appendLine, guideMode, planVision, queueBuildBrief, runAssist],
   );
 
   const maybeHandoff = useCallback(
@@ -337,10 +392,15 @@ export function VoiceAgent({
       wsRef.current = null;
     }
     playTimeRef.current = 0;
+    onSessionLive?.(false);
     setStatus((prev) => (prev === "unavailable" ? prev : "idle"));
-  }, []);
+  }, [onSessionLive]);
 
-  useEffect(() => () => stop(), [stop]);
+  const stopRef = useRef(stop);
+  stopRef.current = stop;
+
+  // Tear down only on true unmount — never when callbacks/presentation change.
+  useEffect(() => () => stopRef.current(), []);
 
   const playPcmChunk = useCallback((base64: string) => {
     const ctx = audioContextRef.current;
@@ -366,18 +426,20 @@ export function VoiceAgent({
     playTimeRef.current = startAt + buffer.duration;
   }, []);
 
-  const speakBrowser = useCallback(
-    (text: string) => {
-      if (typeof window === "undefined" || !window.speechSynthesis) return;
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.rate = 1.02;
-      utter.onstart = () => setStatus("speaking");
-      utter.onend = () => setStatus("listening");
-      window.speechSynthesis.speak(utter);
-    },
-    [],
-  );
+  const speakBrowser = useCallback((text: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.02;
+    utter.onstart = () => setStatus("speaking");
+    utter.onend = () => setStatus("listening");
+    window.speechSynthesis.speak(utter);
+  }, []);
+
+  const openingLine = useCallback(() => {
+    if (guideMode) return "Who am I speaking with?";
+    return "ADAPT voice online. What should we move next in the loop?";
+  }, [guideMode]);
 
   const replyViaAssist = useCallback(
     async (userText: string) => {
@@ -386,7 +448,7 @@ export function VoiceAgent({
       try {
         if (looksLikeCodingRequest(userText)) {
           await handoffCoding(userText);
-          const ack = immersive
+          const ack = guideMode
             ? "I’ve got that building in the background. Let’s stay on your business."
             : "Queued that for Grok Build. Copy the brief when you’re ready — your subscription covers the coding.";
           appendLine("assistant", ack);
@@ -405,7 +467,7 @@ export function VoiceAgent({
         const data = (await res.json()) as { draft?: string };
         const draft =
           data.draft?.trim() ||
-          (immersive
+          (guideMode
             ? "Tell me a little more about what you want to build."
             : "Got it — open the next studio step when you’re ready.");
         appendLine("assistant", draft);
@@ -420,8 +482,8 @@ export function VoiceAgent({
     [
       appendLine,
       applyJourneyCapture,
+      guideMode,
       handoffCoding,
-      immersive,
       instructions,
       speakBrowser,
     ],
@@ -439,7 +501,7 @@ export function VoiceAgent({
 
     setError(null);
     setStatus("listening");
-    if (!immersive) {
+    if (!guideMode) {
       appendLine(
         "system",
         "Browser voice · mic + speechSynthesis · assist brain",
@@ -475,13 +537,9 @@ export function VoiceAgent({
       }
     };
 
-    speakBrowser(
-      immersive
-        ? "Welcome to MyBizAI. What business have you been thinking about?"
-        : "ADAPT browser voice online. What should we move next?",
-    );
+    speakBrowser(openingLine());
     recognition.start();
-  }, [appendLine, immersive, replyViaAssist, speakBrowser]);
+  }, [appendLine, guideMode, openingLine, replyViaAssist, speakBrowser]);
 
   const startXai = useCallback(async () => {
     setError(null);
@@ -544,6 +602,7 @@ export function VoiceAgent({
               },
               replace: {
                 MyBizAI: "My Biz A I",
+                Nova: "Nova",
                 ADAPT: "A DAPT",
               },
             },
@@ -560,9 +619,7 @@ export function VoiceAgent({
               content: [
                 {
                   type: "output_text",
-                  text: immersive
-                    ? "Welcome to MyBizAI. What business have you been thinking about?"
-                    : "ADAPT voice online. What should we move next in the loop?",
+                  text: openingLine(),
                 },
               ],
             },
@@ -588,7 +645,7 @@ export function VoiceAgent({
         processor.connect(silent);
         silent.connect(audioContext.destination);
         setStatus("listening");
-        if (!immersive) {
+        if (!guideMode) {
           appendLine("system", "xAI grok-voice · server VAD listening");
         }
       };
@@ -666,6 +723,7 @@ export function VoiceAgent({
 
       ws.onclose = () => {
         setStatus((prev) => (prev === "error" ? prev : "idle"));
+        onSessionLive?.(false);
       };
     } catch (err) {
       setStatus("error");
@@ -674,9 +732,25 @@ export function VoiceAgent({
       );
       stop();
     }
-  }, [appendLine, immersive, instructions, maybeHandoff, playPcmChunk, stop]);
+  }, [
+    appendLine,
+    guideMode,
+    instructions,
+    maybeHandoff,
+    onSessionLive,
+    openingLine,
+    playPcmChunk,
+    stop,
+  ]);
 
   const start = useCallback(async () => {
+    // Keep an existing live socket — presentation changes must not reconnect.
+    if (
+      wsRef.current?.readyState === WebSocket.OPEN ||
+      recognitionRef.current
+    ) {
+      return;
+    }
     stop();
     if (backend === "browser") {
       await startBrowser();
@@ -739,114 +813,156 @@ export function VoiceAgent({
   const alternatives = snapshot?.voice.alternatives ?? ["browser"];
   const xaiReady = snapshot?.voice.xaiConfigured ?? false;
 
-  if (immersive) {
-    const live =
-      status === "listening" ||
-      status === "speaking" ||
-      status === "connecting";
-    const orbScale =
-      status === "speaking" ? 1 + speakLevel * 0.28 : live ? 1.02 : 1;
+  const live =
+    status === "listening" ||
+    status === "speaking" ||
+    status === "connecting";
+  const orbScale =
+    status === "speaking" ? 1 + speakLevel * 0.28 : live ? 1.02 : 1;
 
+  const orbLabel = live
+    ? status === "speaking"
+      ? "Nova"
+      : "·"
+    : "Speak";
+
+  const renderOrb = (size: "lg" | "sm") => {
+    const box =
+      size === "lg"
+        ? "h-40 w-40 sm:h-48 sm:w-48"
+        : "h-14 w-14";
+    const type =
+      size === "lg" ? "text-2xl" : "text-xs";
     return (
-      <div className="relative flex w-full flex-col items-center">
-        <button
-          type="button"
-          onClick={() => {
-            if (live) stop();
-            else void start();
-          }}
-          disabled={backend === "xai" && !xaiReady && !live}
-          aria-label={live ? "End conversation" : "Start conversation"}
-          style={{ transform: `scale(${orbScale})` }}
+      <button
+        type="button"
+        onClick={() => {
+          if (live) stop();
+          else void start();
+        }}
+        disabled={backend === "xai" && !xaiReady && !live}
+        aria-label={live ? "End conversation" : "Start conversation"}
+        style={{ transform: `scale(${orbScale})` }}
+        className={
+          status === "speaking"
+            ? `voice-orb voice-orb--speak relative flex ${box} items-center justify-center rounded-full border border-[#e8c547]/50 bg-white/10 backdrop-blur-md transition-transform duration-75`
+            : live
+              ? `voice-orb relative flex ${box} items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300`
+              : `voice-orb relative flex ${box} items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/55 hover:bg-white/15`
+        }
+      >
+        <span
           className={
             status === "speaking"
-              ? "voice-orb voice-orb--speak relative flex h-40 w-40 items-center justify-center rounded-full border border-[#e8c547]/50 bg-white/10 backdrop-blur-md transition-transform duration-75 sm:h-48 sm:w-48"
-              : live
-                ? "voice-orb relative flex h-40 w-40 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300 sm:h-48 sm:w-48"
-                : "voice-orb relative flex h-40 w-40 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/55 hover:bg-white/15 sm:h-48 sm:w-48"
+              ? "voice-orb__ring voice-orb__ring--speak"
+              : "voice-orb__ring"
           }
+          style={
+            status === "speaking"
+              ? {
+                  transform: `scale(${1 + speakLevel * 0.35})`,
+                  opacity: 0.45 + speakLevel * 0.55,
+                }
+              : undefined
+          }
+        />
+        <span
+          className={`relative z-10 font-display tracking-tight text-white ${type}`}
         >
-          <span
-            className={
-              status === "speaking"
-                ? "voice-orb__ring voice-orb__ring--speak"
-                : "voice-orb__ring"
-            }
-            style={
-              status === "speaking"
-                ? {
-                    transform: `scale(${1 + speakLevel * 0.35})`,
-                    opacity: 0.45 + speakLevel * 0.55,
-                  }
-                : undefined
-            }
-          />
-          <span className="relative z-10 font-display text-2xl tracking-tight text-white">
-            {live ? (status === "speaking" ? "ADAPT" : "·") : "Speak"}
-          </span>
-        </button>
+          {orbLabel}
+        </span>
+      </button>
+    );
+  };
 
+  const chatPanel =
+    chatOpen && guideMode ? (
+      <div className="fixed bottom-4 right-4 z-[80] w-[min(100%-2rem,18rem)] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
+        <div className="rounded-2xl border border-white/15 bg-[#0a0658]/90 p-3 shadow-2xl shadow-black/40 backdrop-blur-md">
+          <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
+            Written chat
+          </p>
+          <ul className="mt-2 max-h-40 space-y-2 overflow-y-auto text-left text-sm text-white/80">
+            {lines
+              .filter((line) => line.role !== "system")
+              .slice(-8)
+              .map((line) => (
+                <li key={line.id}>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#ffb347]/80">
+                    {line.role === "user" ? "You" : "Nova"}
+                  </span>
+                  <p className="mt-0.5 leading-snug">{line.text}</p>
+                </li>
+              ))}
+          </ul>
+          <form
+            className="mt-3 flex gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const value = chatInput;
+              setChatInput("");
+              void sendChatText(value);
+            }}
+          >
+            <input
+              value={chatInput}
+              onChange={(event) => setChatInput(event.target.value)}
+              placeholder="Type instead…"
+              className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/30 focus:border-[#ff8c00]/50"
+            />
+            <button
+              type="submit"
+              disabled={chatBusy || !chatInput.trim()}
+              className="rounded-full bg-[#ff8c00] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#070828] disabled:opacity-40"
+            >
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+    ) : null;
+
+  if (presentation === "hidden") {
+    return null;
+  }
+
+  if (presentation === "dock") {
+    return (
+      <div className="pointer-events-auto fixed bottom-5 right-5 z-[75] flex flex-col items-center gap-2 sm:bottom-8 sm:right-8">
+        {renderOrb("sm")}
         {error ? (
-          <p className="mt-6 max-w-sm text-center text-sm text-[#ffb347]">
+          <p className="max-w-[10rem] text-center text-[10px] text-[#ffb347]">
             {error}
           </p>
         ) : null}
+        {chatPanel}
+      </div>
+    );
+  }
 
-        {!xaiReady ? (
-          <button
-            type="button"
-            className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
-            onClick={() => setBackend("browser")}
-          >
-            Use browser voice
-          </button>
-        ) : null}
+  if (presentation === "presence") {
+    return (
+      <div className="pointer-events-none fixed inset-0 z-20 flex flex-col items-center justify-center px-4">
+        <div className="pointer-events-auto flex w-full max-w-xl flex-col items-center">
+          {renderOrb("lg")}
 
-        {chatOpen ? (
-          <div className="fixed bottom-4 right-4 z-30 w-[min(100%-2rem,18rem)] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
-            <div className="rounded-2xl border border-white/15 bg-[#0a0658]/90 p-3 shadow-2xl shadow-black/40 backdrop-blur-md">
-              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
-                Written chat
-              </p>
-              <ul className="mt-2 max-h-40 space-y-2 overflow-y-auto text-left text-sm text-white/80">
-                {lines
-                  .filter((line) => line.role !== "system")
-                  .slice(-8)
-                  .map((line) => (
-                    <li key={line.id}>
-                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#ffb347]/80">
-                        {line.role === "user" ? "You" : "ADAPT"}
-                      </span>
-                      <p className="mt-0.5 leading-snug">{line.text}</p>
-                    </li>
-                  ))}
-              </ul>
-              <form
-                className="mt-3 flex gap-2"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  const value = chatInput;
-                  setChatInput("");
-                  void sendChatText(value);
-                }}
-              >
-                <input
-                  value={chatInput}
-                  onChange={(event) => setChatInput(event.target.value)}
-                  placeholder="Type instead…"
-                  className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/30 focus:border-[#ff8c00]/50"
-                />
-                <button
-                  type="submit"
-                  disabled={chatBusy || !chatInput.trim()}
-                  className="rounded-full bg-[#ff8c00] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#070828] disabled:opacity-40"
-                >
-                  Send
-                </button>
-              </form>
-            </div>
-          </div>
-        ) : null}
+          {error ? (
+            <p className="mt-6 max-w-sm text-center text-sm text-[#ffb347]">
+              {error}
+            </p>
+          ) : null}
+
+          {!xaiReady ? (
+            <button
+              type="button"
+              className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
+              onClick={() => setBackend("browser")}
+            >
+              Use browser voice
+            </button>
+          ) : null}
+        </div>
+        {chatPanel}
       </div>
     );
   }
@@ -889,7 +1005,11 @@ export function VoiceAgent({
             <button
               key={id}
               type="button"
-              disabled={status !== "idle" && status !== "error" && status !== "unavailable"}
+              disabled={
+                status !== "idle" &&
+                status !== "error" &&
+                status !== "unavailable"
+              }
               onClick={() => {
                 if (locked) return;
                 setBackend(id);

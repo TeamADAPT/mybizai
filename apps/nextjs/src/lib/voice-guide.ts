@@ -1,20 +1,20 @@
 /**
- * Non-technical voice guide — conversation fills the ADAPT loop quietly.
+ * Non-technical voice guide — Nova fills the loop quietly.
  */
 
 export const IMMERSIVE_INSTRUCTIONS = [
-  "You are ADAPT, the calm voice of MyBizAI.",
+  "You are Nova, the calm voice of MyBizAI.",
   "The person talking is not technical. Speak simply, warmly, and briefly — one question at a time.",
-  "Your job: guide them from a spark of an idea to a real business they feel ready to run.",
-  "Journey order: Idea → Research → Plan → Brand → Venture. Never dump a form or dashboard.",
-  "When they name a business idea, repeat it back once, confirm, then say you’ve saved it — we will open the Ideas studio for them.",
-  "When they describe who it’s for or the market, treat that as research and say we’re opening Research.",
-  "When they describe how it should work, treat that as the plan and say we’re opening Plan.",
-  "When they describe the feel/tone of the brand, note it and say we’re opening Brand.",
-  "When they are ready, celebrate lightly and say we’re opening their Venture.",
+  "Opening script (follow this order):",
+  "1) Ask: Who am I speaking with?",
+  "2) After they give a name, greet them by name, then ask: Do you have an idea, or shall we explore?",
+  "3) If they want to explore, say you’ll open Ideas and help them discover options.",
+  "4) If they have an idea, repeat it once, confirm, then say you’re opening Ideas to capture it.",
+  "Journey order after that: Idea → Research → Plan → Brand → Venture.",
+  "Never dump a form or dashboard. Never say you are ADAPT — you are Nova.",
+  "When a step is ready, say you’re taking them there.",
   "Never read code, diffs, or engineering steps aloud.",
   "If they ask to build software features, say you’ll handle that in the background and stay on the business conversation.",
-  "Start by welcoming them to MyBizAI and asking what business they’ve been thinking about.",
 ].join(" ");
 
 export const STUDIO_INSTRUCTIONS = [
@@ -54,44 +54,114 @@ export type JourneySnapshot = {
   venture: string | null;
 };
 
+export type PresencePhase = "name" | "intent" | "building";
+
+/** Studio ids used for voice journey navigation. */
+export type StudioId = JourneyStepId;
+
+export function studioHref(lang: string, studio: StudioId): string {
+  return `/${lang}/${JOURNEY_ROUTES[studio]}?voice=1`;
+}
+
 /**
  * Lightweight capture from spoken language — fills the loop without forms.
  */
-export function extractJourneyHint(text: string): {
+export function extractJourneyHint(
+  text: string,
+  phase: PresencePhase = "building",
+): {
   step: JourneyStepId | null;
   value: string;
+  phase?: PresencePhase;
+  navigate?: boolean;
 } {
   const trimmed = text.trim();
-  if (!trimmed || trimmed.length < 4) return { step: null, value: "" };
+  if (!trimmed || trimmed.length < 2) return { step: null, value: "" };
 
-  const idea =
-    trimmed.match(
-      /(?:i want to (?:build|start|create)|my idea is|let'?s (?:build|start)|i'?m thinking (?:about|of))\s+(.+)/i,
-    ) ?? trimmed.match(/^(.+?)(?:\s+business)?$/i);
+  if (phase === "name") {
+    const nameMatch = trimmed.match(
+      /(?:i(?:'| a)?m|my name is|this is|call me)\s+([A-Za-z][\w' -]{1,40})/i,
+    );
+    const bare = trimmed.match(/^([A-Za-z][\w']{1,24})$/);
+    const name = (nameMatch?.[1] ?? bare?.[1] ?? "").trim();
+    if (name) {
+      return { step: null, value: name, phase: "intent", navigate: false };
+    }
+    return { step: null, value: "" };
+  }
+
+  if (phase === "intent") {
+    if (/(?:explore|not sure|no idea|help me|discover|brainstorm)/i.test(trimmed)) {
+      return {
+        step: "idea",
+        value: "Exploring ideas together",
+        phase: "building",
+        navigate: true,
+      };
+    }
+    if (
+      /(?:i (?:have|got) an idea|my idea|i want to|let'?s build|i'?m thinking)/i.test(
+        trimmed,
+      )
+    ) {
+      const idea =
+        trimmed
+          .replace(
+            /^(?:i (?:have|got) an idea[:\s]*|my idea is\s*|i want to (?:build|start|create)\s*|let'?s build\s*|i'?m thinking (?:about|of)\s*)/i,
+            "",
+          )
+          .replace(/[.?!]+$/, "")
+          .trim()
+          .slice(0, 120) || trimmed.slice(0, 120);
+      return {
+        step: "idea",
+        value: idea,
+        phase: "building",
+        navigate: true,
+      };
+    }
+    // Short affirmative idea title
+    if (trimmed.length > 3 && trimmed.length < 80 && !/\?$/.test(trimmed)) {
+      return {
+        step: "idea",
+        value: trimmed.replace(/[.?!]+$/, "").trim(),
+        phase: "building",
+        navigate: true,
+      };
+    }
+    return { step: null, value: "" };
+  }
 
   if (
     /(?:i want to (?:build|start|create)|my idea is|let'?s (?:build|start)|i'?m thinking)/i.test(
       trimmed,
     )
   ) {
-    const value = (idea?.[1] ?? trimmed).replace(/[.?!]+$/, "").trim().slice(0, 120);
-    if (value) return { step: "idea", value };
+    const idea = trimmed
+      .replace(
+        /^(?:i want to (?:build|start|create)\s*|my idea is\s*|let'?s (?:build|start)\s*|i'?m thinking (?:about|of)\s*)/i,
+        "",
+      )
+      .replace(/[.?!]+$/, "")
+      .trim()
+      .slice(0, 120);
+    if (idea) return { step: "idea", value: idea, navigate: true };
   }
 
   if (/(?:customers?|market|audience|who (?:it'?s|is) for|competitors?)/i.test(trimmed)) {
-    return { step: "research", value: trimmed.slice(0, 200) };
+    return { step: "research", value: trimmed.slice(0, 200), navigate: true };
   }
 
   if (/(?:the plan|how it works|we should|offer|pricing|product)/i.test(trimmed)) {
-    return { step: "plan", value: trimmed.slice(0, 200) };
+    return { step: "plan", value: trimmed.slice(0, 200), navigate: true };
   }
 
-  if (/(?:brand|feel|tone|look|voice|colors?|premium|friendly)/i.test(trimmed)) {
-    return { step: "brand", value: trimmed.slice(0, 160) };
+  if (/(?:brand|feel|tone|look|colors?|premium|friendly)/i.test(trimmed)) {
+    return { step: "brand", value: trimmed.slice(0, 160), navigate: true };
   }
 
   if (/(?:ready|let'?s (?:go|launch|do it)|create (?:the )?venture|i'?m in)/i.test(trimmed)) {
-    return { step: "venture", value: trimmed.slice(0, 120) };
+    return { step: "venture", value: trimmed.slice(0, 120), navigate: true };
   }
 
   return { step: null, value: "" };

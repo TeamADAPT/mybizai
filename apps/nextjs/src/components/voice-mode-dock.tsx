@@ -1,22 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { VoiceAgent } from "~/components/voice-agent";
+import { useVoiceRuntimeOptional } from "~/components/voice-runtime";
 import {
   JOURNEY_ROUTES,
   JOURNEY_STEPS,
   type JourneySnapshot,
-  type JourneyStepId,
 } from "~/lib/voice-guide";
 import {
   disableVoiceMode,
   enableVoiceMode,
   isVoiceMode,
   loadVoiceJourney,
-  saveVoiceJourney,
 } from "~/lib/voice-mode";
 
 const emptyJourney: JourneySnapshot = {
@@ -28,18 +26,20 @@ const emptyJourney: JourneySnapshot = {
 };
 
 /**
- * Upper-right voice-mode dock + page smoke frame while guiding through studios.
+ * Upper-right voice-mode dock + page smoke frame.
+ * Nova session lives in VoiceRuntimeProvider — no second WebSocket here.
  */
 export function VoiceModeDock({ lang }: { lang: string }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const runtime = useVoiceRuntimeOptional();
   const [active, setActive] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [filled, setFilled] = useState<JourneySnapshot>(emptyJourney);
-  const [speaking, setSpeaking] = useState(false);
 
   const onPresence = pathname?.includes("/voice/presence");
+  const speaking = runtime?.voiceStatus === "speaking";
 
   useEffect(() => {
     const fromQuery = searchParams?.get("voice") === "1";
@@ -48,22 +48,6 @@ export function VoiceModeDock({ lang }: { lang: string }) {
     if (fromQuery) enableVoiceMode();
     setFilled({ ...emptyJourney, ...loadVoiceJourney() });
   }, [pathname, searchParams]);
-
-  const onJourneyFill = useCallback(
-    (step: JourneyStepId, value: string) => {
-      setFilled((prev) => {
-        const next = { ...prev, [step]: value };
-        saveVoiceJourney(next);
-        return next;
-      });
-      enableVoiceMode(step);
-      const href = `/${lang}/${JOURNEY_ROUTES[step]}?voice=1`;
-      if (!pathname?.includes(`/${JOURNEY_ROUTES[step]}`)) {
-        router.push(href);
-      }
-    },
-    [lang, pathname, router],
-  );
 
   if (onPresence || !active) return null;
 
@@ -99,8 +83,13 @@ export function VoiceModeDock({ lang }: { lang: string }) {
               Voice mode
             </p>
             <p className="mt-1 text-xs text-white/60">
-              ADAPT is guiding this studio. Keep talking — or reopen presence.
+              Nova is guiding this studio. Keep talking — or reopen presence.
             </p>
+            {runtime?.guestName ? (
+              <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">
+                With {runtime.guestName}
+              </p>
+            ) : null}
             <ul className="mt-3 space-y-1">
               {JOURNEY_STEPS.map((step) => {
                 const done = Boolean(filled[step.id]);
@@ -142,16 +131,6 @@ export function VoiceModeDock({ lang }: { lang: string }) {
               >
                 Exit voice mode
               </button>
-            </div>
-            <div className="mt-3 flex max-h-56 origin-top scale-[0.72] justify-center overflow-hidden border-t border-white/10 pt-3">
-              <VoiceAgent
-                variant="immersive"
-                chatOpen={false}
-                onJourneyFill={onJourneyFill}
-                onStatusChange={(status) =>
-                  setSpeaking(status === "speaking")
-                }
-              />
             </div>
           </div>
         ) : null}
