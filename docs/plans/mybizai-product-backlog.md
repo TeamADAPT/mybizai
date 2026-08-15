@@ -9,56 +9,45 @@ Living roadmap after the design-foundation PRs (#1–#5). Prefer large multi-sur
 - Pricing, auth, dashboard chrome, brand kit, i18n, admin login polish
 - Mobile nav, insights blog, account shortcuts
 - Operator `/playbook`, docs chrome, loaders / empty / billing polish
+- Railway staging + Postgres (https://mybizai-production-63b8.up.railway.app)
 
-## Ship-now (this wave + next FE polish)
+## Ship-now
 
 | Item | Status |
 | --- | --- |
-| Common `siteConfig` → MyBizAI | Done (this PR) |
-| Rename `sidebar_nav_clusters` → `modules` | Done |
-| Shared `BrandAuthFrame` for login / register / Clerk | Done |
-| Branded loading + locale `error` panels | Done |
-| Studio stubs: research / plan / campaigns / finance / marketplace | Done |
-| Quarantine unused Saasfly demo widgets | Done |
-| Home trim (drop features-grid clutter) | Done |
-| Denser billing card + light-friendly surfaces | Done |
-| README rewrite (MyBizAI-first) | Done |
-| Light-theme pass on remaining dark-only panels | Partial — continue |
-| Auth CTA dictionary consolidation (all locales) | Next |
-| Wire shell modules ↔ studio deep links both ways | Next |
-| Loading screen for dashboard routes via `BrandProcessScreen` | Next |
+| Common `siteConfig` → MyBizAI | Done |
+| Shared auth / loading / error chrome | Done |
+| Studio stubs + marketplace | Done |
+| Research competitor matrix | Done |
+| Academy + onboarding studios | Done |
+| Light-theme shell / dashboard cards | Done (continue elsewhere) |
+| Home CTA → shell / onboarding first | Done |
+| Ventures empty state on dashboard | Done |
+| Real Clerk keys on Railway | Next |
+| Wire live ADAPT data into shell metrics | Next |
+| Venture CRUD (rename k8s clusters) | Next |
 
 ## Product builders (mock → live)
 
-Priority order from `mocks/` + shell modules:
-
-1. **Market research** (`/research` stub exists) — charts, AI summary, deepen prompt → ADAPT
-2. **Business plan editor** (`/plan` stub) — section approvals, venture handoff
-3. **Campaign architect** (`/campaigns` stub) — channels, budget, approve gate
-4. **Financial projections** (`/finance` stub) — base / stretch / conservative
-5. **Brand identity kit** (live builder exists) — connect export to venture records
-6. **AI agent marketplace** (`/marketplace` stub exists) — skills, install, feedback loops
-7. **Onboarding complete** — first-run checklist after private access
-8. **Academy / help** — tutorials tied to playbook
-9. **Data import / export** — mapping, confirmation, status
-10. **Team invite / guest access** — Clerk orgs rename (“My Application” → MyBizAI)
+1. **Market research** — stub + matrix live; deepen → ADAPT next
+2. **Business plan editor** (`/plan`)
+3. **Campaign architect** (`/campaigns`)
+4. **Financial projections** (`/finance`)
+5. **Brand identity kit** — connect export to ventures
+6. **AI agent marketplace** (`/marketplace`)
+7. **Onboarding** (`/onboarding`) — checklist live
+8. **Academy** (`/academy`) — lesson doors live
+9. **Data import / export**
+10. **Team invite / guest access**
 
 ## Data & ops
 
-- Live ADAPT signals in dashboard + shell (replace mock metrics)
-- k8s cluster CRUD → venture CRUD naming end-to-end
-- Real Clerk / Postgres / Stripe / Resend (no placeholders)
-- Dual auth cleanup (NextAuth leftovers vs Clerk)
-- Deploy, webhooks, admin hardening
+- Live ADAPT signals in dashboard + shell
+- Real Clerk / Stripe / Resend
+- Dual auth cleanup
 - PostHog + Sentry
-- Clerk dashboard branding rename
-
-## Infra / docs
-
-- Keep this file updated when batches merge
-- Design notes: `docs/plans/MyBizAI Design Foundation.md`
-- Prefer ready (non-draft) PRs; branch pattern `cursor/<name>-d537`
+- Point Railway deploy branch to `main` after merge
 
 ## Run guidance
 
-Cover **more than one task per run**: polish leftovers + one product slice + backlog updates. Do not block on Live Preview — ship screenshots / local `127.0.0.1:3000` when needed.
+Cover **more than one task per run**. Review on Railway staging URL — do not rely on localhost preview.
