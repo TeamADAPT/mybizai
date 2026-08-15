@@ -26,8 +26,8 @@ const emptyJourney: JourneySnapshot = {
 };
 
 /**
- * Upper-right voice-mode dock + page smoke frame.
- * Nova session lives in VoiceRuntimeProvider — no second WebSocket here.
+ * Mid-right Nova button + full-page border pulse while she talks.
+ * Socket lives in VoiceRuntimeProvider — no second agent here.
  */
 export function VoiceModeDock({ lang }: { lang: string }) {
   const pathname = usePathname();
@@ -40,6 +40,10 @@ export function VoiceModeDock({ lang }: { lang: string }) {
 
   const onPresence = pathname?.includes("/voice/presence");
   const speaking = runtime?.voiceStatus === "speaking";
+  const live =
+    runtime?.voiceStatus === "listening" ||
+    runtime?.voiceStatus === "speaking" ||
+    runtime?.voiceStatus === "connecting";
 
   useEffect(() => {
     const fromQuery = searchParams?.get("voice") === "1";
@@ -62,25 +66,36 @@ export function VoiceModeDock({ lang }: { lang: string }) {
         aria-hidden
       />
 
-      <div className="fixed right-4 top-4 z-[70] flex flex-col items-end gap-2 sm:right-6 sm:top-5">
+      <div className="fixed right-4 top-[48%] z-[70] flex -translate-y-1/2 flex-col items-end gap-2 sm:right-6">
         <button
           type="button"
           onClick={() => setExpanded((open) => !open)}
           className={
             speaking
-              ? "voice-mode-dock voice-mode-dock--speak flex h-12 w-12 items-center justify-center rounded-full border border-[#ff8c00]/70 bg-[#120a8f]/90 text-white shadow-lg shadow-[#ff8c00]/25 backdrop-blur-md"
-              : "voice-mode-dock flex h-12 w-12 items-center justify-center rounded-full border border-[#ffb347]/45 bg-[#120a8f]/85 text-white shadow-lg shadow-black/30 backdrop-blur-md"
+              ? "voice-mode-dock voice-mode-dock--speak flex h-14 min-w-[5.5rem] items-center justify-center rounded-full border border-[#ff8c00]/80 bg-[#120a8f]/92 px-5 text-white shadow-lg shadow-[#ff8c00]/30 backdrop-blur-md"
+              : live
+                ? "voice-mode-dock flex h-14 min-w-[5.5rem] items-center justify-center rounded-full border border-[#ffb347]/55 bg-[#120a8f]/88 px-5 text-white shadow-lg shadow-black/30 backdrop-blur-md"
+                : "voice-mode-dock flex h-14 min-w-[5.5rem] items-center justify-center rounded-full border border-white/25 bg-[#120a8f]/85 px-5 text-white shadow-lg shadow-black/30 backdrop-blur-md"
           }
-          aria-label={expanded ? "Collapse voice mode" : "Expand voice mode"}
-          title="Voice mode"
+          aria-label={expanded ? "Collapse Nova" : "Open Nova"}
+          title="Nova"
         >
-          <span className="font-display text-sm tracking-tight">V</span>
+          <span className="font-display text-base tracking-tight">Nova</span>
         </button>
+        {speaking ? (
+          <p className="rounded-full bg-[#070828]/75 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-[#ffb347]">
+            Speaking
+          </p>
+        ) : live ? (
+          <p className="rounded-full bg-[#070828]/65 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
+            Listening
+          </p>
+        ) : null}
 
         {expanded ? (
           <div className="w-[min(100vw-2rem,17rem)] rounded-2xl border border-white/15 bg-[#070828]/92 p-3 text-white shadow-2xl backdrop-blur-md">
             <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[#ffb347]">
-              Voice mode
+              Nova
             </p>
             <p className="mt-1 text-xs text-white/60">
               Nova is guiding this studio. Keep talking — or reopen presence.

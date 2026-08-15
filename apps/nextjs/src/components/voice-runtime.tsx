@@ -137,6 +137,7 @@ export function VoiceRuntimeProvider({ children }: { children: ReactNode }) {
         lang={lang}
         presentation={presentation}
         presencePhase={presencePhase}
+        guestName={guestName}
         chatOpen={chatOpen}
         onPresencePhase={setPresencePhase}
         onGuestName={setGuestName}

@@ -8,8 +8,9 @@ export const IMMERSIVE_INSTRUCTIONS = [
   "Opening script (follow this order):",
   "1) Ask: Who am I speaking with?",
   "2) After they give a name, greet them by name, then ask: Do you have an idea, or shall we explore?",
-  "3) If they want to explore, say you’ll open Ideas and help them discover options.",
-  "4) If they have an idea, repeat it once, confirm, then say you’re opening Ideas to capture it.",
+  "3) Stay on this screen until they clearly choose — explore OR an idea they already have. Do not move on after the name alone.",
+  "4) If they want to explore, say you’ll open Ideas and help them discover options.",
+  "5) If they have an idea, repeat it once, confirm, then say you’re opening Ideas to capture it.",
   "Journey order after that: Idea → Research → Plan → Brand → Venture.",
   "Never dump a form or dashboard. Never say you are ADAPT — you are Nova.",
   "When a step is ready, say you’re taking them there.",
@@ -65,10 +66,13 @@ export function studioHref(lang: string, studio: StudioId): string {
 
 /**
  * Lightweight capture from spoken language — fills the loop without forms.
+ * Intent phase never navigates on a bare name / short phrase — only explore
+ * or an explicit “I have an idea…” signal.
  */
 export function extractJourneyHint(
   text: string,
   phase: PresencePhase = "building",
+  guestName?: string | null,
 ): {
   step: JourneyStepId | null;
   value: string;
@@ -91,7 +95,20 @@ export function extractJourneyHint(
   }
 
   if (phase === "intent") {
-    if (/(?:explore|not sure|no idea|help me|discover|brainstorm)/i.test(trimmed)) {
+    const guest = guestName?.trim().toLowerCase();
+    if (guest && trimmed.toLowerCase() === guest) {
+      return { step: null, value: "" };
+    }
+    // Still answering the name question — ignore bare first-name replies.
+    if (/^([A-Za-z][\w']{1,24})$/.test(trimmed)) {
+      return { step: null, value: "" };
+    }
+
+    if (
+      /(?:explore|not sure|no idea|help me (?:explore|figure)|discover|brainstorm|let'?s explore|shall we explore|nope|don'?t have)/i.test(
+        trimmed,
+      )
+    ) {
       return {
         step: "idea",
         value: "Exploring ideas together",
@@ -99,20 +116,21 @@ export function extractJourneyHint(
         navigate: true,
       };
     }
+
     if (
-      /(?:i (?:have|got) an idea|my idea|i want to|let'?s build|i'?m thinking)/i.test(
+      /(?:i (?:have|got) (?:an )?idea|my idea|i want to|let'?s build|i'?m thinking|i already (?:have|got)|yes[, ]+(?:i have|an idea))/i.test(
         trimmed,
       )
     ) {
       const idea =
         trimmed
           .replace(
-            /^(?:i (?:have|got) an idea[:\s]*|my idea is\s*|i want to (?:build|start|create)\s*|let'?s build\s*|i'?m thinking (?:about|of)\s*)/i,
+            /^(?:yes[, ]+)?(?:i (?:have|got) (?:an )?idea[:\s]*|my idea is\s*|i want to (?:build|start|create)\s*|let'?s build\s*|i'?m thinking (?:about|of)\s*|i already (?:have|got)\s*)/i,
             "",
           )
           .replace(/[.?!]+$/, "")
           .trim()
-          .slice(0, 120) || trimmed.slice(0, 120);
+          .slice(0, 120) || "Idea captured";
       return {
         step: "idea",
         value: idea,
@@ -120,15 +138,8 @@ export function extractJourneyHint(
         navigate: true,
       };
     }
-    // Short affirmative idea title
-    if (trimmed.length > 3 && trimmed.length < 80 && !/\?$/.test(trimmed)) {
-      return {
-        step: "idea",
-        value: trimmed.replace(/[.?!]+$/, "").trim(),
-        phase: "building",
-        navigate: true,
-      };
-    }
+
+    // Stay on presence until explore vs existing idea is clear.
     return { step: null, value: "" };
   }
 

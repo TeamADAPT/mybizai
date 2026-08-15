@@ -111,6 +111,7 @@ export function VoiceAgent({
   variant = "studio",
   presentation: presentationProp,
   presencePhase = "building",
+  guestName = null,
   onPresencePhase,
   onGuestName,
   onSessionLive,
@@ -124,6 +125,7 @@ export function VoiceAgent({
   variant?: "studio" | "immersive";
   presentation?: VoiceAgentPresentation;
   presencePhase?: PresencePhase;
+  guestName?: string | null;
   onPresencePhase?: (phase: PresencePhase) => void;
   onGuestName?: (name: string) => void;
   onSessionLive?: (live: boolean) => void;
@@ -175,11 +177,20 @@ export function VoiceAgent({
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const browserBusyRef = useRef(false);
   const presencePhaseRef = useRef(presencePhase);
+  const guestNameRef = useRef(guestName);
+  const lastUserUtteranceRef = useRef<{ text: string; at: number }>({
+    text: "",
+    at: 0,
+  });
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
     presencePhaseRef.current = presencePhase;
   }, [presencePhase]);
+
+  useEffect(() => {
+    guestNameRef.current = guestName;
+  }, [guestName]);
 
   useEffect(() => {
     void fetch("/api/providers")
@@ -227,7 +238,24 @@ export function VoiceAgent({
   const applyJourneyCapture = useCallback(
     (transcript: string) => {
       if (!guideMode) return;
-      const hint = extractJourneyHint(transcript, presencePhaseRef.current);
+      const normalized = transcript.trim().toLowerCase();
+      if (!normalized) return;
+      // Same utterance can arrive twice (transcript + item.created) after
+      // phase flips name→intent — never advance on the duplicate.
+      const now = Date.now();
+      if (
+        normalized === lastUserUtteranceRef.current.text &&
+        now - lastUserUtteranceRef.current.at < 2800
+      ) {
+        return;
+      }
+      lastUserUtteranceRef.current = { text: normalized, at: now };
+
+      const hint = extractJourneyHint(
+        transcript,
+        presencePhaseRef.current,
+        guestNameRef.current,
+      );
 
       if (hint.phase === "intent" && hint.value) {
         onGuestName?.(hint.value);
@@ -927,17 +955,8 @@ export function VoiceAgent({
   }
 
   if (presentation === "dock") {
-    return (
-      <div className="pointer-events-auto fixed bottom-5 right-5 z-[75] flex flex-col items-center gap-2 sm:bottom-8 sm:right-8">
-        {renderOrb("sm")}
-        {error ? (
-          <p className="max-w-[10rem] text-center text-[10px] text-[#ffb347]">
-            {error}
-          </p>
-        ) : null}
-        {chatPanel}
-      </div>
-    );
+    // Studio chrome owns the Nova button + border pulse; keep socket only.
+    return chatPanel;
   }
 
   if (presentation === "presence") {
