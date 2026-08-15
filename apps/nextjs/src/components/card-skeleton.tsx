@@ -3,14 +3,14 @@ import { Skeleton } from "@saasfly/ui/skeleton";
 
 export function CardSkeleton() {
   return (
-    <Card>
+    <Card className="border-brand-gold/20 bg-brand-ink/40">
       <CardHeader className="gap-2">
         <Skeleton className="h-5 w-1/5" />
         <Skeleton className="h-4 w-4/5" />
       </CardHeader>
       <CardContent className="h-10" />
       <CardFooter>
-        <Skeleton className="h-8 w-[120px]" />
+        <Skeleton className="h-8 w-[120px] rounded-full" />
       </CardFooter>
     </Card>
   );

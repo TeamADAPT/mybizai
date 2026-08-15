@@ -38,13 +38,13 @@ export function BillingFormButton({
   return (
     <Button
       variant="default"
-      className="w-full"
+      className="w-full rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
       disabled={isPending}
       onClick={stripeSessionAction}
     >
       {isPending ? (
         <>
-          <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading...
+          <Icons.Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading…
         </>
       ) : (
         <>
