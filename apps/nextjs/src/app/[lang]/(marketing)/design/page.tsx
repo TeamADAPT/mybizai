@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Button } from "@saasfly/ui/button";
 
 import { BrandLogo } from "~/components/brand-logo";
+import { CodeCopy } from "~/components/code-copy";
 import { ThemeSwitch } from "~/components/theme-switch";
+import { TypewriterEffectSmooths } from "~/components/typewriterEffectSmooth";
 import {
   brand,
   brandHex,
@@ -276,10 +278,19 @@ export default function DesignFoundationPage({
                 product shell now follow these tokens. Next: swap the SVG mark
                 for the production 3D logo asset when ready.
               </p>
+              <div className="pt-2">
+                <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+                  Local preview
+                </p>
+                <CodeCopy />
+              </div>
               <p className="text-xs">
                 Parent: {brand.parent} · Tagline: {brand.tagline}
               </p>
             </div>
+          </div>
+          <div className="mt-8 border-t border-border pt-6">
+            <TypewriterEffectSmooths />
           </div>
         </section>
       </div>

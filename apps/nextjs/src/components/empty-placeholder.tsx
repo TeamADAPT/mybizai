@@ -13,7 +13,7 @@ export function EmptyPlaceholder({
   return (
     <div
       className={cn(
-        "flex min-h-[400px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center animate-in fade-in-50",
+        "flex min-h-[400px] flex-col items-center justify-center rounded-2xl border border-dashed border-brand-gold/30 bg-brand-ink/30 p-8 text-center animate-in fade-in-50",
         className,
       )}
       {...props}
@@ -32,7 +32,7 @@ interface EmptyPlaceholderIconProps
 
 EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({
   name,
-  className, // ...props
+  className,
 }: EmptyPlaceholderIconProps) {
   const Icon = Icons[name];
 
@@ -41,8 +41,8 @@ EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({
   }
 
   return (
-    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-      <Icon className={cn("h-10 w-10", className)} />
+    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-brand-cobalt/20">
+      <Icon className={cn("h-10 w-10 text-brand-orange", className)} />
     </div>
   );
 };
@@ -55,7 +55,10 @@ EmptyPlaceholder.Title = function EmptyPlaceholderTitle({
 }: EmptyPlacholderTitleProps) {
   return (
     // eslint-disable-next-line jsx-a11y/heading-has-content
-    <h2 className={cn("mt-6 text-xl font-semibold", className)} {...props} />
+    <h2
+      className={cn("mt-6 font-display text-2xl tracking-tight", className)}
+      {...props}
+    />
   );
 };
 

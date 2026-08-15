@@ -24,22 +24,25 @@ export function LocaleChange({ url }: { url: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="h-8 w-8 px-0">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 px-0 text-muted-foreground hover:text-brand-gold"
+        >
           <Icons.Languages />
-          <span className="sr-only"></span>
+          <span className="sr-only">Change language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <div>
-          {i18n.locales.map((locale) => {
-            return (
-              // <Link href={redirectedPathName(locale)}>{locale}</Link>
-              <DropdownMenuItem key={locale} onClick={() => onClick(locale)}>
-                <span>{localeMap[locale]}</span>
-              </DropdownMenuItem>
-            );
-          })}
-        </div>
+      <DropdownMenuContent align="end" className="border-brand-gold/20">
+        {i18n.locales.map((locale) => (
+          <DropdownMenuItem
+            key={locale}
+            onClick={() => onClick(locale)}
+            className="focus:bg-brand-orange/10 focus:text-brand-orange"
+          >
+            <span>{localeMap[locale]}</span>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

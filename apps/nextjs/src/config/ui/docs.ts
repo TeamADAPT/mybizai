@@ -54,6 +54,10 @@ export const getDocsConfig = (_lang: string): DocsConfig => {
         title: "Access",
         items: [
           {
+            title: "Operator playbook",
+            href: `/playbook`,
+          },
+          {
             title: "Private access",
             href: `/login-clerk`,
           },
