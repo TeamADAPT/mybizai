@@ -101,9 +101,21 @@ const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
   const redirected = withLocaleRedirect(req);
   if (redirected) return redirected;
 
+  const locale = getLocale(req) ?? i18n.defaultLocale;
+  const isAuthPage = /^\/[a-zA-Z]{2,}\/(login|register|login-clerk)/.test(
+    req.nextUrl.pathname,
+  );
+
+  // Auth pages are public for guests, but signed-in users should enter the app.
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error Clerk matcher typing
   if (isPublicRoute(req)) {
+    if (isAuthPage) {
+      const { userId } = await auth();
+      if (userId) {
+        return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
+      }
+    }
     return null;
   }
 
@@ -118,11 +130,7 @@ const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
     }
   }
 
-  const isAuthPage = /^\/[a-zA-Z]{2,}\/(login|register|login-clerk)/.test(
-    req.nextUrl.pathname,
-  );
   const isAuthRoute = req.nextUrl.pathname.startsWith("/api/trpc/");
-  const locale = getLocale(req);
   if (isAuthRoute && isAuth) {
     return NextResponse.next();
   }
@@ -130,12 +138,6 @@ const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
     if (!isAuth || !isAdmin)
       return NextResponse.redirect(new URL(`/admin/login`, req.url));
     return NextResponse.next();
-  }
-  if (isAuthPage) {
-    if (isAuth) {
-      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
-    }
-    return null;
   }
   if (!isAuth) {
     let from = req.nextUrl.pathname;

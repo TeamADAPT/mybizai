@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { authOptions, getCurrentUser } from "@saasfly/auth";
+import { getCurrentUser } from "@saasfly/auth";
 
 import { DashboardHeader } from "~/components/header";
 import { DashboardShell } from "~/components/shell";
@@ -20,7 +20,7 @@ export default async function SettingsPage({
 }) {
   const user = await getCurrentUser();
   if (!user) {
-    redirect(authOptions?.pages?.signIn ?? "/login-clerk");
+    redirect(`/${lang}/login-clerk`);
   }
   return (
     <DashboardShell>
