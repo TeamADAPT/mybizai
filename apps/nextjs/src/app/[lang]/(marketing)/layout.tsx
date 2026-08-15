@@ -5,6 +5,7 @@ import { getCurrentUser } from "@saasfly/auth";
 import { ModalProvider } from "~/components/modal-provider";
 import { NavBar } from "~/components/navbar";
 import { SiteFooter } from "~/components/site-footer";
+import { VoiceModeDock } from "~/components/voice-mode-dock";
 import type { Locale } from "~/config/i18n-config";
 import { getMarketingConfig } from "~/config/ui/marketing";
 import { getDictionary } from "~/lib/get-dictionary";
@@ -48,6 +49,9 @@ export default async function MarketingLayout({
         params={{ lang: `${lang}` }}
         dict={dict.common}
       />
+      <Suspense fallback={null}>
+        <VoiceModeDock lang={lang} />
+      </Suspense>
     </div>
   );
 }
