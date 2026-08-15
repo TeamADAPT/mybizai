@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 
 import { Button } from "@saasfly/ui/button";
@@ -10,7 +10,12 @@ import * as Icons from "@saasfly/ui/icons";
 import { BrandLogo } from "~/components/brand-logo";
 import { ThemeSwitch } from "~/components/theme-switch";
 import { brand } from "~/config/brand";
-import { useVentureLoop } from "~/hooks/use-venture-loop";
+import {
+  type LoopVentureStatus,
+  useVentureLoop,
+} from "~/hooks/use-venture-loop";
+
+type VentureFilter = Extract<LoopVentureStatus, "active" | "ready" | "paused">;
 
 const modules = [
   { id: "dashboard", label: "Dashboard" },
@@ -154,6 +159,9 @@ export function ProductShell({
   const [status, setStatus] = useState<string | null>(null);
   const [prompt, setPrompt] = useState(canvases[start].prompt);
   const [pending, startTransition] = useTransition();
+  const [ventureFilter, setVentureFilter] = useState<VentureFilter | null>(
+    null,
+  );
   const canvas = canvases[active];
   const {
     ventures,
@@ -170,10 +178,16 @@ export function ProductShell({
     paused: ventures.filter((v) => v.status === "paused").length,
   };
 
+  const filteredVentures = useMemo(() => {
+    if (!ventureFilter) return ventures.filter((v) => v.status !== "archived");
+    return ventures.filter((v) => v.status === ventureFilter);
+  }, [ventureFilter, ventures]);
+
   function selectModule(id: ModuleId) {
     setActive(id);
     setPrompt(canvases[id].prompt);
     setStatus(null);
+    setVentureFilter(null);
   }
 
   function approvePlan() {
@@ -211,7 +225,7 @@ export function ProductShell({
     <div className="min-h-[85vh] overflow-hidden rounded-2xl border border-border bg-card text-foreground shadow-xl shadow-brand-cobalt/10 dark:bg-brand-midnight/80 dark:shadow-2xl dark:shadow-brand-cobalt/20">
       <div className="flex min-h-[85vh] flex-col md:flex-row">
         <aside className="flex w-full flex-col border-b border-border bg-muted/30 md:w-60 md:border-b-0 md:border-r dark:bg-transparent">
-          <div className="flex items-center gap-2 border-b border-border px-4 py-4">
+          <div className="flex min-h-[3.75rem] items-center gap-2 border-b border-border px-4 py-4">
             <BrandLogo href={`/${lang}`} size="sm" showWordmark />
           </div>
           <nav className="flex gap-1 overflow-x-auto px-2 py-3 md:flex-col md:overflow-visible">
@@ -222,8 +236,8 @@ export function ProductShell({
                 onClick={() => selectModule(mod.id)}
                 className={
                   active === mod.id
-                    ? "whitespace-nowrap rounded-lg bg-brand-orange/15 px-3 py-2 text-left text-sm font-medium text-brand-orange"
-                    : "whitespace-nowrap rounded-lg px-3 py-2 text-left text-sm text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
+                    ? "whitespace-nowrap rounded-lg bg-brand-orange/15 px-3 py-2.5 text-left text-sm font-medium leading-none text-brand-orange"
+                    : "whitespace-nowrap rounded-lg px-3 py-2.5 text-left text-sm leading-none text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
                 }
               >
                 {mod.label}
@@ -236,16 +250,16 @@ export function ProductShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 md:px-6">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand-gold">
+          <header className="flex items-center justify-between gap-3 border-b border-border px-4 py-4 md:px-6">
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.18em] text-brand-gold">
                 {brand.parent}
               </p>
-              <h1 className="font-display text-xl tracking-tight md:text-2xl">
+              <h1 className="mt-1 font-display text-xl leading-tight tracking-tight md:text-2xl">
                 {canvas.title}
               </h1>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <ThemeSwitch />
               <div className="hidden h-8 w-8 items-center justify-center rounded-full border border-brand-gold/40 text-xs text-brand-gold sm:flex">
                 NC
@@ -258,38 +272,135 @@ export function ProductShell({
 
             <div className="grid gap-3 sm:grid-cols-3">
               {(active === "businesses"
-                ? [
-                    { label: "Active", value: String(liveCounts.active) },
-                    { label: "Ready", value: String(liveCounts.ready) },
-                    { label: "Paused", value: String(liveCounts.paused) },
-                  ]
-                : canvas.metrics
-              ).map((m) => (
-                <div
-                  key={m.label}
-                  className="rounded-2xl border border-brand-gold/20 bg-card/90 p-4 dark:bg-brand-ink/50"
-                >
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
-                    {m.label}
-                  </p>
-                  <p className="mt-2 font-display text-3xl tracking-tight">
-                    {m.value}
-                  </p>
-                </div>
-              ))}
+                ? (
+                    [
+                      {
+                        label: "Active",
+                        value: String(liveCounts.active),
+                        filter: "active" as const,
+                      },
+                      {
+                        label: "Ready",
+                        value: String(liveCounts.ready),
+                        filter: "ready" as const,
+                      },
+                      {
+                        label: "Paused",
+                        value: String(liveCounts.paused),
+                        filter: "paused" as const,
+                      },
+                    ] as const
+                  ).map((m) => {
+                    const selected = ventureFilter === m.filter;
+                    return (
+                      <button
+                        key={m.label}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => {
+                          setVentureFilter((prev) =>
+                            prev === m.filter ? null : m.filter,
+                          );
+                          setStatus(
+                            `Showing ${m.label.toLowerCase()} ventures · tap again to clear`,
+                          );
+                        }}
+                        className={
+                          selected
+                            ? "rounded-2xl border border-brand-orange/50 bg-brand-orange/10 px-4 pb-4 pt-5 text-left transition-colors"
+                            : "rounded-2xl border border-brand-gold/20 bg-card/90 px-4 pb-4 pt-5 text-left transition-colors hover:border-brand-gold/50 dark:bg-brand-ink/50"
+                        }
+                      >
+                        <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.16em] text-brand-gold">
+                          {m.label}
+                        </p>
+                        <p className="mt-2.5 font-display text-3xl leading-none tracking-tight">
+                          {m.value}
+                        </p>
+                        <p className="mt-2 text-[11px] leading-normal text-muted-foreground">
+                          {selected ? "Filtered · tap to clear" : "Tap to drill down"}
+                        </p>
+                      </button>
+                    );
+                  })
+                : canvas.metrics.map((m) => (
+                    <div
+                      key={m.label}
+                      className="rounded-2xl border border-brand-gold/20 bg-card/90 px-4 pb-4 pt-5 dark:bg-brand-ink/50"
+                    >
+                      <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.16em] text-brand-gold">
+                        {m.label}
+                      </p>
+                      <p className="mt-2.5 font-display text-3xl leading-none tracking-tight">
+                        {m.value}
+                      </p>
+                    </div>
+                  ))}
             </div>
 
-            <ul className="space-y-3">
-              {canvas.bullets.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-start gap-3 border-b border-border/60 py-3 text-sm"
-                >
-                  <Icons.Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+            {active === "businesses" ? (
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+                    {ventureFilter
+                      ? `${ventureFilter} ventures`
+                      : "Live ventures"}
+                  </p>
+                  {ventureFilter ? (
+                    <button
+                      type="button"
+                      className="text-xs text-muted-foreground hover:text-foreground"
+                      onClick={() => setVentureFilter(null)}
+                    >
+                      Clear filter
+                    </button>
+                  ) : null}
+                </div>
+                {filteredVentures.length === 0 ? (
+                  <p className="rounded-2xl border border-dashed border-border px-4 py-6 text-sm text-muted-foreground">
+                    No ventures in this lane yet. Open the Ventures studio to
+                    create one.
+                  </p>
+                ) : (
+                  <ul className="space-y-3">
+                    {filteredVentures.map((venture) => (
+                      <li
+                        key={venture.id}
+                        className="flex flex-wrap items-start justify-between gap-3 border-b border-border/60 py-3"
+                      >
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {venture.name}
+                          </p>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {venture.industry} · {venture.status} ·{" "}
+                            {venture.note}
+                          </p>
+                        </div>
+                        <Link
+                          href={`/${lang}/ventures`}
+                          className="text-xs font-medium text-brand-orange hover:underline"
+                        >
+                          Open
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <ul className="space-y-3">
+                {canvas.bullets.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 border-b border-border/60 py-3 text-sm"
+                  >
+                    <Icons.Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-orange" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {status || (active === "businesses" && lastEvent) ? (
               <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange">
@@ -323,11 +434,7 @@ export function ProductShell({
               >
                 <Link href={`/${lang}/brand-kit`}>Open brand kit</Link>
               </Button>
-              <Button
-                variant="ghost"
-                className="rounded-full"
-                asChild
-              >
+              <Button variant="ghost" className="rounded-full" asChild>
                 <Link href={`/${lang}/design`}>Design tokens</Link>
               </Button>
             </div>

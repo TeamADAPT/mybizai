@@ -116,19 +116,19 @@ export function ResearchBuilder({ lang }: { lang: string }) {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <div className="space-y-4">
           <div className="overflow-x-auto rounded-2xl border border-border bg-card/80 dark:bg-brand-ink/40">
-            <table className="w-full min-w-[36rem] text-left text-sm">
+            <table className="w-full min-w-[36rem] border-separate border-spacing-0 text-left text-sm">
               <thead>
-                <tr className="border-b border-border">
-                  <th className="px-3 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                <tr>
+                  <th className="sticky top-0 z-10 border-b border-border bg-card/95 px-4 pb-3.5 pt-5 font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground dark:bg-brand-ink/95">
                     Signal
                   </th>
-                  <th className="px-3 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
+                  <th className="sticky top-0 z-10 border-b border-border bg-card/95 px-4 pb-3.5 pt-5 font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-brand-gold dark:bg-brand-ink/95">
                     Agency
                   </th>
-                  <th className="px-3 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
+                  <th className="sticky top-0 z-10 border-b border-border bg-card/95 px-4 pb-3.5 pt-5 font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-brand-gold dark:bg-brand-ink/95">
                     SaaS
                   </th>
-                  <th className="px-3 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
+                  <th className="sticky top-0 z-10 border-b border-border bg-card/95 px-4 pb-3.5 pt-5 font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-brand-gold dark:bg-brand-ink/95">
                     MyBizAI
                   </th>
                 </tr>
@@ -139,14 +139,14 @@ export function ResearchBuilder({ lang }: { lang: string }) {
                     key={row.id}
                     className={
                       row.id === activeId
-                        ? "border-b border-border bg-brand-orange/10"
-                        : "border-b border-border/70 hover:bg-muted/40"
+                        ? "bg-brand-orange/10"
+                        : "hover:bg-muted/40"
                     }
                   >
-                    <td className="px-3 py-2">
+                    <td className="border-b border-border/70 px-4 py-3.5">
                       <button
                         type="button"
-                        className="font-medium text-left hover:text-brand-orange"
+                        className="text-left font-medium hover:text-brand-orange"
                         onClick={() => {
                           setActiveId(row.id);
                           setStatus(null);
@@ -160,13 +160,15 @@ export function ResearchBuilder({ lang }: { lang: string }) {
                         ) : null}
                       </button>
                     </td>
-                    <td className="px-3 py-2 text-muted-foreground">
+                    <td className="border-b border-border/70 px-4 py-3.5 text-muted-foreground">
                       {row.agency}
                     </td>
-                    <td className="px-3 py-2 text-muted-foreground">
+                    <td className="border-b border-border/70 px-4 py-3.5 text-muted-foreground">
                       {row.saas}
                     </td>
-                    <td className="px-3 py-2 text-foreground">{row.mybizai}</td>
+                    <td className="border-b border-border/70 px-4 py-3.5 text-foreground">
+                      {row.mybizai}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -188,27 +190,27 @@ export function ResearchBuilder({ lang }: { lang: string }) {
 
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+              <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
                 Cells
               </p>
-              <p className="mt-1 font-display text-3xl text-brand-orange">
+              <p className="mt-2.5 font-display text-3xl leading-none text-brand-orange">
                 {matrix.length}
               </p>
             </div>
-            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+              <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
                 Deepened
               </p>
-              <p className="mt-1 font-display text-3xl text-brand-orange">
+              <p className="mt-2.5 font-display text-3xl leading-none text-brand-orange">
                 {deepenedCount}
               </p>
             </div>
-            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+            <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+              <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
                 Focus
               </p>
-              <p className="mt-1 font-display text-lg tracking-tight">
+              <p className="mt-2.5 font-display text-lg leading-snug tracking-tight">
                 {active.signal}
               </p>
             </div>
