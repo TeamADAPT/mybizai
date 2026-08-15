@@ -1,0 +1,9 @@
+# Coding worker — separate Railway service (root directory: apps/coding-worker)
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "node src/server.js"
+healthcheckPath = "/health"
+restartPolicyType = "ON_FAILURE"
