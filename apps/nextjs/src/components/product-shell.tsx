@@ -9,6 +9,7 @@ import * as Icons from "@saasfly/ui/icons";
 
 import { BrandLogo } from "~/components/brand-logo";
 import { ThemeSwitch } from "~/components/theme-switch";
+import { VoiceAgent } from "~/components/voice-agent";
 import { brand } from "~/config/brand";
 
 const modules = [
@@ -255,6 +256,8 @@ export function ProductShell({
               </p>
             ) : null}
 
+            {active === "dashboard" ? <VoiceAgent compact /> : null}
+
             <div className="flex flex-wrap gap-3">
               <Button
                 className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
@@ -274,6 +277,13 @@ export function ProductShell({
                   </Link>
                 </Button>
               ) : null}
+              <Button
+                variant="outline"
+                className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+                asChild
+              >
+                <Link href={`/${lang}/voice`}>Voice agent</Link>
+              </Button>
               <Button
                 variant="outline"
                 className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"

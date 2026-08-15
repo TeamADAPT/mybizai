@@ -32,6 +32,11 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?marketplace(.*)"),
   new RegExp("/(\\w{2}/)?academy(.*)"),
   new RegExp("/(\\w{2}/)?onboarding(.*)"),
+  new RegExp("/(\\w{2}/)?voice(.*)"),
+  "/api/assist(.*)",
+  "/api/voice(.*)",
+  "/api/providers(.*)",
+  "/api/coding(.*)",
   new RegExp("^/\\w{2}$"), // root with locale
 ]);
 
@@ -64,7 +69,13 @@ function withLocaleRedirect(req: NextRequest): NextResponse | null {
     return null;
   }
 
-  if (req.nextUrl.pathname.startsWith("/api/webhooks/")) {
+  if (
+    req.nextUrl.pathname.startsWith("/api/webhooks/") ||
+    req.nextUrl.pathname.startsWith("/api/assist") ||
+    req.nextUrl.pathname.startsWith("/api/voice") ||
+    req.nextUrl.pathname.startsWith("/api/providers") ||
+    req.nextUrl.pathname.startsWith("/api/coding")
+  ) {
     return NextResponse.next();
   }
 
