@@ -173,9 +173,9 @@ export function ProductShell({
   }
 
   return (
-    <div className="min-h-[85vh] overflow-hidden rounded-2xl border border-border bg-brand-midnight/80 text-foreground shadow-2xl shadow-brand-cobalt/20">
+    <div className="min-h-[85vh] overflow-hidden rounded-2xl border border-border bg-card text-foreground shadow-xl shadow-brand-cobalt/10 dark:bg-brand-midnight/80 dark:shadow-2xl dark:shadow-brand-cobalt/20">
       <div className="flex min-h-[85vh] flex-col md:flex-row">
-        <aside className="flex w-full flex-col border-b border-border md:w-60 md:border-b-0 md:border-r">
+        <aside className="flex w-full flex-col border-b border-border bg-muted/30 md:w-60 md:border-b-0 md:border-r dark:bg-transparent">
           <div className="flex items-center gap-2 border-b border-border px-4 py-4">
             <BrandLogo href={`/${lang}`} size="sm" showWordmark />
           </div>
@@ -225,7 +225,7 @@ export function ProductShell({
               {canvas.metrics.map((m) => (
                 <div
                   key={m.label}
-                  className="rounded-2xl border border-brand-gold/20 bg-brand-ink/50 p-4"
+                  className="rounded-2xl border border-brand-gold/20 bg-card/90 p-4 dark:bg-brand-ink/50"
                 >
                   <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
                     {m.label}

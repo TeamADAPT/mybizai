@@ -30,6 +30,8 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?campaigns(.*)"),
   new RegExp("/(\\w{2}/)?plan(.*)"),
   new RegExp("/(\\w{2}/)?marketplace(.*)"),
+  new RegExp("/(\\w{2}/)?academy(.*)"),
+  new RegExp("/(\\w{2}/)?onboarding(.*)"),
   new RegExp("^/\\w{2}$"), // root with locale
 ]);
 

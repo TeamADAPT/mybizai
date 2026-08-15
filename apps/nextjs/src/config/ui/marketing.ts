@@ -25,6 +25,10 @@ export const getMarketingConfig = async ({
         href: `/research`,
       },
       {
+        title: "Academy",
+        href: `/academy`,
+      },
+      {
         title: dict.marketing.main_nav_pricing,
         href: `/pricing`,
       },

@@ -23,6 +23,27 @@ export default function ResearchPage({
         { label: "Growth YoY", value: "15%" },
         { label: "Confidence", value: "High" },
       ]}
+      table={{
+        columns: ["Agency retainers", "Generic SaaS", "MyBizAI"],
+        rows: [
+          {
+            label: "Execution",
+            values: ["Human team", "Self-serve tools", "ADAPT agents"],
+          },
+          {
+            label: "Personal touch",
+            values: ["High", "Low", "Designed-in"],
+          },
+          {
+            label: "Speed to plan",
+            values: ["Weeks", "Days", "Hours"],
+          },
+          {
+            label: "Approval gate",
+            values: ["Email threads", "None", "Shell Approve"],
+          },
+        ],
+      }}
       insights={[
         {
           title: "Coastal SMB logistics heat",

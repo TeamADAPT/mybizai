@@ -6,6 +6,7 @@ import { brand } from "~/config/brand";
 
 export type StudioMetric = { label: string; value: string };
 export type StudioInsight = { title: string; body: string };
+export type StudioRow = { label: string; values: string[] };
 
 type StudioModuleProps = {
   lang: string;
@@ -16,6 +17,8 @@ type StudioModuleProps = {
   insights: StudioInsight[];
   prompt: string;
   shellModule?: string;
+  table?: { columns: string[]; rows: StudioRow[] };
+  children?: React.ReactNode;
 };
 
 /**
@@ -31,6 +34,8 @@ export function StudioModule({
   insights,
   prompt,
   shellModule,
+  table,
+  children,
 }: StudioModuleProps) {
   const shellHref = shellModule
     ? `/${lang}/shell?module=${shellModule}`
@@ -52,7 +57,7 @@ export function StudioModule({
           {metrics.map((metric) => (
             <div
               key={metric.label}
-              className="rounded-2xl border border-brand-gold/20 bg-card/70 p-5 dark:bg-brand-ink/40"
+              className="rounded-2xl border border-brand-gold/20 bg-card/80 p-5 dark:bg-brand-ink/40"
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
                 {metric.label}
@@ -64,11 +69,45 @@ export function StudioModule({
           ))}
         </div>
 
+        {table ? (
+          <div className="mt-10 overflow-x-auto rounded-2xl border border-border bg-card/70 dark:bg-brand-ink/30">
+            <table className="w-full min-w-[32rem] text-left text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    Signal
+                  </th>
+                  {table.columns.map((col) => (
+                    <th
+                      key={col}
+                      className="px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold"
+                    >
+                      {col}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {table.rows.map((row) => (
+                  <tr key={row.label} className="border-b border-border/70">
+                    <td className="px-4 py-3 font-medium">{row.label}</td>
+                    {row.values.map((value, i) => (
+                      <td key={`${row.label}-${i}`} className="px-4 py-3 text-muted-foreground">
+                        {value}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+
         <div className="mt-10 space-y-4">
           {insights.map((insight) => (
             <article
               key={insight.title}
-              className="rounded-2xl border border-border bg-card/60 p-6 dark:bg-brand-ink/30"
+              className="rounded-2xl border border-border bg-card/70 p-6 dark:bg-brand-ink/30"
             >
               <h2 className="font-display text-xl tracking-tight">
                 {insight.title}
@@ -77,6 +116,8 @@ export function StudioModule({
             </article>
           ))}
         </div>
+
+        {children}
 
         <div className="mt-10 rounded-2xl border border-brand-orange/30 bg-brand-orange/5 p-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-orange">
