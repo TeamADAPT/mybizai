@@ -26,12 +26,21 @@ function ClerkSignIn({ lang }: { lang: string }) {
   const { signOut } = useClerk();
   const { isLoaded, user } = useUser();
   const nextHref = postLoginHref(lang);
+  const redirectedRef = React.useRef(false);
 
   React.useEffect(() => {
-    if (!isLoaded || !user) return;
-    // Hard navigation avoids soft-nav loops when middleware/RSC still
-    // looks signed-out (Clerk Development "dev-browser-missing").
-    window.location.assign(nextHref);
+    if (!isLoaded || !user || redirectedRef.current) return;
+    // One hard navigation only — repeating assign() fought middleware when
+    // Railway Clerk Development omitted the server session cookie.
+    const key = "mybizai.postLoginRedirect";
+    try {
+      if (sessionStorage.getItem(key) === nextHref) return;
+      sessionStorage.setItem(key, nextHref);
+    } catch {
+      /* private mode */
+    }
+    redirectedRef.current = true;
+    window.location.replace(nextHref);
   }, [isLoaded, nextHref, user]);
 
   if (!isLoaded) {
@@ -55,6 +64,13 @@ function ClerkSignIn({ lang }: { lang: string }) {
             buttonVariants(),
             "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
           )}
+          onClick={() => {
+            try {
+              sessionStorage.removeItem("mybizai.postLoginRedirect");
+            } catch {
+              /* ignore */
+            }
+          }}
         >
           Continue to workspace
         </a>
@@ -65,6 +81,11 @@ function ClerkSignIn({ lang }: { lang: string }) {
             "text-muted-foreground",
           )}
           onClick={() => {
+            try {
+              sessionStorage.removeItem("mybizai.postLoginRedirect");
+            } catch {
+              /* ignore */
+            }
             void signOut({ redirectUrl: `/${lang}/login-clerk` });
           }}
         >

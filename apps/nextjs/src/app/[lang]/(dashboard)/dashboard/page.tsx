@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { authOptions, getCurrentUser } from "@saasfly/auth";
 import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
@@ -74,10 +72,9 @@ export default async function DashboardPage({
     lang: Locale;
   };
 }) {
-  const user = await getCurrentUser();
-  if (!user) {
-    redirect(authOptions?.pages?.signIn ?? "/login-clerk");
-  }
+  // Do not server-redirect here — Clerk Development on Railway often
+  // omits the server session while the client is signed in, which caused
+  // a login↔dashboard flash loop. DashboardChrome gates access.
   const dict = await getDictionary(lang);
 
   return (
