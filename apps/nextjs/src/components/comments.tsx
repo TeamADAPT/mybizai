@@ -87,8 +87,27 @@ const Comments = () => {
           <ReviewCard key={review.username} {...review} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background" />
+      {/*
+        Edge fades must use hsl(... / 0), not Tailwind from-background.
+        Our theme maps background without <alpha-value>, so from-background
+        rendered as solid slabs and hid the marquee on mobile.
+      */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-20 md:w-28"
+        style={{
+          background:
+            "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background) / 0) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-20 md:w-28"
+        style={{
+          background:
+            "linear-gradient(to left, hsl(var(--background)) 0%, hsl(var(--background) / 0) 100%)",
+        }}
+      />
     </div>
   );
 };
