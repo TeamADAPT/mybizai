@@ -1,6 +1,6 @@
 /**
- * Shared Clerk key checks — safe for server components / layout.
- * Keep in sync with middleware `hasValidClerkSecret` rules.
+ * Shared Clerk key checks — safe for server + client.
+ * Keep in sync with middleware secret rules.
  */
 
 export function hasValidClerkSecret(
@@ -23,6 +23,10 @@ export function hasValidClerkPublishableKey(
   return true;
 }
 
+/** True when Clerk UI can mount. Client only sees the publishable key. */
 export function hasClerkConfigured(): boolean {
+  if (typeof window !== "undefined") {
+    return hasValidClerkPublishableKey();
+  }
   return hasValidClerkSecret() && hasValidClerkPublishableKey();
 }
