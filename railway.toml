@@ -3,7 +3,7 @@
 
 [build]
 builder = "RAILPACK"
-buildCommand = "bun install && bun run --filter @saasfly/nextjs build:railway"
+buildCommand = "bun run --filter @saasfly/nextjs build:railway"
 
 [deploy]
 startCommand = "bun run --filter @saasfly/nextjs start:railway"
