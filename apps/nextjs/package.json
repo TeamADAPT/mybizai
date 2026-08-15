@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "build": "contentlayer2 build && bun with-env next build",
+    "build:railway": "contentlayer2 build && next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "bun with-env next dev",
     "lint": " bun with-env next lint --quiet",
     "format": "prettier --write '**/*.{js,cjs,mjs,ts,tsx,md,json}'  --ignore-path .prettierignore",
     "start": "bun with-env next start",
+    "start:railway": "next start --hostname 0.0.0.0 --port ${PORT:-3000}",
     "with-env": "dotenv -e ../../.env.local --"
   },
   "dependencies": {
