@@ -82,7 +82,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const body = (
+  const app = (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
+      <NextDevtoolsProvider>{children}</NextDevtoolsProvider>
+      <Analytics />
+      <SpeedInsights />
+      <Toaster />
+      <TailwindIndicator />
+    </ThemeProvider>
+  );
+
+  return (
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
@@ -93,25 +108,8 @@ export default function RootLayout({
           fontMono.variable,
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextDevtoolsProvider>{children}</NextDevtoolsProvider>
-          <Analytics />
-          <SpeedInsights />
-          <Toaster />
-          <TailwindIndicator />
-        </ThemeProvider>
+        {hasClerkConfigured() ? <ClerkProvider>{app}</ClerkProvider> : app}
       </body>
     </html>
   );
-
-  if (!hasClerkConfigured()) {
-    return body;
-  }
-
-  return <ClerkProvider>{body}</ClerkProvider>;
 }

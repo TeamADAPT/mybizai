@@ -24,11 +24,12 @@ export const SignInClerkModal = ({ dict }: { dict: Record<string, string> }) => 
   const signInWith = (strategy: OAuthStrategy) => {
     const protocol = window.location.protocol;
     const host = window.location.host;
+    const lang = window.location.pathname.split("/")[1] || "en";
     return signIn
       .authenticateWithRedirect({
         strategy,
-        redirectUrl: "/sign-in/sso-callback",
-        redirectUrlComplete: `${protocol}//${host}/dashboard`,
+        redirectUrl: `/${lang}/login-clerk/sso-callback`,
+        redirectUrlComplete: `${protocol}//${host}/${lang}/dashboard`,
       })
       .then((res) => {
         console.log(res);

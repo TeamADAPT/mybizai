@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SignIn, useUser } from "@clerk/nextjs";
 
 import { cn } from "@saasfly/ui";
@@ -19,13 +19,40 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function ClerkSignIn({ lang }: { lang: string }) {
-  const { user } = useUser();
+  const router = useRouter();
+  const { isLoaded, user } = useUser();
+  const dashboardHref = `/${lang}/dashboard`;
+
+  React.useEffect(() => {
+    if (isLoaded && user) {
+      router.replace(dashboardHref);
+    }
+  }, [dashboardHref, isLoaded, router, user]);
+
+  if (!isLoaded) {
+    return (
+      <p className="text-center text-sm text-muted-foreground">
+        Loading private access…
+      </p>
+    );
+  }
+
   if (user) {
-    redirect(`/${lang}/dashboard`);
+    return (
+      <p className="text-center text-sm text-muted-foreground">
+        Signed in — opening your dashboard…
+      </p>
+    );
   }
 
   return (
-    <SignIn withSignUp={false} fallbackRedirectUrl={`/${lang}/dashboard`} />
+    <SignIn
+      routing="path"
+      path={`/${lang}/login-clerk`}
+      signUpUrl={`/${lang}/register`}
+      fallbackRedirectUrl={dashboardHref}
+      forceRedirectUrl={dashboardHref}
+    />
   );
 }
 
