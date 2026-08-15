@@ -290,8 +290,10 @@
   }
 
   .voice-orb__ring--speak {
-    animation: voice-orb-speak 1.4s ease-in-out infinite;
     border-color: rgba(232, 197, 71, 0.65);
+    transition:
+      transform 80ms linear,
+      opacity 80ms linear;
   }
 }
 

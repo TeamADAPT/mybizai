@@ -98,10 +98,17 @@ export function VoiceAgent({
   compact = false,
   variant = "studio",
   onJourneyFill,
+  onStatusChange,
+  chatOpen = false,
 }: {
   compact?: boolean;
   variant?: "studio" | "immersive";
-  onJourneyFill?: (step: import("~/lib/voice-guide").JourneyStepId, value: string) => void;
+  onJourneyFill?: (
+    step: import("~/lib/voice-guide").JourneyStepId,
+    value: string,
+  ) => void;
+  onStatusChange?: (status: VoiceStatus) => void;
+  chatOpen?: boolean;
 }) {
   const immersive = variant === "immersive";
   const instructions = immersive ? IMMERSIVE_INSTRUCTIONS : STUDIO_INSTRUCTIONS;
@@ -135,6 +142,7 @@ export function VoiceAgent({
   const assistantBufferRef = useRef("");
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const browserBusyRef = useRef(false);
+  const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
     void fetch("/api/providers")
@@ -145,6 +153,19 @@ export function VoiceAgent({
       })
       .catch(() => setSnapshot(null));
   }, []);
+
+  useEffect(() => {
+    onStatusChange?.(status);
+  }, [onStatusChange, status]);
+
+  useEffect(() => {
+    if (status !== "speaking") {
+      setSpeakLevel(0);
+    }
+  }, [status]);
+
+  const [chatInput, setChatInput] = useState("");
+  const [chatBusy, setChatBusy] = useState(false);
 
   const appendLine = useCallback(
     (role: TranscriptLine["role"], text: string) => {
@@ -326,6 +347,15 @@ export function VoiceAgent({
     if (!ctx) return;
     const float32 = base64PCM16ToFloat32(base64);
     if (!float32.length) return;
+
+    let sum = 0;
+    for (let i = 0; i < float32.length; i++) {
+      const sample = float32[i] ?? 0;
+      sum += sample * sample;
+    }
+    const rms = Math.sqrt(sum / float32.length);
+    setSpeakLevel(Math.min(1, rms * 3.2));
+
     const buffer = ctx.createBuffer(1, float32.length, SAMPLE_RATE);
     buffer.copyToChannel(float32, 0);
     const source = ctx.createBufferSource();
@@ -655,6 +685,44 @@ export function VoiceAgent({
     await startXai();
   }, [backend, startBrowser, startXai, stop]);
 
+  const sendChatText = useCallback(
+    async (raw: string) => {
+      const text = raw.trim();
+      if (!text || chatBusy) return;
+      setChatBusy(true);
+      appendLine("user", text);
+      applyJourneyCapture(text);
+      try {
+        const ws = wsRef.current;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(
+            JSON.stringify({
+              type: "conversation.item.create",
+              item: {
+                type: "message",
+                role: "user",
+                content: [{ type: "input_text", text }],
+              },
+            }),
+          );
+          ws.send(JSON.stringify({ type: "response.create" }));
+          maybeHandoff(text);
+          return;
+        }
+        await replyViaAssist(text);
+      } finally {
+        setChatBusy(false);
+      }
+    },
+    [
+      appendLine,
+      applyJourneyCapture,
+      chatBusy,
+      maybeHandoff,
+      replyViaAssist,
+    ],
+  );
+
   const statusLabel =
     status === "connecting"
       ? "Connecting…"
@@ -670,17 +738,17 @@ export function VoiceAgent({
 
   const alternatives = snapshot?.voice.alternatives ?? ["browser"];
   const xaiReady = snapshot?.voice.xaiConfigured ?? false;
-  const latestAssistant =
-    [...lines].reverse().find((line) => line.role === "assistant")?.text ??
-    null;
 
   if (immersive) {
     const live =
       status === "listening" ||
       status === "speaking" ||
       status === "connecting";
+    const orbScale =
+      status === "speaking" ? 1 + speakLevel * 0.28 : live ? 1.02 : 1;
+
     return (
-      <div className="flex w-full flex-col items-center gap-6">
+      <div className="relative flex w-full flex-col items-center">
         <button
           type="button"
           onClick={() => {
@@ -689,62 +757,95 @@ export function VoiceAgent({
           }}
           disabled={backend === "xai" && !xaiReady && !live}
           aria-label={live ? "End conversation" : "Start conversation"}
+          style={{ transform: `scale(${orbScale})` }}
           className={
-            live
-              ? "voice-orb voice-orb--live group relative flex h-36 w-36 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition sm:h-40 sm:w-40"
-              : "voice-orb group relative flex h-36 w-36 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/60 hover:bg-white/15 sm:h-40 sm:w-40"
+            status === "speaking"
+              ? "voice-orb voice-orb--speak relative flex h-40 w-40 items-center justify-center rounded-full border border-[#e8c547]/50 bg-white/10 backdrop-blur-md transition-transform duration-75 sm:h-48 sm:w-48"
+              : live
+                ? "voice-orb relative flex h-40 w-40 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300 sm:h-48 sm:w-48"
+                : "voice-orb relative flex h-40 w-40 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/55 hover:bg-white/15 sm:h-48 sm:w-48"
           }
         >
           <span
             className={
               status === "speaking"
                 ? "voice-orb__ring voice-orb__ring--speak"
-                : status === "listening"
-                  ? "voice-orb__ring voice-orb__ring--listen"
-                  : "voice-orb__ring"
+                : "voice-orb__ring"
+            }
+            style={
+              status === "speaking"
+                ? {
+                    transform: `scale(${1 + speakLevel * 0.35})`,
+                    opacity: 0.45 + speakLevel * 0.55,
+                  }
+                : undefined
             }
           />
           <span className="relative z-10 font-display text-2xl tracking-tight text-white">
-            {live ? (status === "speaking" ? "ADAPT" : "Listening") : "Speak"}
+            {live ? (status === "speaking" ? "ADAPT" : "·") : "Speak"}
           </span>
         </button>
 
-        <p className="min-h-[1.25rem] font-mono text-[10px] uppercase tracking-[0.2em] text-[#ffb347]/90">
-          {status === "connecting"
-            ? "Connecting…"
-            : status === "listening"
-              ? "Listening"
-              : status === "speaking"
-                ? "Speaking"
-                : status === "error"
-                  ? "Try again"
-                  : "Tap to begin"}
-        </p>
-
-        <p className="min-h-[3.5rem] max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
-          {latestAssistant ||
-            quietNote ||
-            "No menus. No forms. Just tell us what you want to build."}
-        </p>
-
-        {quietNote && latestAssistant ? (
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-            {quietNote}
-          </p>
-        ) : null}
-
         {error ? (
-          <p className="max-w-sm text-sm text-[#ffb347]">{error}</p>
+          <p className="mt-6 max-w-sm text-center text-sm text-[#ffb347]">
+            {error}
+          </p>
         ) : null}
 
         {!xaiReady ? (
           <button
             type="button"
-            className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
+            className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
             onClick={() => setBackend("browser")}
           >
-            Use browser voice instead
+            Use browser voice
           </button>
+        ) : null}
+
+        {chatOpen ? (
+          <div className="fixed bottom-4 right-4 z-30 w-[min(100%-2rem,18rem)] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
+            <div className="rounded-2xl border border-white/15 bg-[#0a0658]/90 p-3 shadow-2xl shadow-black/40 backdrop-blur-md">
+              <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
+                Written chat
+              </p>
+              <ul className="mt-2 max-h-40 space-y-2 overflow-y-auto text-left text-sm text-white/80">
+                {lines
+                  .filter((line) => line.role !== "system")
+                  .slice(-8)
+                  .map((line) => (
+                    <li key={line.id}>
+                      <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-[#ffb347]/80">
+                        {line.role === "user" ? "You" : "ADAPT"}
+                      </span>
+                      <p className="mt-0.5 leading-snug">{line.text}</p>
+                    </li>
+                  ))}
+              </ul>
+              <form
+                className="mt-3 flex gap-2"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const value = chatInput;
+                  setChatInput("");
+                  void sendChatText(value);
+                }}
+              >
+                <input
+                  value={chatInput}
+                  onChange={(event) => setChatInput(event.target.value)}
+                  placeholder="Type instead…"
+                  className="min-w-0 flex-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm text-white outline-none placeholder:text-white/30 focus:border-[#ff8c00]/50"
+                />
+                <button
+                  type="submit"
+                  disabled={chatBusy || !chatInput.trim()}
+                  className="rounded-full bg-[#ff8c00] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#070828] disabled:opacity-40"
+                >
+                  Send
+                </button>
+              </form>
+            </div>
+          </div>
         ) : null}
       </div>
     );
