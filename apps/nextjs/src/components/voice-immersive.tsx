@@ -46,12 +46,20 @@ export function VoiceImmersive({ lang }: { lang: string }) {
 
       <header className="relative z-10 flex items-center justify-between px-5 pb-2 pt-5 sm:px-8 sm:pt-7">
         <BrandLogo href={`/${lang}`} size="md" showWordmark />
-        <Link
-          href={`/${lang}/shell`}
-          className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45 transition hover:text-white/80"
-        >
-          Workspace
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href={`/${lang}/voice`}
+            className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45 transition hover:text-white/80"
+          >
+            Back to studio
+          </Link>
+          <Link
+            href={`/${lang}/shell`}
+            className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/45 transition hover:text-white/80"
+          >
+            Workspace
+          </Link>
+        </div>
       </header>
 
       <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-5 pb-8 pt-4 text-center sm:px-8">

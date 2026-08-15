@@ -14,7 +14,8 @@ Cobalt `#120a8f` · dark orange `#ff8c00` · gold — dark-first with Light / Da
 | `/[lang]/brand-kit` | Brand identity kit + JSON export |
 | `/[lang]/research` `/plan` `/campaigns` `/finance` `/marketplace` `/academy` `/onboarding` | Studio stubs (mock → live) |
 | `/[lang]/ideas` `/ventures` | Idea triage + ventures studio |
-| `/[lang]/voice` | ADAPT voice + Path A/B coding handoff |
+| `/[lang]/voice` | ADAPT voice studio (main operator surface) |
+| `/[lang]/voice/presence` | Calm founder presence (orb-first) |
 | `/[lang]/playbook` | Operator playbook |
 | `/[lang]/pricing` | Access / Architect / Fifth Avenue |
 | `/[lang]/docs` `/blog` | Docs + insights |
