@@ -33,6 +33,11 @@ export const getDashboardConfig = async ({
         href: "/dashboard/",
       },
       {
+        id: "ventures",
+        title: "Ventures",
+        href: "/ventures",
+      },
+      {
         id: "brand",
         title: "Brand kit",
         href: "/brand-kit",

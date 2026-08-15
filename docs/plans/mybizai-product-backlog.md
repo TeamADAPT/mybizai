@@ -3,7 +3,7 @@
 Living roadmap. Prefer large multi-surface batches. Review on Railway staging — not localhost.
 
 **Staging:** https://mybizai-production-63b8.up.railway.app/en  
-**Direction (agent lead):** Finish the **operator core loop** before spreading into secondary marketing/account chrome. Core loop = Research → Plan → Brand → Campaigns → Finance → Approve in Shell → Venture. Everything else either feeds that loop, waits on Clerk/data, or stays out of the product for now.
+**Direction (agent lead):** Finish the **operator core loop** before spreading into secondary marketing/account chrome. Core loop = Ideas → Research → Plan → Brand → Campaigns → Finance → Approve in Shell → Venture. Everything else either feeds that loop, waits on Clerk/data, or stays out of the product for now.
 
 ---
 

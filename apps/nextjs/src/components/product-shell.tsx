@@ -13,7 +13,7 @@ import { brand } from "~/config/brand";
 
 const modules = [
   { id: "dashboard", label: "Dashboard" },
-  { id: "businesses", label: "My Businesses" },
+  { id: "businesses", label: "Ventures" },
   { id: "research", label: "Market Research" },
   { id: "brand", label: "Brand Identity" },
   { id: "marketing", label: "Marketing Plan" },
@@ -27,7 +27,8 @@ const studioRoutes: Partial<Record<ModuleId, string>> = {
   brand: "brand-kit",
   marketing: "campaigns",
   finance: "finance",
-  businesses: "ideas",
+  businesses: "ventures",
+  dashboard: "dashboard",
 };
 
 type Canvas = {
@@ -55,7 +56,7 @@ const canvases: Record<ModuleId, Canvas> = {
     prompt: "Summarize what needs my approval before end of day.",
   },
   businesses: {
-    title: "Businesses in flight",
+    title: "Ventures in flight",
     lead: "Each venture gets its own ADAPT stack — shared intelligence, separate execution.",
     metrics: [
       { label: "Active", value: "2" },
@@ -65,7 +66,7 @@ const canvases: Record<ModuleId, Canvas> = {
     bullets: [
       "Fifth Avenue demo · Brand kit ready",
       "Logistics pilot · Ops agents active",
-      "Archive / pause without losing history",
+      "Empty → create → archive without losing history",
     ],
     prompt: "Spin up a third venture focused on boutique hospitality.",
   },
@@ -162,6 +163,12 @@ export function ProductShell({
 
   function approvePlan() {
     startTransition(() => {
+      if (active === "businesses") {
+        setStatus(
+          "Approved · venture handoff queued — open the Ventures studio to create or activate.",
+        );
+        return;
+      }
       setStatus(`Approved · ${canvas.title} queued for ADAPT execute.`);
     });
   }

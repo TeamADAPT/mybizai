@@ -33,8 +33,7 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?academy(.*)"),
   new RegExp("/(\\w{2}/)?onboarding(.*)"),
   new RegExp("/(\\w{2}/)?ideas(.*)"),
-  // Client-gated: Clerk Development can omit server session cookies
-  // (dev-browser-missing) while the browser session is valid.
+  new RegExp("/(\\w{2}/)?ventures(.*)"),
   new RegExp("/(\\w{2}/)?dashboard(.*)"),
   new RegExp("^/\\w{2}$"), // root with locale
 ]);

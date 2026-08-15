@@ -34,6 +34,11 @@ const overview = [
 
 const modules = [
   {
+    title: "Ventures",
+    href: "ventures",
+    note: "Create, pause, archive workspaces",
+  },
+  {
     title: "Ideas",
     href: "ideas",
     note: "Brainstorm and keep venture seeds",
