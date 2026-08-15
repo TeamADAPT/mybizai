@@ -39,7 +39,9 @@ export function DashboardNav({ items, params: { lang } }: DashboardNavProps) {
         const active =
           path === href ||
           path === `/${lang}${item.href}` ||
-          (item.href !== "/dashboard/" && path?.includes(item.href));
+          (!!item.href &&
+            item.href !== "/dashboard/" &&
+            !!path?.includes(item.href));
         return (
           item.href && (
             <Link key={index} href={href}>
