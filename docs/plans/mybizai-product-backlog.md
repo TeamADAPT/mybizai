@@ -36,14 +36,17 @@ Studio stays main at `/[lang]/voice`. Presence lives at `/[lang]/voice/presence`
 
 | Item | Status |
 | --- | --- |
-| Left rail on presence (journey + controls) | Done |
+| Left rail on presence (journey + controls) | Done → now compact circle menu |
 | Orb pulsates with **talking** audio level only | Done |
 | Hide center transcript — orb-only | Done |
 | Side **Written chat** panel | Done |
 | Journey buttons jump to studio parts | Done |
 | Back to studio / Workspace | Done |
-| Further simplify / start-in-presence toggle | Next |
-| Listening-mode mic level pulse (optional) | Later |
+| Presence starts **collapsed** (circle only) | Done |
+| Auto-navigate into studios while talking | Done |
+| Upper-right voice-mode dock + smoke border | Done |
+| Persistent voice WebSocket across page nav | Later |
+| Start-in-presence as default entrance | Next |
 
 ## Product builders (mock → live)
 
