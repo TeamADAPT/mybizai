@@ -93,7 +93,7 @@
     "dashboard": {
       "main_nav_documentation": "디자인",
       "main_nav_support": "지원",
-      "sidebar_nav_clusters": "개요",
+      "sidebar_nav_modules": "개요",
       "sidebar_nav_billing": "청구",
       "sidebar_nav_settings": "설정",
       "title_text": "에이전트, 승인, 성장을 모니터링하세요."

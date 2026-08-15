@@ -93,7 +93,7 @@
     "dashboard": {
       "main_nav_documentation": "Design",
       "main_nav_support": "Support",
-      "sidebar_nav_clusters": "Overview",
+      "sidebar_nav_modules": "Overview",
       "sidebar_nav_billing": "Billing",
       "sidebar_nav_settings": "Settings",
       "title_text": "Monitor agents, approvals, and growth."

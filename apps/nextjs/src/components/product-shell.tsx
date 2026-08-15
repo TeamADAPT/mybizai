@@ -22,6 +22,14 @@ const modules = [
 
 type ModuleId = (typeof modules)[number]["id"];
 
+const studioRoutes: Partial<Record<ModuleId, string>> = {
+  research: "research",
+  brand: "brand-kit",
+  marketing: "campaigns",
+  finance: "finance",
+  businesses: "plan",
+};
+
 type Canvas = {
   title: string;
   lead: string;
@@ -123,10 +131,26 @@ const canvases: Record<ModuleId, Canvas> = {
   },
 };
 
-export function ProductShell({ lang }: { lang: string }) {
-  const [active, setActive] = useState<ModuleId>("brand");
+const moduleIds = modules.map((m) => m.id);
+
+function resolveModule(id?: string | null): ModuleId {
+  if (id && (moduleIds as readonly string[]).includes(id)) {
+    return id as ModuleId;
+  }
+  return "brand";
+}
+
+export function ProductShell({
+  lang,
+  initialModule,
+}: {
+  lang: string;
+  initialModule?: string | null;
+}) {
+  const start = resolveModule(initialModule);
+  const [active, setActive] = useState<ModuleId>(start);
   const [status, setStatus] = useState<string | null>(null);
-  const [prompt, setPrompt] = useState(canvases.brand.prompt);
+  const [prompt, setPrompt] = useState(canvases[start].prompt);
   const [pending, startTransition] = useTransition();
   const canvas = canvases[active];
 
@@ -239,6 +263,17 @@ export function ProductShell({ lang }: { lang: string }) {
               >
                 Approve plan
               </Button>
+              {studioRoutes[active] ? (
+                <Button
+                  variant="outline"
+                  className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+                  asChild
+                >
+                  <Link href={`/${lang}/${studioRoutes[active]}`}>
+                    Open studio
+                  </Link>
+                </Button>
+              ) : null}
               <Button
                 variant="outline"
                 className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"

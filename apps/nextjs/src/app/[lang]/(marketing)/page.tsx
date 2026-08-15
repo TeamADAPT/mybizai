@@ -8,7 +8,6 @@ import * as Icons from "@saasfly/ui/icons";
 import { BrandCapabilities } from "~/components/brand-capabilities";
 import { BrandLogo } from "~/components/brand-logo";
 import { Comments } from "~/components/comments";
-import { FeaturesGrid } from "~/components/features-grid";
 import { RightsideMarketing } from "~/components/rightside-marketing";
 import type { Locale } from "~/config/i18n-config";
 import { brand } from "~/config/brand";
@@ -135,10 +134,6 @@ export default async function IndexPage({
             lang={lang}
           />
         </div>
-      </section>
-
-      <section className="container py-16">
-        <FeaturesGrid dict={dict.marketing.features_grid} />
       </section>
 
       <section className="container py-20">

@@ -93,7 +93,7 @@
     "dashboard": {
       "main_nav_documentation": "设计",
       "main_nav_support": "支持",
-      "sidebar_nav_clusters": "概览",
+      "sidebar_nav_modules": "概览",
       "sidebar_nav_billing": "账单",
       "sidebar_nav_settings": "设置",
       "title_text": "监控智能体、审批与增长。"
