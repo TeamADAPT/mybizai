@@ -10,6 +10,7 @@ import * as Icons from "@saasfly/ui/icons";
 import { BrandLogo } from "~/components/brand-logo";
 import { ThemeSwitch } from "~/components/theme-switch";
 import { brand } from "~/config/brand";
+import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 const modules = [
   { id: "dashboard", label: "Dashboard" },
@@ -154,6 +155,20 @@ export function ProductShell({
   const [prompt, setPrompt] = useState(canvases[start].prompt);
   const [pending, startTransition] = useTransition();
   const canvas = canvases[active];
+  const {
+    ventures,
+    lastEvent,
+    createVenture,
+    approveVenture,
+    runAssist,
+    assistPending,
+  } = useVentureLoop();
+
+  const liveCounts = {
+    active: ventures.filter((v) => v.status === "active").length,
+    ready: ventures.filter((v) => v.status === "ready").length,
+    paused: ventures.filter((v) => v.status === "paused").length,
+  };
 
   function selectModule(id: ModuleId) {
     setActive(id);
@@ -163,13 +178,26 @@ export function ProductShell({
 
   function approvePlan() {
     startTransition(() => {
-      if (active === "businesses") {
-        setStatus(
-          "Approved · venture handoff queued — open the Ventures studio to create or activate.",
-        );
-        return;
-      }
-      setStatus(`Approved · ${canvas.title} queued for ADAPT execute.`);
+      void (async () => {
+        if (active === "businesses") {
+          const draft = await runAssist("shell.approve", prompt);
+          const existing = ventures.find((v) => v.status === "ready");
+          if (existing) {
+            approveVenture(existing.id);
+          } else {
+            createVenture({
+              name: prompt.slice(0, 48) || "Shell-approved venture",
+              industry: "Operator-led",
+              note: draft,
+            });
+          }
+          setStatus(
+            "Approved · venture handoff queued — open the Ventures studio to refine.",
+          );
+          return;
+        }
+        setStatus(`Approved · ${canvas.title} queued for ADAPT execute.`);
+      })();
     });
   }
 
@@ -229,7 +257,14 @@ export function ProductShell({
             <p className="max-w-2xl text-muted-foreground">{canvas.lead}</p>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              {canvas.metrics.map((m) => (
+              {(active === "businesses"
+                ? [
+                    { label: "Active", value: String(liveCounts.active) },
+                    { label: "Ready", value: String(liveCounts.ready) },
+                    { label: "Paused", value: String(liveCounts.paused) },
+                  ]
+                : canvas.metrics
+              ).map((m) => (
                 <div
                   key={m.label}
                   className="rounded-2xl border border-brand-gold/20 bg-card/90 p-4 dark:bg-brand-ink/50"

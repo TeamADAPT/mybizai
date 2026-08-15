@@ -7,38 +7,12 @@ import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { StudioBuilderChrome } from "~/components/studio-builder-chrome";
+import {
+  type LoopVentureStatus,
+  useVentureLoop,
+} from "~/hooks/use-venture-loop";
 
-type VentureStatus = "active" | "ready" | "paused" | "archived";
-
-type Venture = {
-  id: string;
-  name: string;
-  industry: string;
-  status: VentureStatus;
-  note: string;
-  createdAt: string;
-};
-
-const seedVentures: Venture[] = [
-  {
-    id: "v1",
-    name: "Fifth Avenue demo",
-    industry: "Professional services",
-    status: "ready",
-    note: "Brand kit locked · plan approved · waiting on campaign spend gate",
-    createdAt: "2026-08-10",
-  },
-  {
-    id: "v2",
-    name: "Coastal logistics pilot",
-    industry: "Logistics",
-    status: "active",
-    note: "Research deepen complete · finance base scenario green",
-    createdAt: "2026-08-12",
-  },
-];
-
-const statusStyles: Record<VentureStatus, string> = {
+const statusStyles: Record<LoopVentureStatus, string> = {
   active: "border-brand-orange/40 bg-brand-orange/10 text-brand-orange",
   ready: "border-brand-gold/40 bg-brand-gold/10 text-brand-gold",
   paused: "border-border bg-muted/40 text-muted-foreground",
@@ -46,11 +20,24 @@ const statusStyles: Record<VentureStatus, string> = {
 };
 
 export function VenturesBuilder({ lang }: { lang: string }) {
-  const [ventures, setVentures] = useState<Venture[]>(seedVentures);
-  const [name, setName] = useState("");
-  const [industry, setIndustry] = useState("Hospitality");
+  const {
+    ventures,
+    ideas,
+    planVision,
+    lastEvent,
+    createVenture,
+    setVentureStatus,
+    approveVenture,
+    runAssist,
+    assistPending,
+  } = useVentureLoop();
+  const keptIdea = ideas.find((idea) => idea.kept);
+  const [name, setName] = useState(keptIdea?.title ?? "");
+  const [industry, setIndustry] = useState(keptIdea?.industry ?? "Hospitality");
   const [note, setNote] = useState(
-    "Seeded from Ideas · ADAPT will draft plan after you approve.",
+    planVision
+      ? `Seeded from plan vision · ${planVision.slice(0, 96)}`
+      : "Seeded from Ideas · ADAPT will draft plan after you approve.",
   );
   const [showArchived, setShowArchived] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -66,74 +53,44 @@ export function VenturesBuilder({ lang }: { lang: string }) {
     [showArchived, ventures],
   );
 
-  const counts = useMemo(() => {
-    return {
+  const counts = useMemo(
+    () => ({
       active: ventures.filter((v) => v.status === "active").length,
       ready: ventures.filter((v) => v.status === "ready").length,
       paused: ventures.filter((v) => v.status === "paused").length,
       archived: ventures.filter((v) => v.status === "archived").length,
-    };
-  }, [ventures]);
+    }),
+    [ventures],
+  );
 
-  function createVenture() {
-    const trimmed = name.trim();
-    if (!trimmed) {
-      setStatus("Name your venture before creating a workspace.");
-      return;
-    }
+  function onCreate() {
     startTransition(() => {
-      const next: Venture = {
-        id: `v-${Date.now()}`,
-        name: trimmed,
-        industry: industry.trim() || "General",
-        status: "ready",
-        note: note.trim() || "New venture workspace ready for ADAPT.",
-        createdAt: new Date().toISOString().slice(0, 10),
-      };
-      setVentures((prev) => [next, ...prev]);
-      setName("");
-      setStatus(`Created · “${next.name}” ready for plan handoff`);
+      void (async () => {
+        await runAssist("ventures.create", name || planVision);
+        const created = createVenture({
+          name,
+          industry,
+          note,
+          seededFromIdeaId: keptIdea?.id,
+        });
+        if (created) {
+          setName("");
+          setStatus(`Created · “${created.name}” ready for plan handoff`);
+        } else {
+          setStatus(lastEvent);
+        }
+      })();
     });
   }
 
-  function setVentureStatus(id: string, next: VentureStatus) {
-    startTransition(() => {
-      setVentures((prev) =>
-        prev.map((venture) =>
-          venture.id === id ? { ...venture, status: next } : venture,
-        ),
-      );
-      const label =
-        next === "archived"
-          ? "Archived"
-          : next === "active"
-            ? "Activated"
-            : next === "paused"
-              ? "Paused"
-              : "Marked ready";
-      setStatus(`${label} · venture updated`);
-    });
-  }
-
-  function approveHandoff(venture: Venture) {
-    startTransition(() => {
-      setVentures((prev) =>
-        prev.map((item) =>
-          item.id === venture.id ? { ...item, status: "active" } : item,
-        ),
-      );
-      setStatus(
-        `Approved · “${venture.name}” queued for ADAPT execute in the shell`,
-      );
-    });
-  }
+  const banner = status ?? lastEvent;
 
   return (
     <StudioBuilderChrome
       lang={lang}
       eyebrow="Studio · Ventures · Interactive"
       title="Ventures"
-      lead="Empty → create → archive. Each venture is its own ADAPT stack — shared intelligence, separate execution."
+      lead="Empty → create → archive. Shared with Ideas and Plan — the LLM will write into this same loop."
       shellModule="businesses"
     >
       <div className="grid gap-4 sm:grid-cols-4">
@@ -184,11 +141,6 @@ export function VenturesBuilder({ lang }: { lang: string }) {
                   ? "Archived workspaces will land here — history stays recoverable."
                   : "Start a business workspace and let ADAPT co-architect the plan."}
               </p>
-              {!showArchived ? (
-                <p className="mt-4 text-xs text-brand-gold">
-                  Use the create panel → name it → Approve when the loop is ready.
-                </p>
-              ) : null}
             </div>
           ) : (
             <div className="space-y-3">
@@ -197,27 +149,22 @@ export function VenturesBuilder({ lang }: { lang: string }) {
                   key={venture.id}
                   className="rounded-2xl border border-border bg-card/80 p-5 dark:bg-brand-ink/40"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="font-display text-xl tracking-tight">
-                          {venture.name}
-                        </h2>
-                        <span
-                          className={`rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${statusStyles[venture.status]}`}
-                        >
-                          {venture.status}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {venture.industry} · opened {venture.createdAt}
-                      </p>
-                      <p className="mt-3 text-sm text-muted-foreground">
-                        {venture.note}
-                      </p>
-                    </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-xl tracking-tight">
+                      {venture.name}
+                    </h2>
+                    <span
+                      className={`rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] ${statusStyles[venture.status]}`}
+                    >
+                      {venture.status}
+                    </span>
                   </div>
-
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {venture.industry} · opened {venture.createdAt}
+                  </p>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    {venture.note}
+                  </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {venture.status !== "archived" ? (
                       <>
@@ -225,7 +172,12 @@ export function VenturesBuilder({ lang }: { lang: string }) {
                           type="button"
                           size="sm"
                           className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
-                          onClick={() => approveHandoff(venture)}
+                          onClick={() => {
+                            startTransition(() => {
+                              approveVenture(venture.id);
+                              setStatus(null);
+                            });
+                          }}
                           disabled={pending}
                         >
                           Approve for shell
@@ -279,24 +231,15 @@ export function VenturesBuilder({ lang }: { lang: string }) {
                     >
                       <Link href={`/${lang}/plan`}>Open plan</Link>
                     </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="ghost"
-                      className="rounded-full"
-                      asChild
-                    >
-                      <Link href={`/${lang}/ideas`}>From ideas</Link>
-                    </Button>
                   </div>
                 </article>
               ))}
             </div>
           )}
 
-          {status ? (
+          {banner ? (
             <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange animate-fade-up">
-              {status}
+              {banner}
             </p>
           ) : null}
         </div>
@@ -306,6 +249,11 @@ export function VenturesBuilder({ lang }: { lang: string }) {
             <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
               Create venture
             </p>
+            {keptIdea ? (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Prefills from kept idea · {keptIdea.title}
+              </p>
+            ) : null}
             <label className="mt-4 block space-y-2">
               <span className="text-xs text-muted-foreground">Name</span>
               <input
@@ -335,35 +283,33 @@ export function VenturesBuilder({ lang }: { lang: string }) {
             <Button
               type="button"
               className="mt-4 w-full rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
-              onClick={createVenture}
-              disabled={pending}
+              onClick={onCreate}
+              disabled={pending || assistPending}
             >
               <Icons.Add className="mr-2 h-4 w-4" />
-              New venture
+              {assistPending ? "Drafting…" : "New venture"}
             </Button>
           </div>
 
           <div className="rounded-2xl border border-border bg-card/70 p-5 dark:bg-brand-ink/40">
             <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-gold">
-              Core loop
+              Shared loop
             </p>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li>Ideas → Research → Plan</li>
-              <li>Brand → Campaigns → Finance</li>
-              <li>Approve in Shell → Venture</li>
-            </ul>
+            <p className="mt-2 text-sm text-muted-foreground line-clamp-4">
+              {planVision}
+            </p>
             <div className="mt-4 flex flex-col gap-2">
               <Link
-                href={`/${lang}/shell?module=businesses`}
+                href={`/${lang}/ideas`}
                 className="text-sm text-brand-orange hover:underline"
               >
-                Open ventures in shell
+                Back to ideas
               </Link>
               <Link
-                href={`/${lang}/onboarding`}
+                href={`/${lang}/shell?module=businesses`}
                 className="text-sm text-muted-foreground hover:text-foreground"
               >
-                First-run checklist
+                Open ventures in shell
               </Link>
             </div>
           </div>

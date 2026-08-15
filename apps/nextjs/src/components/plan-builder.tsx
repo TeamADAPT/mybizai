@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 
 import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { StudioBuilderChrome } from "~/components/studio-builder-chrome";
+import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 type SectionStatus = "draft" | "needs_you" | "approved";
 
@@ -18,7 +19,7 @@ type Section = {
   status: SectionStatus;
 };
 
-const initialSections: Section[] = [
+const baseSections: Section[] = [
   {
     id: "vision",
     title: "Vision",
@@ -68,10 +69,27 @@ const statusLabel: Record<SectionStatus, string> = {
 };
 
 export function PlanBuilder({ lang }: { lang: string }) {
-  const [sections, setSections] = useState(initialSections);
-  const [activeId, setActiveId] = useState(initialSections[1]!.id);
+  const { planVision, setPlanVision, lastEvent, runAssist, assistPending } =
+    useVentureLoop();
+  const [sections, setSections] = useState(baseSections);
+  const [activeId, setActiveId] = useState(baseSections[1]!.id);
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === "vision"
+          ? {
+              ...section,
+              body: planVision,
+              status:
+                section.status === "approved" ? "needs_you" : section.status,
+            }
+          : section,
+      ),
+    );
+  }, [planVision]);
 
   const active = sections.find((s) => s.id === activeId) ?? sections[0]!;
   const progress = useMemo(() => {
@@ -91,6 +109,9 @@ export function PlanBuilder({ lang }: { lang: string }) {
           : s,
       ),
     );
+    if (activeId === "vision") {
+      setPlanVision(value);
+    }
   }
 
   function applySuggestion() {
@@ -117,33 +138,44 @@ export function PlanBuilder({ lang }: { lang: string }) {
           s.id === activeId ? { ...s, status: "approved" } : s,
         ),
       );
+      if (activeId === "vision") {
+        setPlanVision(active.body);
+      }
       setStatus(`Approved · ${active.title} locked for venture handoff`);
     });
   }
 
   function generateSection() {
     startTransition(() => {
-      setSections((prev) =>
-        prev.map((s) =>
-          s.id === activeId
-            ? {
-                ...s,
-                body: `${s.body.trim()}\n\nGenerated deepen: competitive whitespace favors operators who want agency-grade execution without retainer drag.`,
-                status: "needs_you",
-              }
-            : s,
-        ),
-      );
-      setStatus(`Generated · ${active.title} awaits your edit`);
+      void (async () => {
+        const draft = await runAssist(
+          "plan.deepen",
+          `${active.title}: ${active.body}`,
+        );
+        setSections((prev) =>
+          prev.map((s) =>
+            s.id === activeId
+              ? {
+                  ...s,
+                  body: `${s.body.trim()}\n\n${draft}`,
+                  status: "needs_you",
+                }
+              : s,
+          ),
+        );
+        setStatus(`Generated · ${active.title} awaits your edit`);
+      })();
     });
   }
+
+  const banner = status ?? lastEvent;
 
   return (
     <StudioBuilderChrome
       lang={lang}
       eyebrow="Studio · Plan · Interactive"
       title="Business plan editor"
-      lead="ADAPT drafts each section. You edit, apply suggestions, and approve before anything becomes a venture."
+      lead="ADAPT drafts each section. You edit, apply suggestions, and approve before anything becomes a venture. Vision stays synced with Ideas."
       shellModule="businesses"
     >
       <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)_240px]">
@@ -226,10 +258,15 @@ export function PlanBuilder({ lang }: { lang: string }) {
               variant="outline"
               className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
               onClick={generateSection}
-              disabled={pending}
+              disabled={pending || assistPending}
             >
-              Generate deepen
+              {assistPending ? "Drafting…" : "Generate deepen"}
             </Button>
+            <Link href={`/${lang}/ventures`}>
+              <Button variant="ghost" className="rounded-full">
+                Hand off to ventures
+              </Button>
+            </Link>
             <Link href={`/${lang}/research`}>
               <Button variant="ghost" className="rounded-full">
                 Open research
@@ -237,9 +274,9 @@ export function PlanBuilder({ lang }: { lang: string }) {
             </Link>
           </div>
 
-          {status ? (
+          {banner ? (
             <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange animate-fade-up">
-              {status}
+              {banner}
             </p>
           ) : null}
         </div>
@@ -289,12 +326,12 @@ export function PlanBuilder({ lang }: { lang: string }) {
               ))}
             </ul>
           </div>
-          <Link href={`/${lang}/onboarding`}>
+          <Link href={`/${lang}/ventures`}>
             <Button
               variant="outline"
               className="w-full rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
             >
-              Venture handoff checklist
+              Create venture from plan
             </Button>
           </Link>
         </aside>

@@ -7,84 +7,57 @@ import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { StudioBuilderChrome } from "~/components/studio-builder-chrome";
-
-type Idea = {
-  id: string;
-  title: string;
-  industry: string;
-  angle: string;
-  kept: boolean;
-};
-
-const seeds: Idea[] = [
-  {
-    id: "1",
-    title: "Boutique hospitality OS",
-    industry: "Hospitality",
-    angle: "Private-access ops for multi-property hosts with ADAPT concierges.",
-    kept: false,
-  },
-  {
-    id: "2",
-    title: "Coastal SMB logistics desk",
-    industry: "Logistics",
-    angle: "Agency-grade routing plans that execute after Approve.",
-    kept: true,
-  },
-  {
-    id: "3",
-    title: "Founder brand studio",
-    industry: "Professional services",
-    angle: "Cobalt/orange kits + campaign gate for solo operators.",
-    kept: false,
-  },
-];
+import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 export function IdeasBuilder({ lang }: { lang: string }) {
-  const [ideas, setIdeas] = useState(seeds);
+  const {
+    ideas,
+    lastEvent,
+    assistPending,
+    keepIdea,
+    addIdea,
+    seedPlanFromIdea,
+    runAssist,
+  } = useVentureLoop();
   const [prompt, setPrompt] = useState(
     "Spin three venture ideas for operators who want personal touch + autonomy.",
   );
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
-  function generate() {
+  async function generate() {
     startTransition(() => {
-      const next: Idea = {
-        id: String(Date.now()),
-        title: "Adaptive retail pop-up stack",
-        industry: "Retail",
-        angle:
-          "Short-run brand kits and campaign bursts with finance runway guardrails.",
-        kept: false,
-      };
-      setIdeas((prev) => [next, ...prev]);
-      setStatus("Generated · new idea from assist prompt");
+      void (async () => {
+        const draft = await runAssist("ideas.generate", prompt);
+        addIdea({
+          title: draft.replace(/^Adaptive concept ·\s*/i, "").slice(0, 64),
+          industry: "Cross-industry",
+          angle:
+            "Short-run brand kits and campaign bursts with finance runway guardrails — drafted by assist (LLM seam).",
+        });
+        setStatus("Generated · assist draft added to the board");
+      })();
     });
   }
 
-  function toggleKeep(id: string) {
-    setIdeas((prev) =>
-      prev.map((idea) =>
-        idea.id === id ? { ...idea, kept: !idea.kept } : idea,
-      ),
-    );
-  }
-
-  function sendToPlan(idea: Idea) {
+  function sendToPlan(ideaId: string) {
+    const idea = ideas.find((item) => item.id === ideaId);
+    if (!idea) return;
     startTransition(() => {
+      seedPlanFromIdea(idea);
       setStatus(`Queued for plan · “${idea.title}” as venture vision seed`);
     });
   }
 
   const kept = ideas.filter((i) => i.kept).length;
+  const banner = status ?? lastEvent;
 
   return (
     <StudioBuilderChrome
       lang={lang}
       eyebrow="Studio · Ideas · Interactive"
       title="Idea generation"
-      lead="Brainstorm with ADAPT, keep the ones with Fifth Avenue legs, then seed the business plan."
+      lead="Brainstorm with ADAPT, keep the ones with Fifth Avenue legs, then seed the business plan. Assist drafts are local today — same hook will call the LLM."
       shellModule="businesses"
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
@@ -102,10 +75,10 @@ export function IdeasBuilder({ lang }: { lang: string }) {
             <Button
               type="button"
               className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
-              onClick={generate}
-              disabled={pending}
+              onClick={() => void generate()}
+              disabled={pending || assistPending}
             >
-              Generate ideas
+              {assistPending ? "Drafting…" : "Generate ideas"}
             </Button>
           </label>
 
@@ -129,7 +102,7 @@ export function IdeasBuilder({ lang }: { lang: string }) {
                   </div>
                   <button
                     type="button"
-                    onClick={() => toggleKeep(idea.id)}
+                    onClick={() => keepIdea(idea.id)}
                     className={
                       idea.kept
                         ? "rounded-full bg-brand-orange/15 px-3 py-1 text-xs font-medium text-brand-orange"
@@ -144,11 +117,19 @@ export function IdeasBuilder({ lang }: { lang: string }) {
                     type="button"
                     variant="outline"
                     className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
-                    onClick={() => sendToPlan(idea)}
+                    onClick={() => sendToPlan(idea.id)}
                     disabled={pending}
                   >
                     <Icons.Check className="mr-2 h-4 w-4" />
                     Seed plan
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="rounded-full"
+                    asChild
+                  >
+                    <Link href={`/${lang}/ventures`}>Open ventures</Link>
                   </Button>
                   <Link href={`/${lang}/research`}>
                     <Button variant="ghost" className="rounded-full">
@@ -161,31 +142,31 @@ export function IdeasBuilder({ lang }: { lang: string }) {
           </div>
         </div>
 
-        <aside className="space-y-4 rounded-2xl border border-border bg-card/80 p-5 dark:bg-brand-ink/40 h-fit">
+        <aside className="h-fit space-y-4 rounded-2xl border border-border bg-card/80 p-5 dark:bg-brand-ink/40">
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
             Kept ideas
           </p>
           <p className="font-display text-4xl text-brand-orange">{kept}</p>
           <p className="text-sm text-muted-foreground">
-            Kept ideas become vision seeds in the plan builder. Discard the rest
-            without guilt — ADAPT can regenerate.
+            Kept ideas seed the shared plan vision and can mint a venture
+            workspace. Same store the LLM will write into.
           </p>
           <Link href={`/${lang}/plan`}>
             <Button className="w-full rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
               Open plan builder
             </Button>
           </Link>
-          <Link href={`/${lang}/onboarding`}>
+          <Link href={`/${lang}/ventures`}>
             <Button
               variant="outline"
               className="w-full rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
             >
-              First-run checklist
+              Create venture
             </Button>
           </Link>
-          {status ? (
+          {banner ? (
             <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-3 py-2 text-sm text-brand-orange animate-fade-up">
-              {status}
+              {banner}
             </p>
           ) : null}
         </aside>

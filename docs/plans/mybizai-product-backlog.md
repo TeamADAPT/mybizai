@@ -21,8 +21,8 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging �
 | AI agent marketplace + skill config / feedback | Keep — interactive install next | Stub → deepen |
 | Onboarding / welcome | Keep — first-run checklist | Done |
 | Academy / help tutorials | Keep — thin doors into loop | Done |
-| New idea / brainstorm / personalization | Keep — **Ideas** studio next | Next |
-| Project tracking / empty / archive | Keep as **Ventures** (rename k8s) | Next |
+| New idea / brainstorm / personalization | Keep — **Ideas** studio | Done |
+| Project tracking / empty / archive | Keep as **Ventures** (rename k8s) | Done (interactive) |
 | AI platform dashboard | Fold into shell + dashboard overview | Partial |
 
 ### Next — needs Clerk / real data
@@ -74,19 +74,22 @@ Do **not** parallelize voice, forum, webinars, or report-builder until the loop 
 ## Done (foundation + recent)
 
 - Design tokens, theme, `/design`, `/shell`, pricing, auth chrome, brand kit  
-- Railway staging + Postgres; Clerk-optional crash fixes  
-- Interactive **Plan / Campaigns / Finance** builders  
-- Academy, onboarding, research matrix, marketplace stub  
+- Railway staging + Postgres; Clerk Development keys live; post-login workspace gate  
+- Interactive **Plan / Campaigns / Finance / Research / Marketplace / Ideas / Ventures** builders  
+- Academy, onboarding, playbook doors into the loop  
+- Shell module **Ventures** (was My Businesses) → `/ventures`
 
 ## Ship-now checklist
 
 | Item | Status |
 | --- | --- |
-| Research interactive builder | Next |
-| Marketplace interactive install | Next |
-| Ideas / brainstorm studio | Next |
-| Ventures (k8s → venture) rename + empty create | Next |
-| Real Clerk keys on Railway | Waiting on you |
+| Research interactive builder | Done |
+| Marketplace interactive install | Done |
+| Ideas / brainstorm studio | Done |
+| Ventures (k8s → venture) empty / create / archive | Done |
+| Real Clerk keys on Railway | Done |
+| Wire builders ↔ shell ↔ ventures (shared state / APIs) | Done (client store + assist seam) |
+| Plug real LLM into `runAssist` (`/api/assist`) | Next |
 | Point Railway branch to `main` after PR merge | After merge |
 
 ## Run guidance
