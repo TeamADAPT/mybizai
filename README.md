@@ -12,7 +12,7 @@ Cobalt `#120a8f` · dark orange `#ff8c00` · gold — dark-first with Light / Da
 | `/[lang]/design` | Design foundation |
 | `/[lang]/shell` | Interactive product shell |
 | `/[lang]/brand-kit` | Brand identity kit + JSON export |
-| `/[lang]/research` `/plan` `/campaigns` `/finance` | Studio stubs (mock → live) |
+| `/[lang]/research` `/plan` `/campaigns` `/finance` `/marketplace` | Studio stubs (mock → live) |
 | `/[lang]/playbook` | Operator playbook |
 | `/[lang]/pricing` | Access / Architect / Fifth Avenue |
 | `/[lang]/docs` `/blog` | Docs + insights |

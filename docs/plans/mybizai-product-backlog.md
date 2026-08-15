@@ -18,7 +18,7 @@ Living roadmap after the design-foundation PRs (#1–#5). Prefer large multi-sur
 | Rename `sidebar_nav_clusters` → `modules` | Done |
 | Shared `BrandAuthFrame` for login / register / Clerk | Done |
 | Branded loading + locale `error` panels | Done |
-| Studio stubs: research / plan / campaigns / finance | Done |
+| Studio stubs: research / plan / campaigns / finance / marketplace | Done |
 | Quarantine unused Saasfly demo widgets | Done |
 | Home trim (drop features-grid clutter) | Done |
 | Denser billing card + light-friendly surfaces | Done |
@@ -37,7 +37,7 @@ Priority order from `mocks/` + shell modules:
 3. **Campaign architect** (`/campaigns` stub) — channels, budget, approve gate
 4. **Financial projections** (`/finance` stub) — base / stretch / conservative
 5. **Brand identity kit** (live builder exists) — connect export to venture records
-6. **AI agent marketplace** — skills, install, feedback loops
+6. **AI agent marketplace** (`/marketplace` stub exists) — skills, install, feedback loops
 7. **Onboarding complete** — first-run checklist after private access
 8. **Academy / help** — tutorials tied to playbook
 9. **Data import / export** — mapping, confirmation, status

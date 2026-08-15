@@ -48,6 +48,7 @@ const studios = [
   { href: "plan", label: "Plan" },
   { href: "campaigns", label: "Campaigns" },
   { href: "finance", label: "Finance" },
+  { href: "marketplace", label: "Marketplace" },
 ];
 
 export default function PlaybookPage({
