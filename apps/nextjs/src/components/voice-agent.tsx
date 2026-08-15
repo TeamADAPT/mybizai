@@ -13,6 +13,8 @@ const DEFAULT_INSTRUCTIONS = [
   "Ask one focused question at a time. Prefer action over lecture.",
 ].join(" ");
 
+type VoiceBackend = "xai" | "browser";
+
 type VoiceStatus =
   | "idle"
   | "connecting"
@@ -25,6 +27,20 @@ type TranscriptLine = {
   id: string;
   role: "user" | "assistant" | "system";
   text: string;
+};
+
+type ProviderSnapshot = {
+  assist: {
+    active: string;
+    model: string | null;
+    xaiConfigured: boolean;
+  };
+  voice: {
+    active: VoiceBackend;
+    xaiConfigured: boolean;
+    alternatives: VoiceBackend[];
+    model: string | null;
+  };
 };
 
 function float32ToBase64PCM16(float32Array: Float32Array): string {
@@ -57,15 +73,36 @@ function base64PCM16ToFloat32(base64String: string): Float32Array {
   return float32;
 }
 
+type SpeechRecognitionLike = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: { results: ArrayLike<{ 0: { transcript: string }; isFinal: boolean }> }) => void) | null;
+  onerror: ((event: { error?: string }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
+  if (typeof window === "undefined") return null;
+  const w = window as Window & {
+    SpeechRecognition?: new () => SpeechRecognitionLike;
+    webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+  };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
+
 export function VoiceAgent({
   compact = false,
 }: {
   compact?: boolean;
 }) {
+  const [backend, setBackend] = useState<VoiceBackend>("xai");
+  const [snapshot, setSnapshot] = useState<ProviderSnapshot | null>(null);
   const [status, setStatus] = useState<VoiceStatus>("idle");
   const [error, setError] = useState<string | null>(null);
   const [lines, setLines] = useState<TranscriptLine[]>([]);
-  const [configured, setConfigured] = useState<boolean | null>(null);
 
   const wsRef = useRef<WebSocket | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -73,14 +110,17 @@ export function VoiceAgent({
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const playTimeRef = useRef(0);
   const assistantBufferRef = useRef("");
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const browserBusyRef = useRef(false);
 
   useEffect(() => {
-    void fetch("/api/voice/session")
+    void fetch("/api/providers")
       .then((res) => res.json())
-      .then((data: { configured?: boolean }) => {
-        setConfigured(Boolean(data.configured));
+      .then((data: ProviderSnapshot) => {
+        setSnapshot(data);
+        setBackend(data.voice.active);
       })
-      .catch(() => setConfigured(false));
+      .catch(() => setSnapshot(null));
   }, []);
 
   const appendLine = useCallback(
@@ -96,6 +136,12 @@ export function VoiceAgent({
   );
 
   const stop = useCallback(() => {
+    recognitionRef.current?.stop();
+    recognitionRef.current = null;
+    browserBusyRef.current = false;
+    if (typeof window !== "undefined") {
+      window.speechSynthesis?.cancel();
+    }
     processorRef.current?.disconnect();
     processorRef.current = null;
     mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
@@ -129,32 +175,123 @@ export function VoiceAgent({
     playTimeRef.current = startAt + buffer.duration;
   }, []);
 
-  const start = useCallback(async () => {
+  const speakBrowser = useCallback(
+    (text: string) => {
+      if (typeof window === "undefined" || !window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 1.02;
+      utter.onstart = () => setStatus("speaking");
+      utter.onend = () => setStatus("listening");
+      window.speechSynthesis.speak(utter);
+    },
+    [],
+  );
+
+  const replyViaAssist = useCallback(
+    async (userText: string) => {
+      browserBusyRef.current = true;
+      setStatus("connecting");
+      try {
+        const res = await fetch("/api/assist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            kind: "shell.approve",
+            prompt: `${DEFAULT_INSTRUCTIONS}\n\nOperator said: ${userText}\nReply in 1-2 short spoken sentences.`,
+          }),
+        });
+        const data = (await res.json()) as { draft?: string };
+        const draft =
+          data.draft?.trim() ||
+          "Got it — open the next studio step when you’re ready.";
+        appendLine("assistant", draft);
+        speakBrowser(draft);
+      } catch {
+        setError("Browser voice could not reach /api/assist");
+        setStatus("error");
+      } finally {
+        browserBusyRef.current = false;
+      }
+    },
+    [appendLine, speakBrowser],
+  );
+
+  const startBrowser = useCallback(async () => {
+    const Recognition = getSpeechRecognition();
+    if (!Recognition) {
+      setStatus("unavailable");
+      setError(
+        "This browser has no SpeechRecognition. Use Chrome/Edge or switch to xAI voice.",
+      );
+      return;
+    }
+
+    setError(null);
+    setStatus("listening");
+    appendLine("system", "Browser voice · mic + speechSynthesis · assist brain");
+
+    const recognition = new Recognition();
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+    recognitionRef.current = recognition;
+
+    recognition.onresult = (event) => {
+      const result = event.results[event.results.length - 1];
+      if (!result?.isFinal) return;
+      const transcript = result[0]?.transcript?.trim();
+      if (!transcript || browserBusyRef.current) return;
+      appendLine("user", transcript);
+      void replyViaAssist(transcript);
+    };
+    recognition.onerror = (event) => {
+      if (event.error === "aborted" || event.error === "no-speech") return;
+      setError(event.error ?? "Speech recognition error");
+      setStatus("error");
+    };
+    recognition.onend = () => {
+      if (recognitionRef.current) {
+        try {
+          recognition.start();
+        } catch {
+          /* already started */
+        }
+      }
+    };
+
+    speakBrowser("ADAPT browser voice online. What should we move next?");
+    recognition.start();
+  }, [appendLine, replyViaAssist, speakBrowser]);
+
+  const startXai = useCallback(async () => {
     setError(null);
     setStatus("connecting");
     assistantBufferRef.current = "";
 
     try {
-      const sessionRes = await fetch("/api/voice/session", { method: "POST" });
+      const sessionRes = await fetch("/api/voice/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: "xai" }),
+      });
       const session = (await sessionRes.json()) as {
         token?: string;
         wsUrl?: string;
         voice?: string;
         error?: string;
         configured?: boolean;
+        provider?: string;
       };
 
       if (!sessionRes.ok || !session.token || !session.wsUrl) {
-        setConfigured(session.configured ?? false);
         setStatus(session.configured === false ? "unavailable" : "error");
         setError(
           session.error ??
-            "Could not start voice session. Check XAI_API_KEY on Railway.",
+            "Could not start xAI voice. Set XAI_API_KEY or switch to Browser.",
         );
         return;
       }
-
-      setConfigured(true);
 
       const audioContext = new AudioContext({ sampleRate: SAMPLE_RATE });
       audioContextRef.current = audioContext;
@@ -230,7 +367,7 @@ export function VoiceAgent({
         processor.connect(silent);
         silent.connect(audioContext.destination);
         setStatus("listening");
-        appendLine("system", "Mic live · server VAD listening");
+        appendLine("system", "xAI grok-voice · server VAD listening");
       };
 
       ws.onmessage = (message) => {
@@ -238,7 +375,6 @@ export function VoiceAgent({
           type?: string;
           delta?: string;
           transcript?: string;
-          text?: string;
           error?: { message?: string };
           item?: {
             role?: string;
@@ -307,11 +443,20 @@ export function VoiceAgent({
     } catch (err) {
       setStatus("error");
       setError(
-        err instanceof Error ? err.message : "Could not start voice agent",
+        err instanceof Error ? err.message : "Could not start xAI voice agent",
       );
       stop();
     }
   }, [appendLine, playPcmChunk, stop]);
+
+  const start = useCallback(async () => {
+    stop();
+    if (backend === "browser") {
+      await startBrowser();
+      return;
+    }
+    await startXai();
+  }, [backend, startBrowser, startXai, stop]);
 
   const statusLabel =
     status === "connecting"
@@ -321,10 +466,13 @@ export function VoiceAgent({
         : status === "speaking"
           ? "Speaking"
           : status === "unavailable"
-            ? "Needs XAI_API_KEY"
+            ? "Unavailable"
             : status === "error"
               ? "Error"
               : "Idle";
+
+  const alternatives = snapshot?.voice.alternatives ?? ["browser"];
+  const xaiReady = snapshot?.voice.xaiConfigured ?? false;
 
   return (
     <div
@@ -337,14 +485,18 @@ export function VoiceAgent({
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
-            xAI voice · grok-voice
+            Swappable voice · {backend}
           </p>
           <h2 className="mt-1 font-display text-xl tracking-tight">
             ADAPT voice agent
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Browser talks through an ephemeral token — your API key stays on
-            Railway. Model text drafts use grok-4.6.
+            Flip between xAI grok-voice and browser speech tonight. Assist brain
+            stays on{" "}
+            {snapshot?.assist.active === "xai"
+              ? `grok-4.6`
+              : snapshot?.assist.active ?? "local"}
+            .
           </p>
         </div>
         <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-orange">
@@ -353,14 +505,43 @@ export function VoiceAgent({
       </div>
 
       <div className="flex flex-wrap gap-2">
+        {(["xai", "browser"] as const).map((id) => {
+          const enabled = alternatives.includes(id) || id === "browser";
+          const locked = id === "xai" && !xaiReady;
+          return (
+            <button
+              key={id}
+              type="button"
+              disabled={status !== "idle" && status !== "error" && status !== "unavailable"}
+              onClick={() => {
+                if (locked) return;
+                setBackend(id);
+                setError(null);
+              }}
+              className={
+                backend === id
+                  ? "rounded-full bg-brand-orange/15 px-3 py-1.5 text-xs font-medium text-brand-orange"
+                  : locked || !enabled
+                    ? "rounded-full bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground/50"
+                    : "rounded-full bg-muted/60 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+              }
+            >
+              {id === "xai" ? "xAI voice" : "Browser voice"}
+              {locked ? " · needs key" : ""}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
         {status === "idle" || status === "error" || status === "unavailable" ? (
           <Button
             type="button"
             className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
             onClick={() => void start()}
-            disabled={configured === false}
+            disabled={backend === "xai" && !xaiReady}
           >
-            Start voice
+            Start {backend === "xai" ? "xAI" : "browser"} voice
           </Button>
         ) : (
           <Button
@@ -373,13 +554,6 @@ export function VoiceAgent({
           </Button>
         )}
       </div>
-
-      {configured === false ? (
-        <p className="text-sm text-muted-foreground">
-          Set <code className="font-mono text-xs">XAI_API_KEY</code> on Railway
-          (service mybizai) to unlock voice and grok-4.6 assist.
-        </p>
-      ) : null}
 
       {error ? (
         <p className="rounded-xl border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">

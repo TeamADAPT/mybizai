@@ -38,6 +38,7 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?dashboard(.*)"),
   "/api/assist(.*)",
   "/api/voice(.*)",
+  "/api/providers(.*)",
   new RegExp("^/\\w{2}$"), // root with locale
 ]);
 
@@ -73,7 +74,8 @@ function withLocaleRedirect(req: NextRequest): NextResponse | null {
   if (
     req.nextUrl.pathname.startsWith("/api/webhooks/") ||
     req.nextUrl.pathname.startsWith("/api/assist") ||
-    req.nextUrl.pathname.startsWith("/api/voice")
+    req.nextUrl.pathname.startsWith("/api/voice") ||
+    req.nextUrl.pathname.startsWith("/api/providers")
   ) {
     return NextResponse.next();
   }

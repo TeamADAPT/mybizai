@@ -1,3 +1,8 @@
+import {
+  getProviderStatus,
+  resolveAssistProvider,
+} from "~/lib/providers";
+
 export const assistKinds = [
   "ideas.generate",
   "plan.deepen",
@@ -56,32 +61,35 @@ function systemPrompt(kind: AssistKind): string {
 }
 
 type ChatProvider = {
-  name: string;
+  name: "xai" | "openai";
   url: string;
   apiKey: string;
   model: string;
 };
 
-function resolveProvider(): ChatProvider | null {
-  const xai = process.env.XAI_API_KEY?.trim();
-  if (xai) {
+function resolveChatProvider(): ChatProvider | null {
+  const resolved = resolveAssistProvider();
+  if (resolved.id === "local") return null;
+
+  if (resolved.id === "xai") {
+    const apiKey = process.env.XAI_API_KEY?.trim();
+    if (!apiKey) return null;
     return {
       name: "xai",
       url: "https://api.x.ai/v1/chat/completions",
-      apiKey: xai,
-      model: process.env.XAI_MODEL?.trim() || "grok-4.6",
+      apiKey,
+      model: resolved.model || "grok-4.6",
     };
   }
-  const openai = process.env.OPENAI_API_KEY?.trim();
-  if (openai) {
-    return {
-      name: "openai",
-      url: "https://api.openai.com/v1/chat/completions",
-      apiKey: openai,
-      model: process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini",
-    };
-  }
-  return null;
+
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) return null;
+  return {
+    name: "openai",
+    url: "https://api.openai.com/v1/chat/completions",
+    apiKey,
+    model: resolved.model || "gpt-4o-mini",
+  };
 }
 
 export function getXaiApiKey(): string | null {
@@ -92,11 +100,15 @@ export function getXaiVoiceModel(): string {
   return process.env.XAI_VOICE_MODEL?.trim() || "grok-voice-latest";
 }
 
+export function getAssistProviderSnapshot() {
+  return getProviderStatus().assist;
+}
+
 export async function runServerAssist(
   kind: AssistKind,
   prompt: string,
 ): Promise<AssistResponse> {
-  const provider = resolveProvider();
+  const provider = resolveChatProvider();
   if (!provider) {
     return { draft: localAssistDraft(kind, prompt), source: "local" };
   }

@@ -16,7 +16,7 @@ export default function VoicePage({
       lang={lang}
       eyebrow="Studio · Voice · xAI"
       title="ADAPT voice agent"
-      lead="Talk the core loop with Grok voice — ephemeral browser tokens, API key stays on Railway. Text assist uses grok-4.6."
+      lead="Talk the core loop with swappable voice — xAI grok-voice or browser speech. Assist brain defaults to grok-4.6 when XAI_API_KEY is set. Grok Build stays on the coding side; this is the product surface."
       shellModule="dashboard"
     >
       <VoiceAgent />

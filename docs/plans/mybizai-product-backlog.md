@@ -69,7 +69,12 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging â€
 
 Do **not** parallelize voice, forum, webinars, or report-builder until the loop above is daily-drivable.
 
-**Next operator unlock:** set `XAI_API_KEY` on Railway so assist uses `grok-4.6` and `/en/voice` can mint ephemeral tokens. Optional: `XAI_MODEL`, `XAI_VOICE_MODEL`, `XAI_VOICE_ID`.
+**Next operator unlock:** `XAI_API_KEY` on Railway unlocks `grok-4.6` assist + xAI voice. Swap providers without code changes:
+
+- `ASSIST_PROVIDER=auto|xai|openai|local`
+- `VOICE_PROVIDER=auto|xai|browser`
+
+Grok Build (CLI/ACP) shares the same xAI account/key for **coding**; in-app voice stays on these swappable providers (xAI realtime â†” browser speech).
 
 ---
 
