@@ -17,13 +17,13 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging �
 | Business plan editor | Keep — interactive builder | Done |
 | Marketing campaign planner | Keep — interactive builder | Done |
 | Financial projections | Keep — interactive builder | Done |
-| Brand identity kit | Keep — already live; later wire to ventures | Done (builder) |
+| Brand identity kit | Keep — already live; wire to ventures | Done (loop sync) |
 | AI agent marketplace + skill config / feedback | Keep — interactive install next | Stub → deepen |
 | Onboarding / welcome | Keep — first-run checklist | Done |
 | Academy / help tutorials | Keep — thin doors into loop | Done |
 | New idea / brainstorm / personalization | Keep — **Ideas** studio | Done |
 | Project tracking / empty / archive | Keep as **Ventures** (rename k8s) | Done (interactive) |
-| AI platform dashboard | Fold into shell + dashboard overview | Partial |
+| AI platform dashboard | Fold into shell + dashboard overview | Done (live loop metrics) |
 
 ### Next — needs Clerk / real data
 
@@ -60,14 +60,16 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging �
 
 ## Recommended sequence (where we’re going)
 
-1. **Deepen remaining core studios** — Research interactive + Marketplace install + Ideas brainstorm  
-2. **Ventures surface** — replace k8s cluster CRUD naming; empty → create → archive  
-3. **Clerk on Railway** — real keys unlock private access + dashboard for real  
-4. **Wire builders ↔ shell ↔ ventures** — shared mock state → then ADAPT APIs  
+1. **Deepen remaining core studios** — Research interactive + Marketplace install + Ideas brainstorm ✅  
+2. **Ventures surface** — replace k8s cluster CRUD naming; empty → create → archive ✅  
+3. **Clerk on Railway** — real keys unlock private access + dashboard for real ✅  
+4. **Wire builders ↔ shell ↔ ventures** — shared mock state → `/api/assist` ✅ (add model key for live LLM)  
 5. **Team / billing / import** — only after 1–4 feel sticky on staging  
 6. **Marketing chrome** (about, community, referral) — when positioning for external traffic  
 
 Do **not** parallelize voice, forum, webinars, or report-builder until the loop above is daily-drivable.
+
+**Next operator unlock:** set `XAI_API_KEY` (preferred) or `OPENAI_API_KEY` on Railway so assist drafts leave local fallback.
 
 ---
 
@@ -77,7 +79,9 @@ Do **not** parallelize voice, forum, webinars, or report-builder until the loop 
 - Railway staging + Postgres; Clerk Development keys live; post-login workspace gate  
 - Interactive **Plan / Campaigns / Finance / Research / Marketplace / Ideas / Ventures** builders  
 - Academy, onboarding, playbook doors into the loop  
-- Shell module **Ventures** (was My Businesses) → `/ventures`
+- Shell module **Ventures** (was My Businesses) → `/ventures`  
+- Shared venture-loop store + `/api/assist` (model when `XAI_API_KEY` / `OPENAI_API_KEY` set)  
+- Brand lock-to-venture; research → plan; marketplace agents → shell dashboard
 
 ## Ship-now checklist
 
@@ -88,8 +92,10 @@ Do **not** parallelize voice, forum, webinars, or report-builder until the loop 
 | Ideas / brainstorm studio | Done |
 | Ventures (k8s → venture) empty / create / archive | Done |
 | Real Clerk keys on Railway | Done |
-| Wire builders ↔ shell ↔ ventures (shared state / APIs) | Done (client store + assist seam) |
-| Plug real LLM into `runAssist` (`/api/assist`) | Next |
+| Wire builders ↔ shell ↔ ventures (shared state / APIs) | Done (client store + `/api/assist`) |
+| Plug real LLM into `runAssist` (`/api/assist`) | Done (route live; uses `XAI_API_KEY` or `OPENAI_API_KEY`, else local draft) |
+| Brand kit ↔ ventures ↔ shell sync | Done |
+| Research / marketplace → shared loop + live shell dashboard | Done |
 | Point Railway branch to `main` after PR merge | After merge |
 
 ## Run guidance

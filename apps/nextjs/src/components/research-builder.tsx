@@ -7,6 +7,7 @@ import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { StudioBuilderChrome } from "~/components/studio-builder-chrome";
+import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 type CellId = string;
 
@@ -71,11 +72,27 @@ const deepenCopy: Record<string, string> = {
 };
 
 export function ResearchBuilder({ lang }: { lang: string }) {
-  const [matrix, setMatrix] = useState(initialMatrix);
-  const [activeId, setActiveId] = useState(initialMatrix[0]!.id);
-  const [notes, setNotes] = useState(
-    "Coastal SMB logistics — whitespace between agency retainers and generic SaaS.",
+  const {
+    research,
+    lastEvent,
+    pushResearchToPlan,
+    runAssist,
+    assistPending,
+  } = useVentureLoop();
+  const [matrix, setMatrix] = useState(() =>
+    initialMatrix.map((cell) =>
+      research.deepenedSignals.includes(cell.signal)
+        ? {
+            ...cell,
+            deepened:
+              deepenCopy[cell.id] ??
+              "Deepen with ADAPT citations next.",
+          }
+        : cell,
+    ),
   );
+  const [activeId, setActiveId] = useState(initialMatrix[0]!.id);
+  const [notes, setNotes] = useState(research.notes);
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -87,23 +104,37 @@ export function ResearchBuilder({ lang }: { lang: string }) {
 
   function deepenCell() {
     startTransition(() => {
-      const text = deepenCopy[activeId] ?? "Deepen with ADAPT citations next.";
-      setMatrix((prev) =>
-        prev.map((c) =>
-          c.id === activeId ? { ...c, deepened: text } : c,
-        ),
-      );
-      setStatus(`Deepened · ${active.signal}`);
+      void (async () => {
+        const fallback =
+          deepenCopy[activeId] ?? "Deepen with ADAPT citations next.";
+        const draft = await runAssist(
+          "research.deepen",
+          `${active.signal}: agency=${active.agency}; saas=${active.saas}; mybizai=${active.mybizai}. Notes: ${notes}`,
+        );
+        const text = draft.trim() || fallback;
+        setMatrix((prev) =>
+          prev.map((c) =>
+            c.id === activeId ? { ...c, deepened: text } : c,
+          ),
+        );
+        setStatus(`Deepened · ${active.signal}`);
+      })();
     });
   }
 
   function sendToPlan() {
     startTransition(() => {
+      const deepenedSignals = matrix
+        .filter((c) => c.deepened)
+        .map((c) => c.signal);
+      pushResearchToPlan({ notes, deepenedSignals });
       setStatus(
-        `Queued for plan · ${deepenedCount}/${matrix.length} cells ready for market section`,
+        `Queued for plan · ${deepenedSignals.length}/${matrix.length} cells ready for market section`,
       );
     });
   }
+
+  const banner = status ?? lastEvent;
 
   return (
     <StudioBuilderChrome
@@ -238,9 +269,9 @@ export function ResearchBuilder({ lang }: { lang: string }) {
                 type="button"
                 className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
                 onClick={deepenCell}
-                disabled={pending}
+                disabled={pending || assistPending}
               >
-                Deepen cell
+                {assistPending ? "Deepening…" : "Deepen cell"}
               </Button>
               <Button
                 type="button"
@@ -263,9 +294,9 @@ export function ResearchBuilder({ lang }: { lang: string }) {
                 </Button>
               </Link>
             </div>
-            {status ? (
+            {banner ? (
               <p className="mt-4 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange animate-fade-up">
-                {status}
+                {banner}
               </p>
             ) : null}
           </div>

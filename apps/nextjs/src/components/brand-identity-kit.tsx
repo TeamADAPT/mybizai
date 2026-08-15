@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
 
 import { Button } from "@saasfly/ui/button";
 
 import { brand, brandHex, typography } from "~/config/brand";
+import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 const colorChoices = [
   { id: "cobalt", hex: brandHex.cobalt, label: "Cobalt" },
@@ -34,18 +35,66 @@ const logoStyles = [
 ] as const;
 
 export function BrandIdentityKit({ lang }: { lang: string }) {
+  const {
+    brandKit,
+    ventures,
+    lastEvent,
+    saveBrandKit,
+    lockBrandToVenture,
+    runAssist,
+    assistPending,
+  } = useVentureLoop();
   const [primary, setPrimary] = useState<(typeof colorChoices)[number]["id"]>(
-    "cobalt",
+    (colorChoices.find((c) => c.id === brandKit.primaryId)?.id ?? "cobalt") as
+      (typeof colorChoices)[number]["id"],
   );
-  const [logo, setLogo] = useState<(typeof logoStyles)[number]["id"]>("vortex");
-  const [voice, setVoice] = useState(
-    "Professional, trustworthy, and innovative — Fifth Avenue precision with autonomous warmth.",
+  const [logo, setLogo] = useState(brandKit.logoStyle);
+  const [voice, setVoice] = useState(brandKit.voice);
+  const [ventureId, setVentureId] = useState(
+    brandKit.lockedToVentureId ??
+      ventures.find((v) => v.status !== "archived")?.id ??
+      "",
   );
-  const [exported, setExported] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
-  const selected = colorChoices.find((c) => c.id === primary) ?? colorChoices[0];
+  useEffect(() => {
+    const nextPrimary =
+      colorChoices.find((c) => c.id === brandKit.primaryId)?.id ?? "cobalt";
+    setPrimary(nextPrimary);
+    setLogo(brandKit.logoStyle);
+    setVoice(brandKit.voice);
+    if (brandKit.lockedToVentureId) {
+      setVentureId(brandKit.lockedToVentureId);
+    }
+  }, [brandKit]);
+
+  const selected =
+    colorChoices.find((c) => c.id === primary) ?? colorChoices[0];
+  const liveVentures = ventures.filter((v) => v.status !== "archived");
+
+  function persistKit(lock: boolean) {
+    startTransition(() => {
+      void (async () => {
+        saveBrandKit({
+          primaryId: selected.id,
+          primaryHex: selected.hex,
+          primaryLabel: selected.label,
+          logoStyle: logo,
+          voice,
+        });
+        if (lock && ventureId) {
+          lockBrandToVenture(ventureId);
+          setStatus(`Saved + locked · kit attached to venture`);
+        } else {
+          setStatus("Saved · brand kit in shared loop store");
+        }
+      })();
+    });
+  }
 
   function exportKit() {
+    persistKit(false);
     const payload = {
       brand: brand.name,
       parent: brand.parent,
@@ -64,6 +113,7 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
       },
       logoStyle: logo,
       voice,
+      lockedToVentureId: ventureId || null,
       exportedAt: new Date().toISOString(),
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], {
@@ -75,9 +125,20 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
     a.download = `mybizai-brand-kit-${selected.id}-${logo}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    setExported(true);
-    window.setTimeout(() => setExported(false), 2500);
+    setStatus("Downloaded brand kit JSON · also saved to loop");
   }
+
+  function checkVoice() {
+    startTransition(() => {
+      void (async () => {
+        const draft = await runAssist("brand.voice", voice);
+        setVoice(draft.slice(0, 280));
+        setStatus("Assist · voice check applied — review, then save");
+      })();
+    });
+  }
+
+  const banner = status ?? lastEvent;
 
   return (
     <div className="mx-auto max-w-3xl space-y-14">
@@ -90,7 +151,8 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
         </h1>
         <p className="mt-3 text-muted-foreground">
           Craft a cohesive system for your venture — colors, type, logo style,
-          and voice. Defaults mirror {brand.name}.
+          and voice. Saves into the shared loop so Shell and Ventures stay in
+          sync.
         </p>
       </header>
 
@@ -183,6 +245,37 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
           rows={4}
           className="w-full rounded-2xl border border-border bg-background/80 px-4 py-3 text-sm outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange"
         />
+        <Button
+          type="button"
+          variant="outline"
+          className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+          onClick={checkVoice}
+          disabled={pending || assistPending}
+        >
+          {assistPending ? "Checking…" : "Assist · check voice"}
+        </Button>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="font-display text-2xl tracking-tight">
+          Step 5: Lock to venture
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Attach this kit to a live venture so Shell Brand and Ventures stay
+          aligned.
+        </p>
+        <select
+          value={ventureId}
+          onChange={(e) => setVentureId(e.target.value)}
+          className="w-full rounded-2xl border border-border bg-background/80 px-4 py-3 text-sm outline-none focus:border-brand-orange"
+        >
+          <option value="">Select a venture…</option>
+          {liveVentures.map((venture) => (
+            <option key={venture.id} value={venture.id}>
+              {venture.name} · {venture.status}
+            </option>
+          ))}
+        </select>
       </section>
 
       <section className="rounded-2xl border border-brand-gold/30 bg-brand-ink/40 p-6">
@@ -193,17 +286,26 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
           {selected.label} + {logo} + Instrument Serif reads innovative and
           stable. Gold remains emphasis-only — matches the Architecture mock.
         </p>
-        {exported ? (
-          <p className="mt-4 text-sm text-brand-orange">
-            Downloaded brand kit JSON.
+        {banner ? (
+          <p className="mt-4 text-sm text-brand-orange animate-fade-up">
+            {banner}
           </p>
         ) : null}
         <div className="mt-6 flex flex-wrap gap-3">
           <Button
             className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
-            onClick={exportKit}
+            onClick={() => persistKit(true)}
+            disabled={pending || !ventureId}
           >
-            Export brand kit
+            Save + lock to venture
+          </Button>
+          <Button
+            variant="outline"
+            className="rounded-full border-brand-gold/50 text-brand-gold"
+            onClick={exportKit}
+            disabled={pending}
+          >
+            Export JSON
           </Button>
           <Button
             variant="outline"
@@ -213,7 +315,7 @@ export function BrandIdentityKit({ lang }: { lang: string }) {
             <Link href={`/${lang}/design`}>Open design foundation</Link>
           </Button>
           <Button variant="ghost" className="rounded-full" asChild>
-            <Link href={`/${lang}/shell`}>Preview in shell</Link>
+            <Link href={`/${lang}/shell?module=brand`}>Preview in shell</Link>
           </Button>
         </div>
       </section>

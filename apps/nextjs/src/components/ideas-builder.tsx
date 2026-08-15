@@ -57,7 +57,7 @@ export function IdeasBuilder({ lang }: { lang: string }) {
       lang={lang}
       eyebrow="Studio · Ideas · Interactive"
       title="Idea generation"
-      lead="Brainstorm with ADAPT, keep the ones with Fifth Avenue legs, then seed the business plan. Assist drafts are local today — same hook will call the LLM."
+      lead="Brainstorm with ADAPT, keep the ones with Fifth Avenue legs, then seed the business plan. Assist hits `/api/assist` — model when keys are set, local draft otherwise."
       shellModule="businesses"
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">

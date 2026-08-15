@@ -7,65 +7,14 @@ import { Button } from "@saasfly/ui/button";
 import * as Icons from "@saasfly/ui/icons";
 
 import { StudioBuilderChrome } from "~/components/studio-builder-chrome";
-
-type AgentStatus = "available" | "installed" | "wishlist";
-
-type Agent = {
-  id: string;
-  name: string;
-  category: string;
-  blurb: string;
-  status: AgentStatus;
-};
-
-const initialAgents: Agent[] = [
-  {
-    id: "scout",
-    name: "Research Scout",
-    category: "Market research",
-    blurb: "Maps TAM / whitespace and cites sources before deepen prompts.",
-    status: "available",
-  },
-  {
-    id: "steward",
-    name: "Brand Steward",
-    category: "Identity",
-    blurb: "Keeps cobalt / orange / gold and voice locked across exports.",
-    status: "installed",
-  },
-  {
-    id: "runner",
-    name: "Campaign Runner",
-    category: "Marketing",
-    blurb: "Drafts multi-channel briefs and waits for Approve before spend.",
-    status: "available",
-  },
-  {
-    id: "sentinel",
-    name: "Finance Sentinel",
-    category: "Projections",
-    blurb: "Runs base / stretch / conservative with cash intervention flags.",
-    status: "wishlist",
-  },
-  {
-    id: "concierge",
-    name: "Venture Concierge",
-    category: "Operations",
-    blurb: "Spins workspace ventures from approved plan sections.",
-    status: "available",
-  },
-  {
-    id: "guide",
-    name: "Academy Guide",
-    category: "Learning",
-    blurb: "Pairs playbook steps with short tutorials for new operators.",
-    status: "wishlist",
-  },
-];
+import {
+  type LoopAgentStatus,
+  useVentureLoop,
+} from "~/hooks/use-venture-loop";
 
 export function MarketplaceBuilder({ lang }: { lang: string }) {
-  const [agents, setAgents] = useState(initialAgents);
-  const [filter, setFilter] = useState<"all" | AgentStatus>("all");
+  const { agents, lastEvent, setAgentStatus } = useVentureLoop();
+  const [filter, setFilter] = useState<"all" | LoopAgentStatus>("all");
   const [status, setStatus] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -85,45 +34,33 @@ export function MarketplaceBuilder({ lang }: { lang: string }) {
 
   function install(id: string) {
     startTransition(() => {
-      setAgents((prev) =>
-        prev.map((a) =>
-          a.id === id ? { ...a, status: "installed" as const } : a,
-        ),
-      );
-      const name = agents.find((a) => a.id === id)?.name ?? "Agent";
-      setStatus(`Installed · ${name} ready for shell assist dock`);
+      setAgentStatus(id, "installed");
+      setStatus(null);
     });
   }
 
   function wishlist(id: string) {
     startTransition(() => {
-      setAgents((prev) =>
-        prev.map((a) =>
-          a.id === id ? { ...a, status: "wishlist" as const } : a,
-        ),
-      );
-      const name = agents.find((a) => a.id === id)?.name ?? "Agent";
-      setStatus(`Wishlist · ${name}`);
+      setAgentStatus(id, "wishlist");
+      setStatus(null);
     });
   }
 
   function uninstall(id: string) {
     startTransition(() => {
-      setAgents((prev) =>
-        prev.map((a) =>
-          a.id === id ? { ...a, status: "available" as const } : a,
-        ),
-      );
-      setStatus("Removed from venture stack");
+      setAgentStatus(id, "available");
+      setStatus(null);
     });
   }
+
+  const banner = status ?? lastEvent;
 
   return (
     <StudioBuilderChrome
       lang={lang}
       eyebrow="Studio · Marketplace · Interactive"
       title="AI agent marketplace"
-      lead="Install the skills ADAPT needs for a venture — curated for Fifth Avenue execution, not a plugin aisle."
+      lead="Install the skills ADAPT needs for a venture — curated for Fifth Avenue execution, not a plugin aisle. Stack syncs into the shell dashboard."
       shellModule="dashboard"
     >
       <div className="mb-6 flex flex-wrap gap-2">
@@ -151,27 +88,27 @@ export function MarketplaceBuilder({ lang }: { lang: string }) {
       </div>
 
       <div className="mb-6 grid gap-3 sm:grid-cols-3">
-        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+          <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
             Installed
           </p>
-          <p className="mt-1 font-display text-3xl text-brand-orange">
+          <p className="mt-2.5 font-display text-3xl leading-none text-brand-orange">
             {counts.installed}
           </p>
         </div>
-        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+          <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
             Available
           </p>
-          <p className="mt-1 font-display text-3xl text-brand-orange">
+          <p className="mt-2.5 font-display text-3xl leading-none text-brand-orange">
             {counts.available}
           </p>
         </div>
-        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 p-4 dark:bg-brand-ink/40">
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="rounded-2xl border border-brand-gold/20 bg-card/80 px-4 pb-4 pt-5 dark:bg-brand-ink/40">
+          <p className="font-mono text-[10px] uppercase leading-normal tracking-[0.14em] text-muted-foreground">
             Wishlist
           </p>
-          <p className="mt-1 font-display text-3xl text-brand-orange">
+          <p className="mt-2.5 font-display text-3xl leading-none text-brand-orange">
             {counts.wishlist}
           </p>
         </div>
@@ -233,9 +170,9 @@ export function MarketplaceBuilder({ lang }: { lang: string }) {
         ))}
       </div>
 
-      {status ? (
+      {banner ? (
         <p className="mt-6 rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange animate-fade-up">
-          {status}
+          {banner}
         </p>
       ) : null}
 

@@ -162,9 +162,13 @@ export function ProductShell({
   const [ventureFilter, setVentureFilter] = useState<VentureFilter | null>(
     null,
   );
-  const canvas = canvases[active];
   const {
     ventures,
+    ideas,
+    brandKit,
+    research,
+    agents,
+    planVision,
     lastEvent,
     createVenture,
     approveVenture,
@@ -177,6 +181,88 @@ export function ProductShell({
     ready: ventures.filter((v) => v.status === "ready").length,
     paused: ventures.filter((v) => v.status === "paused").length,
   };
+
+  const agentCounts = {
+    installed: agents.filter((a) => a.status === "installed").length,
+  };
+
+  const keptIdeas = ideas.filter((idea) => idea.kept).length;
+  const awaitingApproval = liveCounts.ready;
+
+  const liveCanvas = useMemo(() => {
+    const base = canvases[active];
+    if (active === "dashboard") {
+      return {
+        ...base,
+        title: "Operator loop overview",
+        lead: "Live status across ventures, agents, research, and approvals — same store the studios write into.",
+        metrics: [
+          { label: "Awaiting approval", value: String(awaitingApproval) },
+          { label: "Agents installed", value: String(agentCounts.installed) },
+          { label: "Ideas kept", value: String(keptIdeas) },
+        ],
+        bullets: [
+          lastEvent ?? "Assist dock quiet · open a studio to move the loop",
+          `${liveCounts.active} active · ${liveCounts.ready} ready · ${liveCounts.paused} paused ventures`,
+          research.readyForPlan
+            ? `Research ready · ${research.deepenedSignals.join(", ") || "signals queued"}`
+            : "Research still deepening — open Market Research",
+          brandKit.lockedToVentureId
+            ? `Brand locked · ${brandKit.primaryLabel} / ${brandKit.logoStyle}`
+            : "Brand kit unlocked — save from Brand Identity",
+        ],
+      };
+    }
+    if (active === "research") {
+      return {
+        ...base,
+        metrics: [
+          { label: "Deepened", value: String(research.deepenedSignals.length) },
+          {
+            label: "Plan ready",
+            value: research.readyForPlan ? "Yes" : "No",
+          },
+          { label: "Confidence", value: research.readyForPlan ? "High" : "Building" },
+        ],
+        bullets: [
+          research.notes,
+          research.deepenedSignals.length > 0
+            ? `Deepened · ${research.deepenedSignals.join(", ")}`
+            : "No cells deepened yet — open Research studio",
+          "Prompt to deepen any cell",
+        ],
+      };
+    }
+    if (active === "brand") {
+      return {
+        ...base,
+        metrics: [
+          { label: "Primary", value: brandKit.primaryHex },
+          { label: "Action", value: "#ff8c00" },
+          { label: "Emphasis", value: "#d4af37" },
+        ],
+        bullets: [
+          `${brandKit.primaryLabel} · ${brandKit.logoStyle} logo`,
+          brandKit.voice,
+          brandKit.lockedToVentureId
+            ? "Locked to a venture — Shell and Ventures stay aligned"
+            : "Not locked yet — save + lock from Brand Identity kit",
+        ],
+      };
+    }
+    return base;
+  }, [
+    active,
+    agentCounts.installed,
+    awaitingApproval,
+    brandKit,
+    keptIdeas,
+    lastEvent,
+    liveCounts.active,
+    liveCounts.paused,
+    liveCounts.ready,
+    research,
+  ]);
 
   const filteredVentures = useMemo(() => {
     if (!ventureFilter) return ventures.filter((v) => v.status !== "archived");
@@ -210,7 +296,15 @@ export function ProductShell({
           );
           return;
         }
-        setStatus(`Approved · ${canvas.title} queued for ADAPT execute.`);
+        if (active === "dashboard") {
+          const draft = await runAssist(
+            "shell.approve",
+            `Summarize approvals. Vision: ${planVision}. Prompt: ${prompt}`,
+          );
+          setStatus(draft);
+          return;
+        }
+        setStatus(`Approved · ${liveCanvas.title} queued for ADAPT execute.`);
       })();
     });
   }
@@ -256,7 +350,7 @@ export function ProductShell({
                 {brand.parent}
               </p>
               <h1 className="mt-1 font-display text-xl leading-tight tracking-tight md:text-2xl">
-                {canvas.title}
+                {liveCanvas.title}
               </h1>
             </div>
             <div className="flex shrink-0 items-center gap-2">
@@ -268,10 +362,10 @@ export function ProductShell({
           </header>
 
           <main className="flex-1 space-y-8 px-4 py-8 md:px-8">
-            <p className="max-w-2xl text-muted-foreground">{canvas.lead}</p>
+            <p className="max-w-2xl text-muted-foreground">{liveCanvas.lead}</p>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              {(active === "businesses"
+              {active === "businesses"
                 ? (
                     [
                       {
@@ -318,12 +412,14 @@ export function ProductShell({
                           {m.value}
                         </p>
                         <p className="mt-2 text-[11px] leading-normal text-muted-foreground">
-                          {selected ? "Filtered · tap to clear" : "Tap to drill down"}
+                          {selected
+                            ? "Filtered · tap to clear"
+                            : "Tap to drill down"}
                         </p>
                       </button>
                     );
                   })
-                : canvas.metrics.map((m) => (
+                : liveCanvas.metrics.map((m) => (
                     <div
                       key={m.label}
                       className="rounded-2xl border border-brand-gold/20 bg-card/90 px-4 pb-4 pt-5 dark:bg-brand-ink/50"
@@ -390,7 +486,7 @@ export function ProductShell({
               </div>
             ) : (
               <ul className="space-y-3">
-                {canvas.bullets.map((item) => (
+                {liveCanvas.bullets.map((item) => (
                   <li
                     key={item}
                     className="flex items-start gap-3 border-b border-border/60 py-3 text-sm"
@@ -448,7 +544,7 @@ export function ProductShell({
                 </p>
                 <TextGenerateEffect
                   key={active}
-                  words={canvas.prompt}
+                  words={canvases[active].prompt}
                   className="!mt-0 text-left text-sm font-normal"
                 />
                 <label className="sr-only" htmlFor="assist-prompt">
