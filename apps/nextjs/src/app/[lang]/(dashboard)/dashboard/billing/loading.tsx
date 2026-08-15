@@ -6,7 +6,7 @@ export default function Loading() {
   return (
     <DashboardShell
       title="Billing"
-      description="Manage your subscription and billing details"
+      description="Manage your MyBizAI subscription"
       className="space-y-4"
     >
       <LoadingCard title="Subscription" />
@@ -17,12 +17,14 @@ export default function Loading() {
 
 function LoadingCard(props: { title: string }) {
   return (
-    <Card className="mt-4">
+    <Card className="mt-4 border-brand-gold/25 bg-brand-ink/40">
       <CardHeader>
-        <CardTitle>{props.title}</CardTitle>
+        <CardTitle className="font-display text-2xl font-light tracking-tight">
+          {props.title}
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-24 animate-pulse rounded bg-muted" />
+        <div className="h-24 animate-pulse rounded-xl bg-muted/60" />
       </CardContent>
     </Card>
   );
