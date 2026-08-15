@@ -18,6 +18,7 @@ import { TailwindIndicator } from "~/components/tailwind-indicator";
 import { ThemeProvider } from "~/components/theme-provider";
 import { brand } from "~/config/brand";
 import { i18n } from "~/config/i18n-config";
+import { hasClerkConfigured } from "~/lib/clerk-config";
 import { siteConfig } from "~/config/site";
 
 const fontSans = FontSans({
@@ -81,32 +82,36 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable,
-            fontDisplay.variable,
-            fontMono.variable,
-          )}
+  const body = (
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+          fontDisplay.variable,
+          fontMono.variable,
+        )}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <NextDevtoolsProvider>{children}</NextDevtoolsProvider>
-            <Analytics />
-            <SpeedInsights />
-            <Toaster />
-            <TailwindIndicator />
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+          <NextDevtoolsProvider>{children}</NextDevtoolsProvider>
+          <Analytics />
+          <SpeedInsights />
+          <Toaster />
+          <TailwindIndicator />
+        </ThemeProvider>
+      </body>
+    </html>
   );
+
+  if (!hasClerkConfigured()) {
+    return body;
+  }
+
+  return <ClerkProvider>{body}</ClerkProvider>;
 }

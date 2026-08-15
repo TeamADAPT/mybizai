@@ -3,6 +3,7 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import Negotiator from "negotiator";
 
+import { hasValidClerkSecret } from "~/lib/clerk-config";
 import { i18n } from "~/config/i18n-config";
 import { env } from "@saasfly/auth/env.mjs";
 
@@ -32,16 +33,7 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("^/\\w{2}$"), // root with locale
 ]);
 
-/** True when CLERK_SECRET_KEY looks like a real key (not .env.example placeholders). */
-export function hasValidClerkSecret(
-  secret = process.env.CLERK_SECRET_KEY ?? "",
-): boolean {
-  if (!secret.startsWith("sk_")) return false;
-  if (/^sk_(test|live)_x+$/i.test(secret)) return false;
-  if (secret.includes("xxxxxxxx")) return false;
-  if (secret.length < 20) return false;
-  return true;
-}
+export { hasValidClerkSecret } from "~/lib/clerk-config";
 
 export function getLocale(request: NextRequest): string | undefined {
   const negotiatorHeaders: Record<string, string> = {};
