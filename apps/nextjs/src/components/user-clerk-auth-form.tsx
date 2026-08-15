@@ -2,8 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { SignIn, useUser } from "@clerk/nextjs";
+import { SignIn, useClerk, useUser } from "@clerk/nextjs";
 
 import { cn } from "@saasfly/ui";
 import { buttonVariants } from "@saasfly/ui/button";
@@ -18,14 +17,71 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   disabled?: boolean;
 }
 
+/** Post-login home until onboarding/venture routing is fully wired. */
+function postLoginHref(lang: string) {
+  return `/${lang}/dashboard`;
+}
+
 function ClerkSignIn({ lang }: { lang: string }) {
-  const { user } = useUser();
+  const { signOut } = useClerk();
+  const { isLoaded, user } = useUser();
+  const nextHref = postLoginHref(lang);
+
+  React.useEffect(() => {
+    if (!isLoaded || !user) return;
+    // Hard navigation avoids soft-nav loops when middleware/RSC still
+    // looks signed-out (Clerk Development "dev-browser-missing").
+    window.location.assign(nextHref);
+  }, [isLoaded, nextHref, user]);
+
+  if (!isLoaded) {
+    return (
+      <p className="text-center text-sm text-muted-foreground">
+        Loading private access…
+      </p>
+    );
+  }
+
   if (user) {
-    redirect(`/${lang}/dashboard`);
+    return (
+      <div className="grid gap-3 text-center">
+        <p className="text-sm text-foreground">Opening your workspace…</p>
+        <p className="text-xs text-muted-foreground">
+          Heading to the overview. If this pauses, tap continue below.
+        </p>
+        <a
+          href={nextHref}
+          className={cn(
+            buttonVariants(),
+            "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
+          )}
+        >
+          Continue to workspace
+        </a>
+        <button
+          type="button"
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "text-muted-foreground",
+          )}
+          onClick={() => {
+            void signOut({ redirectUrl: `/${lang}/login-clerk` });
+          }}
+        >
+          Sign out instead
+        </button>
+      </div>
+    );
   }
 
   return (
-    <SignIn withSignUp={false} fallbackRedirectUrl={`/${lang}/dashboard`} />
+    <SignIn
+      routing="path"
+      path={`/${lang}/login-clerk`}
+      signUpUrl={`/${lang}/register`}
+      fallbackRedirectUrl={nextHref}
+      forceRedirectUrl={nextHref}
+    />
   );
 }
 

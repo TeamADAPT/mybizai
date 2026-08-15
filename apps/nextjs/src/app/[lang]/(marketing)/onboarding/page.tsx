@@ -14,6 +14,12 @@ export const metadata = {
 
 const nextSteps = [
   {
+    title: "Create your first venture",
+    body: "Empty → name it → approve for the shell when the loop is ready.",
+    href: "ventures",
+    cta: "Ventures",
+  },
+  {
     title: "Lock the brand kit",
     body: "Cobalt / orange / gold, type, voice — then export JSON.",
     href: "brand-kit",
@@ -24,12 +30,6 @@ const nextSteps = [
     body: "Switch modules, approve a plan, send an assist prompt.",
     href: "shell",
     cta: "Product shell",
-  },
-  {
-    title: "Read the research studio",
-    body: "See competitive whitespace before you spend on campaigns.",
-    href: "research",
-    cta: "Market research",
   },
 ];
 
