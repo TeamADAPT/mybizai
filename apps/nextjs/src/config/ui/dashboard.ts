@@ -48,6 +48,11 @@ export const getDashboardConfig = async ({
         href: "/research",
       },
       {
+        id: "voice",
+        title: "Voice",
+        href: "/voice",
+      },
+      {
         id: "billing",
         title: dict.common.dashboard.sidebar_nav_billing,
         href: "/dashboard/billing",

@@ -15,6 +15,7 @@ export type AssistResponse = {
   draft: string;
   source: AssistSource;
   provider?: string;
+  model?: string;
 };
 
 export function isAssistKind(value: unknown): value is AssistKind {
@@ -68,7 +69,7 @@ function resolveProvider(): ChatProvider | null {
       name: "xai",
       url: "https://api.x.ai/v1/chat/completions",
       apiKey: xai,
-      model: process.env.XAI_MODEL?.trim() || "grok-2-latest",
+      model: process.env.XAI_MODEL?.trim() || "grok-4.6",
     };
   }
   const openai = process.env.OPENAI_API_KEY?.trim();
@@ -81,6 +82,14 @@ function resolveProvider(): ChatProvider | null {
     };
   }
   return null;
+}
+
+export function getXaiApiKey(): string | null {
+  return process.env.XAI_API_KEY?.trim() || null;
+}
+
+export function getXaiVoiceModel(): string {
+  return process.env.XAI_VOICE_MODEL?.trim() || "grok-voice-latest";
 }
 
 export async function runServerAssist(
@@ -98,14 +107,20 @@ export async function runServerAssist(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${provider.apiKey}`,
+        ...(provider.name === "xai"
+          ? { "x-grok-conv-id": `mybizai-assist-${kind}` }
+          : {}),
       },
       body: JSON.stringify({
         model: provider.model,
         temperature: 0.7,
-        max_tokens: 320,
+        max_tokens: 420,
         messages: [
           { role: "system", content: systemPrompt(kind) },
-          { role: "user", content: prompt.trim() || "Draft the next operator move." },
+          {
+            role: "user",
+            content: prompt.trim() || "Draft the next operator move.",
+          },
         ],
       }),
     });
@@ -127,7 +142,12 @@ export async function runServerAssist(
       return { draft: localAssistDraft(kind, prompt), source: "local" };
     }
 
-    return { draft: content, source: "model", provider: provider.name };
+    return {
+      draft: content,
+      source: "model",
+      provider: provider.name,
+      model: provider.model,
+    };
   } catch (error) {
     console.error("[assist] model call failed", error);
     return { draft: localAssistDraft(kind, prompt), source: "local" };

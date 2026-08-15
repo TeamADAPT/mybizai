@@ -9,6 +9,7 @@ import * as Icons from "@saasfly/ui/icons";
 
 import { BrandLogo } from "~/components/brand-logo";
 import { ThemeSwitch } from "~/components/theme-switch";
+import { VoiceAgent } from "~/components/voice-agent";
 import { brand } from "~/config/brand";
 import {
   type LoopVentureStatus,
@@ -498,6 +499,8 @@ export function ProductShell({
               </ul>
             )}
 
+            {active === "dashboard" ? <VoiceAgent compact /> : null}
+
             {status || (active === "businesses" && lastEvent) ? (
               <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange">
                 {status ?? lastEvent}
@@ -523,6 +526,13 @@ export function ProductShell({
                   </Link>
                 </Button>
               ) : null}
+              <Button
+                variant="outline"
+                className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+                asChild
+              >
+                <Link href={`/${lang}/voice`}>Voice agent</Link>
+              </Button>
               <Button
                 variant="outline"
                 className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"

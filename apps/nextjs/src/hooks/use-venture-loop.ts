@@ -386,7 +386,7 @@ export const useVentureLoop = create<VentureLoopState>((set, get) => ({
         assistPending: false,
         lastEvent:
           data.source === "model"
-            ? `Assist · ${kind.replace(".", " ")} · ${data.provider ?? "model"}`
+            ? `Assist · ${kind.replace(".", " ")} · ${data.provider ?? "model"}${data.model ? ` · ${data.model}` : ""}`
             : `Assist · ${kind.replace(".", " ")} · local draft`,
       });
       return draft;

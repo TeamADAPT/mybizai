@@ -51,6 +51,7 @@ const studios = [
   { href: "campaigns", label: "Campaigns" },
   { href: "finance", label: "Finance" },
   { href: "marketplace", label: "Marketplace" },
+  { href: "voice", label: "Voice" },
   { href: "academy", label: "Academy" },
   { href: "onboarding", label: "Onboarding" },
 ];

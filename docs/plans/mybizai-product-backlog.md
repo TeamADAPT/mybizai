@@ -46,7 +46,7 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging �
 | Blog / news / newsletter / webinars / community forum | Insights blog exists; rest later |
 | Referral / testimonials / resource library | Growth loops later |
 | System status / custom report builder | Ops polish later |
-| Voice command AI | Explicitly defer — novelty, not core |
+| Voice command AI | Keep thin ADAPT voice via xAI realtime | Done (`/en/voice` + shell) |
 | Feature tour overlay | Optional once loop is stable |
 | Legal / compliance guidance | Content pack later |
 
@@ -69,7 +69,7 @@ Living roadmap. Prefer large multi-surface batches. Review on Railway staging �
 
 Do **not** parallelize voice, forum, webinars, or report-builder until the loop above is daily-drivable.
 
-**Next operator unlock:** set `XAI_API_KEY` (preferred) or `OPENAI_API_KEY` on Railway so assist drafts leave local fallback.
+**Next operator unlock:** set `XAI_API_KEY` on Railway so assist uses `grok-4.6` and `/en/voice` can mint ephemeral tokens. Optional: `XAI_MODEL`, `XAI_VOICE_MODEL`, `XAI_VOICE_ID`.
 
 ---
 
@@ -93,9 +93,10 @@ Do **not** parallelize voice, forum, webinars, or report-builder until the loop 
 | Ventures (k8s → venture) empty / create / archive | Done |
 | Real Clerk keys on Railway | Done |
 | Wire builders ↔ shell ↔ ventures (shared state / APIs) | Done (client store + `/api/assist`) |
-| Plug real LLM into `runAssist` (`/api/assist`) | Done (route live; uses `XAI_API_KEY` or `OPENAI_API_KEY`, else local draft) |
+| Plug real LLM into `runAssist` (`/api/assist`) | Done (route live; default `grok-4.6` when `XAI_API_KEY` set) |
 | Brand kit ↔ ventures ↔ shell sync | Done |
 | Research / marketplace → shared loop + live shell dashboard | Done |
+| xAI voice agent (ephemeral browser tokens) | Done (`/en/voice` + shell dashboard) |
 | Point Railway branch to `main` after PR merge | After merge |
 
 ## Run guidance
