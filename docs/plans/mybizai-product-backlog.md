@@ -19,6 +19,7 @@ Living roadmap after the design-foundation PRs (#1–#5). Prefer large multi-sur
 | Shared auth / loading / error chrome | Done |
 | Studio stubs + marketplace | Done |
 | Research competitor matrix | Done |
+| Plan / campaigns / finance interactive builders | Done |
 | Academy + onboarding studios | Done |
 | Light-theme shell / dashboard cards | Done (continue elsewhere) |
 | Home CTA → shell / onboarding first | Done |
@@ -30,9 +31,9 @@ Living roadmap after the design-foundation PRs (#1–#5). Prefer large multi-sur
 ## Product builders (mock → live)
 
 1. **Market research** — stub + matrix live; deepen → ADAPT next
-2. **Business plan editor** (`/plan`)
-3. **Campaign architect** (`/campaigns`)
-4. **Financial projections** (`/finance`)
+2. **Business plan editor** — interactive section approve builder live
+3. **Campaign architect** — interactive channels + approval gate live
+4. **Financial projections** — interactive scenarios + runway chart live
 5. **Brand identity kit** — connect export to ventures
 6. **AI agent marketplace** (`/marketplace`)
 7. **Onboarding** (`/onboarding`) — checklist live
