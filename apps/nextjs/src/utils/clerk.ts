@@ -33,6 +33,8 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?academy(.*)"),
   new RegExp("/(\\w{2}/)?onboarding(.*)"),
   new RegExp("/(\\w{2}/)?voice(.*)"),
+  new RegExp("/(\\w{2}/)?ideas(.*)"),
+  new RegExp("/(\\w{2}/)?ventures(.*)"),
   "/api/assist(.*)",
   "/api/voice(.*)",
   "/api/providers(.*)",

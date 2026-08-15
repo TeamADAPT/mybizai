@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { env } from "./env.mjs";
 
@@ -19,16 +19,31 @@ export async function getSessionUser() {
   }
 
   try {
-    const { sessionClaims } = await auth();
-    if (env.ADMIN_EMAIL) {
-      const adminEmails = env.ADMIN_EMAIL.split(",");
-      if (sessionClaims?.user?.email) {
-        sessionClaims.user.isAdmin = adminEmails.includes(
-          sessionClaims?.user?.email,
-        );
-      }
+    const clerkUser = await currentUser();
+    if (!clerkUser) {
+      return undefined;
     }
-    return sessionClaims?.user;
+
+    const email =
+      clerkUser.primaryEmailAddress?.emailAddress ??
+      clerkUser.emailAddresses[0]?.emailAddress ??
+      null;
+
+    const adminEmails = env.ADMIN_EMAIL
+      ? env.ADMIN_EMAIL.split(",").map((value) => value.trim())
+      : [];
+
+    return {
+      id: clerkUser.id,
+      name:
+        clerkUser.fullName ??
+        clerkUser.firstName ??
+        clerkUser.username ??
+        email,
+      email,
+      image: clerkUser.imageUrl ?? null,
+      isAdmin: email ? adminEmails.includes(email) : false,
+    };
   } catch {
     return undefined;
   }

@@ -43,6 +43,16 @@ export const getDashboardConfig = async ({
         href: "/research",
       },
       {
+        id: "ideas",
+        title: "Ideas",
+        href: "/ideas",
+      },
+      {
+        id: "ventures",
+        title: "Ventures",
+        href: "/ventures",
+      },
+      {
         id: "voice",
         title: "Voice",
         href: "/voice",
