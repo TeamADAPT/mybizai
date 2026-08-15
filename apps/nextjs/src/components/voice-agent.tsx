@@ -5,19 +5,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@saasfly/ui/button";
 
 import { looksLikeCodingRequest } from "~/lib/build-handoff";
+import {
+  IMMERSIVE_INSTRUCTIONS,
+  STUDIO_INSTRUCTIONS,
+  extractJourneyHint,
+} from "~/lib/voice-guide";
 import { useVentureLoop } from "~/hooks/use-venture-loop";
 
 const SAMPLE_RATE = 24000;
-
-const DEFAULT_INSTRUCTIONS = [
-  "You are ADAPT voice for MyBizAI (Fifth Avenue Intelligence Group).",
-  "Speak briefly and clearly — decisions, not dashboards.",
-  "Help operators move Ideas → Research → Plan → Brand → Campaigns → Finance → Approve → Venture.",
-  "Ask one focused question at a time. Prefer action over lecture.",
-  "CRITICAL: Do NOT write code, diffs, or long technical implementations aloud.",
-  "If the operator asks to code, implement, fix, refactor, or ship engineering work, acknowledge in one sentence that it will be queued for Grok Build (their coding subscription) and stop.",
-  "Keep voice cheap — conversation and routing only; coding is a handoff.",
-].join(" ");
 
 type VoiceBackend = "xai" | "browser";
 
@@ -101,15 +96,28 @@ function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
 
 export function VoiceAgent({
   compact = false,
+  variant = "studio",
+  onJourneyFill,
 }: {
   compact?: boolean;
+  variant?: "studio" | "immersive";
+  onJourneyFill?: (step: import("~/lib/voice-guide").JourneyStepId, value: string) => void;
 }) {
+  const immersive = variant === "immersive";
+  const instructions = immersive ? IMMERSIVE_INSTRUCTIONS : STUDIO_INSTRUCTIONS;
   const {
     buildQueue,
     queueBuildBrief,
     clearBuildBrief,
     runAssist,
     planVision,
+    addIdea,
+    setPlanVision,
+    pushResearchToPlan,
+    saveBrandKit,
+    brandKit,
+    createVenture,
+    ideas,
   } = useVentureLoop();
   const [backend, setBackend] = useState<VoiceBackend>("xai");
   const [snapshot, setSnapshot] = useState<ProviderSnapshot | null>(null);
@@ -117,6 +125,7 @@ export function VoiceAgent({
   const [error, setError] = useState<string | null>(null);
   const [lines, setLines] = useState<TranscriptLine[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [quietNote, setQuietNote] = useState<string | null>(null);
 
   const wsRef = useRef<WebSocket | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
@@ -149,6 +158,87 @@ export function VoiceAgent({
     [],
   );
 
+  const applyJourneyCapture = useCallback(
+    (transcript: string) => {
+      if (!immersive) return;
+      const hint = extractJourneyHint(transcript);
+      if (!hint.step || !hint.value) return;
+
+      if (hint.step === "idea") {
+        addIdea({
+          title: hint.value,
+          industry: "General",
+          angle: hint.value,
+          kept: true,
+        });
+        setQuietNote(`Idea saved · ${hint.value}`);
+        onJourneyFill?.("idea", hint.value);
+        return;
+      }
+      if (hint.step === "research") {
+        pushResearchToPlan({
+          notes: hint.value,
+          deepenedSignals: ["Voice capture"],
+        });
+        setQuietNote("Research noted");
+        onJourneyFill?.("research", hint.value);
+        return;
+      }
+      if (hint.step === "plan") {
+        setPlanVision(hint.value);
+        setQuietNote("Plan updated");
+        onJourneyFill?.("plan", hint.value);
+        return;
+      }
+      if (hint.step === "brand") {
+        saveBrandKit({
+          primaryId: brandKit.primaryId,
+          primaryHex: brandKit.primaryHex,
+          primaryLabel: brandKit.primaryLabel,
+          logoStyle: brandKit.logoStyle,
+          voice: hint.value,
+        });
+        setQuietNote("Brand feel saved");
+        onJourneyFill?.("brand", hint.value);
+        return;
+      }
+      if (hint.step === "venture") {
+        const seed =
+          ideas.find((idea) => idea.kept) ??
+          ideas[0] ?? {
+            id: "voice",
+            title: hint.value,
+            industry: "General",
+            angle: planVision || hint.value,
+            kept: true,
+          };
+        createVenture({
+          name: seed.title,
+          industry: seed.industry,
+          note: planVision || seed.angle,
+          seededFromIdeaId: seed.id,
+        });
+        setQuietNote(`Venture ready · ${seed.title}`);
+        onJourneyFill?.("venture", seed.title);
+      }
+    },
+    [
+      addIdea,
+      brandKit.logoStyle,
+      brandKit.primaryHex,
+      brandKit.primaryId,
+      brandKit.primaryLabel,
+      createVenture,
+      ideas,
+      immersive,
+      onJourneyFill,
+      planVision,
+      pushResearchToPlan,
+      saveBrandKit,
+      setPlanVision,
+    ],
+  );
+
   const handoffCoding = useCallback(
     async (request: string) => {
       const refined = await runAssist("build.handoff", request);
@@ -157,21 +247,53 @@ export function VoiceAgent({
         source: "voice",
         context: `${refined}\n\nPlan vision: ${planVision}`,
       });
+
+      if (immersive) {
+        try {
+          const res = await fetch("/api/coding/tasks", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              objective: brief.request,
+              prompt: brief.prompt,
+              provider: "grok",
+            }),
+          });
+          if (res.ok) {
+            setQuietNote("Building quietly in the background");
+            appendLine(
+              "system",
+              "We’re handling that build for you in the background.",
+            );
+          } else {
+            setQuietNote("Build queued — we’ll finish it shortly");
+            appendLine(
+              "system",
+              `Queued for build · “${brief.title}”`,
+            );
+          }
+        } catch {
+          appendLine("system", `Queued for build · “${brief.title}”`);
+        }
+        return brief;
+      }
+
       appendLine(
         "system",
         `Queued for Grok Build · “${brief.title}” — copy the brief below (subscription covers coding).`,
       );
       return brief;
     },
-    [appendLine, planVision, queueBuildBrief, runAssist],
+    [appendLine, immersive, planVision, queueBuildBrief, runAssist],
   );
 
   const maybeHandoff = useCallback(
     (transcript: string) => {
+      applyJourneyCapture(transcript);
       if (!looksLikeCodingRequest(transcript)) return;
       void handoffCoding(transcript);
     },
-    [handoffCoding],
+    [applyJourneyCapture, handoffCoding],
   );
 
   const stop = useCallback(() => {
@@ -234,24 +356,28 @@ export function VoiceAgent({
       try {
         if (looksLikeCodingRequest(userText)) {
           await handoffCoding(userText);
-          const ack =
-            "Queued that for Grok Build. Copy the brief when you’re ready — your subscription covers the coding.";
+          const ack = immersive
+            ? "I’ve got that building in the background. Let’s stay on your business."
+            : "Queued that for Grok Build. Copy the brief when you’re ready — your subscription covers the coding.";
           appendLine("assistant", ack);
           speakBrowser(ack);
           return;
         }
+        applyJourneyCapture(userText);
         const res = await fetch("/api/assist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             kind: "shell.approve",
-            prompt: `${DEFAULT_INSTRUCTIONS}\n\nOperator said: ${userText}\nReply in 1-2 short spoken sentences.`,
+            prompt: `${instructions}\n\nOperator said: ${userText}\nReply in 1-2 short spoken sentences.`,
           }),
         });
         const data = (await res.json()) as { draft?: string };
         const draft =
           data.draft?.trim() ||
-          "Got it — open the next studio step when you’re ready.";
+          (immersive
+            ? "Tell me a little more about what you want to build."
+            : "Got it — open the next studio step when you’re ready.");
         appendLine("assistant", draft);
         speakBrowser(draft);
       } catch {
@@ -261,7 +387,14 @@ export function VoiceAgent({
         browserBusyRef.current = false;
       }
     },
-    [appendLine, handoffCoding, speakBrowser],
+    [
+      appendLine,
+      applyJourneyCapture,
+      handoffCoding,
+      immersive,
+      instructions,
+      speakBrowser,
+    ],
   );
 
   const startBrowser = useCallback(async () => {
@@ -276,7 +409,12 @@ export function VoiceAgent({
 
     setError(null);
     setStatus("listening");
-    appendLine("system", "Browser voice · mic + speechSynthesis · assist brain");
+    if (!immersive) {
+      appendLine(
+        "system",
+        "Browser voice · mic + speechSynthesis · assist brain",
+      );
+    }
 
     const recognition = new Recognition();
     recognition.continuous = true;
@@ -307,9 +445,13 @@ export function VoiceAgent({
       }
     };
 
-    speakBrowser("ADAPT browser voice online. What should we move next?");
+    speakBrowser(
+      immersive
+        ? "Welcome to MyBizAI. What business have you been thinking about?"
+        : "ADAPT browser voice online. What should we move next?",
+    );
     recognition.start();
-  }, [appendLine, replyViaAssist, speakBrowser]);
+  }, [appendLine, immersive, replyViaAssist, speakBrowser]);
 
   const startXai = useCallback(async () => {
     setError(null);
@@ -364,7 +506,7 @@ export function VoiceAgent({
             type: "session.update",
             session: {
               voice: session.voice || "eve",
-              instructions: DEFAULT_INSTRUCTIONS,
+              instructions,
               turn_detection: { type: "server_vad" },
               audio: {
                 input: { format: { type: "audio/pcm", rate: SAMPLE_RATE } },
@@ -388,7 +530,9 @@ export function VoiceAgent({
               content: [
                 {
                   type: "output_text",
-                  text: "ADAPT voice online. What should we move next in the loop?",
+                  text: immersive
+                    ? "Welcome to MyBizAI. What business have you been thinking about?"
+                    : "ADAPT voice online. What should we move next in the loop?",
                 },
               ],
             },
@@ -414,7 +558,9 @@ export function VoiceAgent({
         processor.connect(silent);
         silent.connect(audioContext.destination);
         setStatus("listening");
-        appendLine("system", "xAI grok-voice · server VAD listening");
+        if (!immersive) {
+          appendLine("system", "xAI grok-voice · server VAD listening");
+        }
       };
 
       ws.onmessage = (message) => {
@@ -498,7 +644,7 @@ export function VoiceAgent({
       );
       stop();
     }
-  }, [appendLine, maybeHandoff, playPcmChunk, stop]);
+  }, [appendLine, immersive, instructions, maybeHandoff, playPcmChunk, stop]);
 
   const start = useCallback(async () => {
     stop();
@@ -524,6 +670,85 @@ export function VoiceAgent({
 
   const alternatives = snapshot?.voice.alternatives ?? ["browser"];
   const xaiReady = snapshot?.voice.xaiConfigured ?? false;
+  const latestAssistant =
+    [...lines].reverse().find((line) => line.role === "assistant")?.text ??
+    null;
+
+  if (immersive) {
+    const live =
+      status === "listening" ||
+      status === "speaking" ||
+      status === "connecting";
+    return (
+      <div className="flex w-full flex-col items-center gap-6">
+        <button
+          type="button"
+          onClick={() => {
+            if (live) stop();
+            else void start();
+          }}
+          disabled={backend === "xai" && !xaiReady && !live}
+          aria-label={live ? "End conversation" : "Start conversation"}
+          className={
+            live
+              ? "voice-orb voice-orb--live group relative flex h-36 w-36 items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition sm:h-40 sm:w-40"
+              : "voice-orb group relative flex h-36 w-36 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/60 hover:bg-white/15 sm:h-40 sm:w-40"
+          }
+        >
+          <span
+            className={
+              status === "speaking"
+                ? "voice-orb__ring voice-orb__ring--speak"
+                : status === "listening"
+                  ? "voice-orb__ring voice-orb__ring--listen"
+                  : "voice-orb__ring"
+            }
+          />
+          <span className="relative z-10 font-display text-2xl tracking-tight text-white">
+            {live ? (status === "speaking" ? "ADAPT" : "Listening") : "Speak"}
+          </span>
+        </button>
+
+        <p className="min-h-[1.25rem] font-mono text-[10px] uppercase tracking-[0.2em] text-[#ffb347]/90">
+          {status === "connecting"
+            ? "Connecting…"
+            : status === "listening"
+              ? "Listening"
+              : status === "speaking"
+                ? "Speaking"
+                : status === "error"
+                  ? "Try again"
+                  : "Tap to begin"}
+        </p>
+
+        <p className="min-h-[3.5rem] max-w-md text-base leading-relaxed text-white/80 sm:text-lg">
+          {latestAssistant ||
+            quietNote ||
+            "No menus. No forms. Just tell us what you want to build."}
+        </p>
+
+        {quietNote && latestAssistant ? (
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
+            {quietNote}
+          </p>
+        ) : null}
+
+        {error ? (
+          <p className="max-w-sm text-sm text-[#ffb347]">{error}</p>
+        ) : null}
+
+        {!xaiReady ? (
+          <button
+            type="button"
+            className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
+            onClick={() => setBackend("browser")}
+          >
+            Use browser voice instead
+          </button>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <div
