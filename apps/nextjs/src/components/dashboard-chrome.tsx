@@ -68,9 +68,18 @@ export function DashboardChrome({
     if (!clerkOn) return;
     if (!isLoaded) return;
     if (!user && !serverUser) {
+      // Soft replace once — avoid fighting a post-login hard navigation.
       router.replace(`/${lang}/login-clerk`);
     }
   }, [clerkOn, isLoaded, lang, router, serverUser, user]);
+
+  if (clerkOn && isLoaded && user) {
+    try {
+      sessionStorage.removeItem("mybizai.postLoginRedirect");
+    } catch {
+      /* ignore */
+    }
+  }
 
   if (clerkOn && !isLoaded) {
     return (

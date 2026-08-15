@@ -35,6 +35,8 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?voice(.*)"),
   new RegExp("/(\\w{2}/)?ideas(.*)"),
   new RegExp("/(\\w{2}/)?ventures(.*)"),
+  // Client-gated via DashboardChrome — avoids Railway Clerk Dev bounce loop
+  new RegExp("/(\\w{2}/)?dashboard(.*)"),
   "/api/assist(.*)",
   "/api/voice(.*)",
   "/api/providers(.*)",

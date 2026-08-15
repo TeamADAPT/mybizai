@@ -1,6 +1,4 @@
-import { redirect } from "next/navigation";
-
-import { authOptions, getCurrentUser } from "@saasfly/auth";
+import { getCurrentUser } from "@saasfly/auth";
 
 import { DashboardHeader } from "~/components/header";
 import { DashboardShell } from "~/components/shell";
@@ -14,14 +12,12 @@ export const metadata = {
 };
 
 export default async function SettingsPage({
-  params: { lang },
+  params: { lang: _lang },
 }: {
   params: { lang: Locale };
 }) {
   const user = await getCurrentUser();
-  if (!user) {
-    redirect(authOptions?.pages?.signIn ?? "/login-clerk");
-  }
+
   return (
     <DashboardShell>
       <DashboardHeader
@@ -29,7 +25,16 @@ export default async function SettingsPage({
         text={`Operator profile for ${brand.name} · ${brand.parent}`}
       />
       <div className="mt-8 grid gap-6">
-        <UserNameForm user={{ id: user.id, name: user.name ?? "" }} />
+        {user ? (
+          <UserNameForm user={{ id: user.id, name: user.name ?? "" }} />
+        ) : (
+          <div className="rounded-2xl border border-brand-gold/25 bg-brand-ink/40 p-6">
+            <p className="text-sm text-muted-foreground">
+              Profile fields appear once your session is fully synced. Use the
+              account menu if you need to sign out and back in.
+            </p>
+          </div>
+        )}
         <div className="rounded-2xl border border-brand-gold/25 bg-brand-ink/40 p-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
             Workspace
@@ -38,8 +43,8 @@ export default async function SettingsPage({
             Private access
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Theme follows system preference via the header switch. Locale:{" "}
-            {lang}.
+            Account security and billing hooks land here after Clerk + Stripe
+            are fully wired on Railway.
           </p>
         </div>
       </div>
