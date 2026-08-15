@@ -33,6 +33,9 @@ export const isPublicRoute = createRouteMatcher([
   new RegExp("/(\\w{2}/)?academy(.*)"),
   new RegExp("/(\\w{2}/)?onboarding(.*)"),
   new RegExp("/(\\w{2}/)?ideas(.*)"),
+  // Client-gated: Clerk Development can omit server session cookies
+  // (dev-browser-missing) while the browser session is valid.
+  new RegExp("/(\\w{2}/)?dashboard(.*)"),
   new RegExp("^/\\w{2}$"), // root with locale
 ]);
 
@@ -106,20 +109,20 @@ const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
     req.nextUrl.pathname,
   );
 
-  // Auth pages are public for guests, but signed-in users should enter the app.
+  // Always resolve auth so Clerk can finish handshake / set cookies.
+  // Never return null — that drops Clerk's response decorations.
+  const { userId, sessionClaims } = await auth();
+
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error Clerk matcher typing
   if (isPublicRoute(req)) {
-    if (isAuthPage) {
-      const { userId } = await auth();
-      if (userId) {
-        return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
-      }
+    // Prefer sending signed-in users off the auth screens when the
+    // server session is visible. Client login also hard-navigates.
+    if (isAuthPage && userId) {
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
-    return null;
+    return NextResponse.next();
   }
-
-  const { userId, sessionClaims } = await auth();
 
   const isAuth = !!userId;
   let isAdmin = false;
@@ -151,6 +154,8 @@ const clerkAwareMiddleware = clerkMiddleware(async (auth, req: NextRequest) => {
       ),
     );
   }
+
+  return NextResponse.next();
 });
 
 export const middleware = hasValidClerkSecret()

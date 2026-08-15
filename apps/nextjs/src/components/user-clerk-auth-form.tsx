@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SignIn, useClerk, useUser } from "@clerk/nextjs";
 
 import { cn } from "@saasfly/ui";
@@ -24,16 +23,16 @@ function postLoginHref(lang: string) {
 }
 
 function ClerkSignIn({ lang }: { lang: string }) {
-  const router = useRouter();
   const { signOut } = useClerk();
   const { isLoaded, user } = useUser();
   const nextHref = postLoginHref(lang);
 
   React.useEffect(() => {
-    if (isLoaded && user) {
-      router.replace(nextHref);
-    }
-  }, [isLoaded, nextHref, router, user]);
+    if (!isLoaded || !user) return;
+    // Hard navigation avoids soft-nav loops when middleware/RSC still
+    // looks signed-out (Clerk Development "dev-browser-missing").
+    window.location.assign(nextHref);
+  }, [isLoaded, nextHref, user]);
 
   if (!isLoaded) {
     return (
@@ -48,9 +47,17 @@ function ClerkSignIn({ lang }: { lang: string }) {
       <div className="grid gap-3 text-center">
         <p className="text-sm text-foreground">Opening your workspace…</p>
         <p className="text-xs text-muted-foreground">
-          Taking you to the overview. You can switch accounts from the avatar
-          menu once you arrive.
+          Heading to the overview. If this pauses, tap continue below.
         </p>
+        <a
+          href={nextHref}
+          className={cn(
+            buttonVariants(),
+            "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
+          )}
+        >
+          Continue to workspace
+        </a>
         <button
           type="button"
           className={cn(
