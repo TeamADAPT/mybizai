@@ -13,6 +13,7 @@ import {
 } from "@saasfly/ui/dropdown-menu";
 
 import { UserAvatar } from "~/components/user-avatar";
+import { hasClerkConfigured } from "~/lib/clerk-config";
 
 interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   user: Pick<User, "name" | "image" | "email">;
@@ -22,13 +23,19 @@ interface UserAccountNavProps extends React.HTMLAttributes<HTMLDivElement> {
   dict: Record<string, string>;
 }
 
-export function UserAccountNav({
+function UserAccountMenu({
   user,
-  params: { lang },
+  lang,
   dict,
-}: UserAccountNavProps) {
-  const { signOut } = useClerk();
-
+  onSwitchAccount,
+  onSignOut,
+}: {
+  user: Pick<User, "name" | "image" | "email">;
+  lang: string;
+  dict: Record<string, string>;
+  onSwitchAccount?: () => void;
+  onSignOut?: () => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -64,20 +71,74 @@ export function UserAccountNav({
         <DropdownMenuItem asChild>
           <Link href={`/${lang}/dashboard/settings`}>{dict.settings}</Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="cursor-pointer"
-          onSelect={(event) => {
-            event.preventDefault();
-            signOut({ redirectUrl: `/${lang}/login-clerk` })
-              .catch((error) => {
-                console.error("Error during sign out:", error);
-              })
-          }}
-        >
-          {dict.sign_out}
-        </DropdownMenuItem>
+        {onSwitchAccount || onSignOut ? (
+          <>
+            <DropdownMenuSeparator />
+            {onSwitchAccount ? (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => {
+                  event.preventDefault();
+                  onSwitchAccount();
+                }}
+              >
+                Use a different account
+              </DropdownMenuItem>
+            ) : null}
+            {onSignOut ? (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onSelect={(event) => {
+                  event.preventDefault();
+                  onSignOut();
+                }}
+              >
+                {dict.sign_out}
+              </DropdownMenuItem>
+            ) : null}
+          </>
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenu>
   );
+}
+
+function UserAccountNavWithClerk({
+  user,
+  params: { lang },
+  dict,
+}: UserAccountNavProps) {
+  const { signOut } = useClerk();
+
+  return (
+    <UserAccountMenu
+      user={user}
+      lang={lang}
+      dict={dict}
+      onSwitchAccount={() => {
+        signOut({ redirectUrl: `/${lang}/login-clerk` }).catch((error) => {
+          console.error("Error during sign out:", error);
+        });
+      }}
+      onSignOut={() => {
+        signOut({ redirectUrl: `/${lang}` }).catch((error) => {
+          console.error("Error during sign out:", error);
+        });
+      }}
+    />
+  );
+}
+
+export function UserAccountNav(props: UserAccountNavProps) {
+  if (!hasClerkConfigured()) {
+    return (
+      <UserAccountMenu
+        user={props.user}
+        lang={props.params.lang}
+        dict={props.dict}
+      />
+    );
+  }
+
+  return <UserAccountNavWithClerk {...props} />;
 }

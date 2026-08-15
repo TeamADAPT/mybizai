@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SignIn, useUser } from "@clerk/nextjs";
 
 import { cn } from "@saasfly/ui";
 import { buttonVariants } from "@saasfly/ui/button";
 
+import { SignedInAuthPanel } from "~/components/clerk-auth-nav";
 import { hasClerkConfigured } from "~/lib/clerk-config";
 
 type Dictionary = Record<string, string>;
@@ -19,15 +19,8 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function ClerkSignIn({ lang }: { lang: string }) {
-  const router = useRouter();
   const { isLoaded, user } = useUser();
   const dashboardHref = `/${lang}/dashboard`;
-
-  React.useEffect(() => {
-    if (isLoaded && user) {
-      router.replace(dashboardHref);
-    }
-  }, [dashboardHref, isLoaded, router, user]);
 
   if (!isLoaded) {
     return (
@@ -38,11 +31,7 @@ function ClerkSignIn({ lang }: { lang: string }) {
   }
 
   if (user) {
-    return (
-      <p className="text-center text-sm text-muted-foreground">
-        Signed in — opening your dashboard…
-      </p>
-    );
+    return <SignedInAuthPanel lang={lang} />;
   }
 
   return (

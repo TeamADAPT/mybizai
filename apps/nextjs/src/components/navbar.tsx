@@ -6,13 +6,12 @@ import type { User } from "@saasfly/auth";
 import { useSelectedLayoutSegment } from "next/navigation";
 
 import { cn } from "@saasfly/ui";
-import { Button } from "@saasfly/ui/button";
 
 import { MainNav } from "./main-nav";
+import { ClerkAuthNav } from "~/components/clerk-auth-nav";
 import { LocaleChange } from "~/components/locale-change";
 import { ThemeSwitch } from "~/components/theme-switch";
 import { useSigninModal } from "~/hooks/use-signin-modal";
-import { UserAccountNav } from "./user-account-nav";
 
 import useScroll from "~/hooks/use-scroll";
 import type { MainNavItem } from "~/types";
@@ -82,38 +81,13 @@ export function NavBar({
 
           <ThemeSwitch />
           <LocaleChange url={"/"} />
-          {!user ? (
-            <Link href={`/${lang}/login-clerk`}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
-              >
-                {typeof marketing.login === "string"
-                  ? marketing.login
-                  : "Default Login Text"}
-              </Button>
-            </Link>
-          ) : null}
-
-          {user ? (
-            <UserAccountNav
-              user={user}
-              params={{ lang: `${lang}` }}
-              dict={dropdown}
-            />
-          ) : (
-            <Button
-              className="rounded-full bg-brand-orange px-4 text-brand-midnight hover:bg-brand-orange-soft"
-              variant="default"
-              size="sm"
-              onClick={signInModal.onOpen}
-            >
-              {typeof marketing.signup === "string"
-                ? marketing.signup
-                : "Default Signup Text"}
-            </Button>
-          )}
+          <ClerkAuthNav
+            lang={lang}
+            marketing={marketing}
+            dropdown={dropdown}
+            fallbackUser={user}
+            onOpenSignUp={signInModal.onOpen}
+          />
         </div>
       </div>
     </header>
