@@ -291,9 +291,9 @@ export function ProductShell({
               ))}
             </ul>
 
-            {status ? (
+            {status || (active === "businesses" && lastEvent) ? (
               <p className="rounded-full border border-brand-orange/40 bg-brand-orange/10 px-4 py-2 text-sm text-brand-orange">
-                {status}
+                {status ?? lastEvent}
               </p>
             ) : null}
 
@@ -301,9 +301,9 @@ export function ProductShell({
               <Button
                 className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft"
                 onClick={approvePlan}
-                disabled={pending}
+                disabled={pending || assistPending}
               >
-                Approve plan
+                {assistPending ? "Drafting…" : "Approve plan"}
               </Button>
               {studioRoutes[active] ? (
                 <Button
