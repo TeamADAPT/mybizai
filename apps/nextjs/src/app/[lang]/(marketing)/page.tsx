@@ -8,7 +8,6 @@ import * as Icons from "@saasfly/ui/icons";
 import { BrandCapabilities } from "~/components/brand-capabilities";
 import { BrandLogo } from "~/components/brand-logo";
 import { Comments } from "~/components/comments";
-import { FeaturesGrid } from "~/components/features-grid";
 import { RightsideMarketing } from "~/components/rightside-marketing";
 import type { Locale } from "~/config/i18n-config";
 import { brand } from "~/config/brand";
@@ -55,18 +54,18 @@ export default async function IndexPage({
             className="animate-fade-up mt-10 flex flex-col items-center gap-3 sm:flex-row"
             style={{ animationDelay: "230ms" }}
           >
-            <Link href={`/${lang}/login-clerk`}>
+            <Link href={`/${lang}/shell`}>
               <Button className="h-12 rounded-full bg-brand-orange px-8 text-base text-brand-midnight hover:bg-brand-orange-soft animate-cta-glow">
-                Request private access
+                Preview product shell
                 <Icons.ArrowRight className="h-5 w-5" />
               </Button>
             </Link>
-            <Link href={`/${lang}/shell`}>
+            <Link href={`/${lang}/onboarding`}>
               <Button
                 variant="outline"
                 className="h-12 rounded-full border-brand-gold/60 px-8 text-base text-brand-gold hover:bg-brand-gold/10"
               >
-                Preview product shell
+                First-run checklist
               </Button>
             </Link>
           </div>
@@ -137,10 +136,6 @@ export default async function IndexPage({
         </div>
       </section>
 
-      <section className="container py-16">
-        <FeaturesGrid dict={dict.marketing.features_grid} />
-      </section>
-
       <section className="container py-20">
         <div className="mx-auto max-w-2xl text-center">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-brand-gold">
@@ -166,17 +161,17 @@ export default async function IndexPage({
           Private access. Personal touch.
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href={`/${lang}/login-clerk`}>
+          <Link href={`/${lang}/shell`}>
             <Button className="rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft">
-              Request private access
+              Enter the shell
             </Button>
           </Link>
-          <Link href={`/${lang}/brand-kit`}>
+          <Link href={`/${lang}/login-clerk`}>
             <Button
               variant="outline"
               className="rounded-full border-brand-gold/60 text-brand-gold hover:bg-brand-gold/10"
             >
-              Build your brand kit
+              Request private access
             </Button>
           </Link>
         </div>

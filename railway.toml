@@ -1,0 +1,11 @@
+# Railway — MyBizAI web (monorepo root)
+# Service build/start can also be set in the Railway dashboard.
+
+[build]
+builder = "RAILPACK"
+buildCommand = "bun run --filter @saasfly/nextjs build:railway"
+
+[deploy]
+startCommand = "bun run --filter @saasfly/nextjs start:railway"
+healthcheckPath = "/en"
+restartPolicyType = "ON_FAILURE"

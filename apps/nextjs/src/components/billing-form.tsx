@@ -4,14 +4,6 @@ import * as React from "react";
 
 import { cn } from "@saasfly/ui";
 import { buttonVariants } from "@saasfly/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@saasfly/ui/card";
 import * as Icons from "@saasfly/ui/icons";
 import { toast } from "@saasfly/ui/use-toast";
 
@@ -53,25 +45,32 @@ export function BillingForm({
 
   return (
     <form className={cn(className)} onSubmit={onSubmit} {...props}>
-      <Card className="border-brand-gold/25 bg-brand-ink/40">
-        <CardHeader>
-          <CardTitle className="font-display text-2xl font-light tracking-tight">
-            Subscription
-          </CardTitle>
-          <CardDescription>
-            You are currently on the <strong>{subscriptionPlan?.title}</strong>{" "}
-            plan.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          {subscriptionPlan?.description}
-        </CardContent>
-        <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
+      <div className="rounded-2xl border border-brand-gold/25 bg-card/70 p-5 dark:bg-brand-ink/40 md:p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div className="min-w-0 space-y-1">
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-gold">
+              Subscription
+            </p>
+            <h3 className="font-display text-2xl font-light tracking-tight">
+              {subscriptionPlan?.title}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {subscriptionPlan?.description}
+            </p>
+            {subscriptionPlan?.isPaid ? (
+              <p className="pt-1 text-xs text-muted-foreground">
+                {subscriptionPlan?.isCanceled
+                  ? "Cancels on "
+                  : "Renews on "}
+                {formatDate(subscriptionPlan?.stripeCurrentPeriodEnd)}.
+              </p>
+            ) : null}
+          </div>
           <button
             type="submit"
             className={cn(
               buttonVariants(),
-              "rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
+              "shrink-0 rounded-full bg-brand-orange text-brand-midnight hover:bg-brand-orange-soft",
             )}
             disabled={isLoading}
           >
@@ -82,16 +81,8 @@ export function BillingForm({
               ? "Manage subscription"
               : "Upgrade plan"}
           </button>
-          {subscriptionPlan?.isPaid ? (
-            <p className="rounded-full text-xs font-medium text-muted-foreground">
-              {subscriptionPlan?.isCanceled
-                ? "Your plan will be canceled on "
-                : "Your plan renews on "}
-              {formatDate(subscriptionPlan?.stripeCurrentPeriodEnd)}.
-            </p>
-          ) : null}
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </form>
   );
 }

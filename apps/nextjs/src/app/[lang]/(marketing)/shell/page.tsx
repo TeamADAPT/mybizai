@@ -8,8 +8,10 @@ export const metadata = {
 
 export default function ProductShellPage({
   params: { lang },
+  searchParams,
 }: {
   params: { lang: Locale };
+  searchParams?: { module?: string };
 }) {
   return (
     <div className="relative min-h-[80vh] py-10">
@@ -27,7 +29,7 @@ export default function ProductShellPage({
             canvas, theme, and AI assist dock. Click modules to switch context.
           </p>
         </div>
-        <ProductShell lang={lang} />
+        <ProductShell lang={lang} initialModule={searchParams?.module} />
       </div>
     </div>
   );

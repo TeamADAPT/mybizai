@@ -72,3 +72,7 @@ Living notes for frontend design. Implementation: `/[lang]/design` and `apps/nex
 - Drop production 3D logo raster/WebP over SVG mark
 - Wire live ADAPT agent data into dashboard overview
 - Clerk production app name (replace “My Application”)
+
+## Product backlog
+
+See [`mybizai-product-backlog.md`](./mybizai-product-backlog.md) for the living post-foundation roadmap (studio builders, data, infra).

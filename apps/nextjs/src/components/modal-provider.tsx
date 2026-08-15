@@ -1,20 +1,15 @@
 "use client";
 
-import { SignInModal } from "~/components/sign-in-modal";
 import { SignInClerkModal } from "~/components/sign-in-modal-clerk";
 import { useMounted } from "~/hooks/use-mounted";
+import { hasClerkConfigured } from "~/lib/clerk-config";
 
 export const ModalProvider = ({ dict }: { dict: Record<string, string> }) => {
   const mounted = useMounted();
 
-  if (!mounted) {
+  if (!mounted || !hasClerkConfigured()) {
     return null;
   }
 
-  return (
-    <>
-      {/* <SignInModal dict={dict} /> */}
-      <SignInClerkModal dict={dict} />
-    </>
-  );
+  return <SignInClerkModal dict={dict} />;
 };

@@ -30,11 +30,27 @@ const steps = [
     cta: "Product shell",
   },
   {
+    title: "Read the studio surfaces",
+    body: "Research, plan, campaigns, and finance hold mock-backed narratives that deep-link into the shell.",
+    href: "research",
+    cta: "Market research",
+  },
+  {
     title: "Monitor the workspace",
     body: "Overview metrics, billing usage, and settings stay in dashboard chrome.",
     href: "dashboard",
     cta: "Workspace",
   },
+];
+
+const studios = [
+  { href: "research", label: "Research" },
+  { href: "plan", label: "Plan" },
+  { href: "campaigns", label: "Campaigns" },
+  { href: "finance", label: "Finance" },
+  { href: "marketplace", label: "Marketplace" },
+  { href: "academy", label: "Academy" },
+  { href: "onboarding", label: "Onboarding" },
 ];
 
 export default function PlaybookPage({
@@ -61,7 +77,7 @@ export default function PlaybookPage({
           {steps.map((step, index) => (
             <li
               key={step.title}
-              className="rounded-2xl border border-brand-gold/25 bg-brand-ink/40 p-6"
+              className="rounded-2xl border border-brand-gold/25 bg-card/70 p-6 dark:bg-brand-ink/40"
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-brand-orange">
                 Step {String(index + 1).padStart(2, "0")}
@@ -78,6 +94,24 @@ export default function PlaybookPage({
             </li>
           ))}
         </ol>
+
+        <div className="mt-12">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            Studio doors
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {studios.map((studio) => (
+              <Link key={studio.href} href={`/${lang}/${studio.href}`}>
+                <Button
+                  variant="outline"
+                  className="rounded-full border-brand-gold/50 text-brand-gold hover:bg-brand-gold/10"
+                >
+                  {studio.label}
+                </Button>
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div className="mt-12 flex flex-wrap gap-3">
           <Link href={`/${lang}/design`}>

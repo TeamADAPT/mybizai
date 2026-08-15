@@ -29,13 +29,18 @@ export const getDashboardConfig = async ({
     sidebarNav: [
       {
         id: "overview",
-        title: dict.common.dashboard.sidebar_nav_clusters,
+        title: dict.common.dashboard.sidebar_nav_modules,
         href: "/dashboard/",
       },
       {
         id: "brand",
         title: "Brand kit",
         href: "/brand-kit",
+      },
+      {
+        id: "research",
+        title: "Research",
+        href: "/research",
       },
       {
         id: "billing",

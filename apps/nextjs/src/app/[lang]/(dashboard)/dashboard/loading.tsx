@@ -1,19 +1,12 @@
-import { BasicItemSkeleton } from "~/components/base-item";
-import { DashboardHeader } from "~/components/header";
-import { DashboardShell } from "~/components/shell";
+import { BrandProcessScreen } from "~/components/brand-process-screen";
 
 export default function DashboardLoading() {
   return (
-    <DashboardShell>
-      <DashboardHeader
-        heading="Overview"
-        text="Loading workspace signals…"
-      />
-      <div className="mt-6 divide-y divide-border overflow-hidden rounded-2xl border border-brand-gold/20">
-        <BasicItemSkeleton />
-        <BasicItemSkeleton />
-        <BasicItemSkeleton />
-      </div>
-    </DashboardShell>
+    <BrandProcessScreen
+      title="Loading workspace"
+      detail="Gathering agents, approvals, and growth signals."
+      tip="Overview metrics refresh when ADAPT is connected."
+      progress={55}
+    />
   );
 }
