@@ -32,17 +32,18 @@ Living roadmap after the design-foundation PRs (#1–#5). Prefer large multi-sur
 
 ## Voice presence (founder surface) — next polish
 
-Default tonight: **studio stays main** at `/[lang]/voice`. Presence is opt-in at `/[lang]/voice/presence`.
+Studio stays main at `/[lang]/voice`. Presence lives at `/[lang]/voice/presence`.
 
-Capture these without expanding scope tonight:
-
-1. **Left rail menu on presence** — start in presence if we want the demo entrance, but keep a slim left menu so founders can jump without losing the orb.
-2. **Orb reacts to voice** — pulsate with speaking inflections (talking only first; listening optional later). Not a static pulse.
-3. **Hide typed transcript** on presence — orb + voice only in the center. No scrolling chat text in the main field.
-4. **Side “written chat” button** — opens text chat when someone wants to type instead of talk; otherwise stay orb-only.
-5. **Left journey buttons** — Idea / Research / Plan / Brand / Venture as compact done-state buttons (not a bottom strip). Tap jumps into that studio/part.
-6. **“Back to studio / workspace” control** — clear return from presence into the full operator surface (name TBD: Studio, Workspace, or Desk).
-7. **Simplify presence page** — remove leftover labels/noise so it really is “just them and the orb” unless they open a side control.
+| Item | Status |
+| --- | --- |
+| Left rail on presence (journey + controls) | Done |
+| Orb pulsates with **talking** audio level only | Done |
+| Hide center transcript — orb-only | Done |
+| Side **Written chat** panel | Done |
+| Journey buttons jump to studio parts | Done |
+| Back to studio / Workspace | Done |
+| Further simplify / start-in-presence toggle | Next |
+| Listening-mode mic level pulse (optional) | Later |
 
 ## Product builders (mock → live)
 
