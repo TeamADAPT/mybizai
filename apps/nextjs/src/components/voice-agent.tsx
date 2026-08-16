@@ -188,6 +188,7 @@ export function VoiceAgent({
   const transcriptionDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
+  const listeningReturnRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const nameIntroSentRef = useRef(false);
   const ignoreUserUntilRef = useRef(0);
   const activeSourcesRef = useRef<AudioBufferSourceNode[]>([]);
@@ -503,8 +504,6 @@ export function VoiceAgent({
 
   // Tear down only on true unmount — never when callbacks/presentation change.
   useEffect(() => () => stopRef.current(), []);
-
-  const listeningReturnRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const scheduleListening = useCallback(() => {
     if (listeningReturnRef.current) {
