@@ -54,6 +54,30 @@ type ProviderSnapshot = {
   };
 };
 
+/** Linear resample between audio clock rates (mic/playback vs xAI 24kHz). */
+function resampleFloat32(
+  input: Float32Array,
+  fromRate: number,
+  toRate: number,
+): Float32Array {
+  if (fromRate === toRate || input.length === 0) {
+    return input;
+  }
+  const ratio = fromRate / toRate;
+  const outLength = Math.max(1, Math.round(input.length / ratio));
+  const output = new Float32Array(outLength);
+  for (let i = 0; i < outLength; i++) {
+    const src = i * ratio;
+    const i0 = Math.floor(src);
+    const i1 = Math.min(i0 + 1, input.length - 1);
+    const frac = src - i0;
+    const s0 = input[i0] ?? 0;
+    const s1 = input[i1] ?? s0;
+    output[i] = s0 + (s1 - s0) * frac;
+  }
+  return output;
+}
+
 function float32ToBase64PCM16(float32Array: Float32Array): string {
   const pcm16 = new Int16Array(float32Array.length);
   for (let i = 0; i < float32Array.length; i++) {
@@ -72,11 +96,14 @@ function float32ToBase64PCM16(float32Array: Float32Array): string {
 
 function base64PCM16ToFloat32(base64String: string): Float32Array {
   const binaryString = atob(base64String);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
+  const byteLength = binaryString.length - (binaryString.length % 2);
+  // Copy into an aligned buffer so Int16Array is never misaligned.
+  const aligned = new ArrayBuffer(byteLength);
+  const bytes = new Uint8Array(aligned);
+  for (let i = 0; i < byteLength; i++) {
     bytes[i] = binaryString.charCodeAt(i);
   }
-  const pcm16 = new Int16Array(bytes.buffer);
+  const pcm16 = new Int16Array(aligned);
   const float32 = new Float32Array(pcm16.length);
   for (let i = 0; i < pcm16.length; i++) {
     float32[i] = (pcm16[i] ?? 0) / 32768;
@@ -193,6 +220,8 @@ export function VoiceAgent({
   const ignoreUserUntilRef = useRef(0);
   const activeSourcesRef = useRef<AudioBufferSourceNode[]>([]);
   const statusRef = useRef(status);
+  const speakLevelRef = useRef(0);
+  const dropRemoteAudioRef = useRef(false);
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -521,10 +550,17 @@ export function VoiceAgent({
   }, []);
 
   const playPcmChunk = useCallback((base64: string) => {
+    if (dropRemoteAudioRef.current) return;
     const ctx = audioContextRef.current;
     if (!ctx) return;
-    const float32 = base64PCM16ToFloat32(base64);
-    if (!float32.length) return;
+    if (ctx.state === "suspended") {
+      void ctx.resume();
+    }
+    const raw = base64PCM16ToFloat32(base64);
+    if (!raw.length) return;
+
+    // xAI streams 24kHz; browser context is often 48kHz — resample or pitch breaks.
+    const float32 = resampleFloat32(raw, SAMPLE_RATE, ctx.sampleRate);
 
     let sum = 0;
     for (let i = 0; i < float32.length; i++) {
@@ -532,16 +568,24 @@ export function VoiceAgent({
       sum += sample * sample;
     }
     const rms = Math.sqrt(sum / float32.length);
-    setSpeakLevel(Math.min(1, rms * 3.2));
+    const level = Math.min(1, rms * 3.2);
+    const prev = speakLevelRef.current;
+    if (Math.abs(level - prev) > 0.05 || level > 0.85 || level < 0.02) {
+      speakLevelRef.current = level;
+      setSpeakLevel(level);
+    }
 
-    const buffer = ctx.createBuffer(1, float32.length, SAMPLE_RATE);
+    const buffer = ctx.createBuffer(1, float32.length, ctx.sampleRate);
     buffer.copyToChannel(float32, 0);
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(ctx.destination);
-    // Avoid underrun gaps (sounds like fading in/out) by reseating the cursor.
-    if (playTimeRef.current < ctx.currentTime + 0.02) {
-      playTimeRef.current = ctx.currentTime + 0.04;
+    // Keep a small lead so chunks stitch; never jump far ahead (distortion/lag).
+    const now = ctx.currentTime;
+    if (playTimeRef.current < now + 0.02) {
+      playTimeRef.current = now + 0.05;
+    } else if (playTimeRef.current > now + 0.75) {
+      playTimeRef.current = now + 0.05;
     }
     const startAt = playTimeRef.current;
     source.onended = () => {
@@ -550,8 +594,12 @@ export function VoiceAgent({
       );
     };
     activeSourcesRef.current.push(source);
-    source.start(startAt);
-    playTimeRef.current = startAt + buffer.duration;
+    try {
+      source.start(startAt);
+      playTimeRef.current = startAt + buffer.duration;
+    } catch {
+      /* start failed — drop chunk */
+    }
   }, []);
 
   const speakBrowser = useCallback((text: string) => {
@@ -578,13 +626,15 @@ export function VoiceAgent({
       if (ws && ws.readyState === WebSocket.OPEN) {
         setStatus("speaking");
         ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
+        // Drop late PCM from the prior turn until the new response starts.
+        dropRemoteAudioRef.current = true;
         ws.send(
           JSON.stringify({
             type: "conversation.item.create",
             item: {
               type: "force_message",
               role: "assistant",
-              interruptible: true,
+              interruptible: false,
               content: [{ type: "output_text", text: line }],
             },
           }),
@@ -733,15 +783,21 @@ export function VoiceAgent({
         return;
       }
 
-      const audioContext = new AudioContext({ sampleRate: SAMPLE_RATE });
+      // Use the browser's native rate — forcing 24000 is often ignored and
+      // then 24k PCM played as 48k sounds chipmunked / cut in half.
+      const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
       playTimeRef.current = audioContext.currentTime;
+      if (audioContext.state === "suspended") {
+        void audioContext.resume();
+      }
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
           echoCancellation: true,
           noiseSuppression: true,
+          autoGainControl: true,
         },
       });
       mediaStreamRef.current = stream;
@@ -792,7 +848,8 @@ export function VoiceAgent({
             item: {
               type: "force_message",
               role: "assistant",
-              interruptible: true,
+              // Don't let echo interrupt the greeting mid-word.
+              interruptible: false,
               content: [
                 {
                   type: "output_text",
@@ -810,11 +867,24 @@ export function VoiceAgent({
         processorRef.current = processor;
         processor.onaudioprocess = (event) => {
           if (ws.readyState !== WebSocket.OPEN) return;
+          // Mute uplink while Nova talks — speaker echo cancels her mid-word.
+          if (
+            statusRef.current === "speaking" ||
+            statusRef.current === "connecting"
+          ) {
+            return;
+          }
           const input = event.inputBuffer.getChannelData(0);
+          const down = resampleFloat32(
+            input,
+            audioContext.sampleRate,
+            SAMPLE_RATE,
+          );
+          if (!down.length) return;
           ws.send(
             JSON.stringify({
               type: "input_audio_buffer.append",
-              audio: float32ToBase64PCM16(input),
+              audio: float32ToBase64PCM16(down),
             }),
           );
         };
@@ -848,9 +918,13 @@ export function VoiceAgent({
         }
 
         switch (event.type) {
+          case "response.created":
+            dropRemoteAudioRef.current = false;
+            break;
           case "response.output_audio.delta":
           case "response.audio.delta":
             if (event.delta) {
+              dropRemoteAudioRef.current = false;
               if (listeningReturnRef.current) {
                 clearTimeout(listeningReturnRef.current);
                 listeningReturnRef.current = null;
@@ -920,7 +994,8 @@ export function VoiceAgent({
             break;
           case "response.cancelled":
           case "response.canceled":
-            flushPlayback();
+            // Don't hard-stop already-queued PCM — that chops her mid-word
+            // when echo falsely interrupts. Just clear the transcript buffer.
             assistantBufferRef.current = "";
             scheduleListening();
             break;
