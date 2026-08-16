@@ -750,11 +750,27 @@ export function VoiceAgent({
             setStatus("listening");
             break;
           case "conversation.item.input_audio_transcription.completed":
-          case "conversation.item.input_audio_transcription.updated":
+            if (transcriptionDebounceRef.current) {
+              clearTimeout(transcriptionDebounceRef.current);
+              transcriptionDebounceRef.current = null;
+            }
             if (event.transcript) {
               appendLine("user", event.transcript);
               maybeHandoff(event.transcript);
             }
+            break;
+          case "conversation.item.input_audio_transcription.updated":
+            if (!event.transcript) break;
+            if (transcriptionDebounceRef.current) {
+              clearTimeout(transcriptionDebounceRef.current);
+            }
+            transcriptionDebounceRef.current = setTimeout(() => {
+              transcriptionDebounceRef.current = null;
+              const text = event.transcript?.trim();
+              if (!text) return;
+              appendLine("user", text);
+              maybeHandoff(text);
+            }, 750);
             break;
           case "conversation.item.created":
             if (event.item?.role === "user") {
