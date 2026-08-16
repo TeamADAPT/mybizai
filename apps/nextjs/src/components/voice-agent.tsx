@@ -7,8 +7,10 @@ import { Button } from "@saasfly/ui/button";
 import { looksLikeCodingRequest } from "~/lib/build-handoff";
 import {
   IMMERSIVE_INSTRUCTIONS,
+  OPEN_STUDIO_TOOL,
   STUDIO_INSTRUCTIONS,
   extractJourneyHint,
+  isStudioId,
   type PresencePhase,
   type StudioId,
 } from "~/lib/voice-guide";
@@ -178,10 +180,14 @@ export function VoiceAgent({
   const browserBusyRef = useRef(false);
   const presencePhaseRef = useRef(presencePhase);
   const guestNameRef = useRef(guestName);
+  const onJourneyRef = useRef(onJourney);
   const lastUserUtteranceRef = useRef<{ text: string; at: number }>({
     text: "",
     at: 0,
   });
+  const transcriptionDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -191,6 +197,10 @@ export function VoiceAgent({
   useEffect(() => {
     guestNameRef.current = guestName;
   }, [guestName]);
+
+  useEffect(() => {
+    onJourneyRef.current = onJourney;
+  }, [onJourney]);
 
   useEffect(() => {
     void fetch("/api/providers")
@@ -449,7 +459,11 @@ export function VoiceAgent({
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(ctx.destination);
-    const startAt = Math.max(ctx.currentTime, playTimeRef.current);
+    // Avoid underrun gaps (sounds like fading in/out) by reseating the cursor.
+    if (playTimeRef.current < ctx.currentTime + 0.02) {
+      playTimeRef.current = ctx.currentTime + 0.04;
+    }
+    const startAt = playTimeRef.current;
     source.start(startAt);
     playTimeRef.current = startAt + buffer.duration;
   }, []);
@@ -621,11 +635,25 @@ export function VoiceAgent({
           JSON.stringify({
             type: "session.update",
             session: {
-              voice: session.voice || "eve",
+              voice: session.voice || "ara",
               instructions,
               turn_detection: { type: "server_vad" },
+              tools: guideMode ? [OPEN_STUDIO_TOOL] : [],
               audio: {
-                input: { format: { type: "audio/pcm", rate: SAMPLE_RATE } },
+                input: {
+                  format: { type: "audio/pcm", rate: SAMPLE_RATE },
+                  transcription: {
+                    model: "grok-transcribe",
+                    language_hint: "en",
+                    keyterms: [
+                      "MyBizAI",
+                      "Nova",
+                      "Ideas",
+                      "explore",
+                      "idea",
+                    ],
+                  },
+                },
                 output: { format: { type: "audio/pcm", rate: SAMPLE_RATE } },
               },
               replace: {
@@ -683,6 +711,9 @@ export function VoiceAgent({
           type?: string;
           delta?: string;
           transcript?: string;
+          name?: string;
+          call_id?: string;
+          arguments?: string;
           error?: { message?: string };
           item?: {
             role?: string;
@@ -719,6 +750,7 @@ export function VoiceAgent({
             setStatus("listening");
             break;
           case "conversation.item.input_audio_transcription.completed":
+          case "conversation.item.input_audio_transcription.updated":
             if (event.transcript) {
               appendLine("user", event.transcript);
               maybeHandoff(event.transcript);
@@ -735,6 +767,50 @@ export function VoiceAgent({
               }
             }
             break;
+          case "response.function_call_arguments.done": {
+            if (event.name !== "open_studio" || !event.call_id) break;
+            let args: { studio?: string; note?: string } = {};
+            try {
+              args = JSON.parse(event.arguments || "{}") as typeof args;
+            } catch {
+              args = {};
+            }
+            const studio = args.studio ?? "idea";
+            const note =
+              args.note?.trim() ||
+              (studio === "idea"
+                ? "Exploring ideas together"
+                : `Opening ${studio}`);
+            if (isStudioId(studio)) {
+              if (studio === "idea") {
+                addIdea({
+                  title: note,
+                  industry: "General",
+                  angle: note,
+                  kept: true,
+                });
+              }
+              onPresencePhase?.("building");
+              presencePhaseRef.current = "building";
+              onJourneyRef.current?.(studio, note);
+            }
+            ws.send(
+              JSON.stringify({
+                type: "conversation.item.create",
+                item: {
+                  type: "function_call_output",
+                  call_id: event.call_id,
+                  output: JSON.stringify({
+                    ok: true,
+                    opened: studio,
+                    message: "Studio is opening now. Keep guiding the guest.",
+                  }),
+                },
+              }),
+            );
+            ws.send(JSON.stringify({ type: "response.create" }));
+            break;
+          }
           case "error":
             setError(event.error?.message ?? "Voice session error");
             setStatus("error");
@@ -761,10 +837,12 @@ export function VoiceAgent({
       stop();
     }
   }, [
+    addIdea,
     appendLine,
     guideMode,
     instructions,
     maybeHandoff,
+    onPresencePhase,
     onSessionLive,
     openingLine,
     playPcmChunk,
@@ -852,7 +930,7 @@ export function VoiceAgent({
     ? status === "speaking"
       ? "Nova"
       : "·"
-    : "Speak";
+    : null;
 
   const renderOrb = (size: "lg" | "sm") => {
     const box =
@@ -861,6 +939,23 @@ export function VoiceAgent({
         : "h-14 w-14";
     const type =
       size === "lg" ? "text-2xl" : "text-xs";
+
+    if (size === "lg" && !live) {
+      return (
+        <button
+          type="button"
+          onClick={() => void start()}
+          disabled={backend === "xai" && !xaiReady}
+          className="voice-orb relative flex min-h-[3.5rem] items-center justify-center rounded-full border border-[#ff8c00]/55 bg-[#ff8c00] px-8 py-4 shadow-lg shadow-[#ff8c00]/25 transition hover:border-[#ffb347] hover:bg-[#ff9a26] sm:min-h-[4rem] sm:px-10 sm:py-5"
+          aria-label="Begin with Nova"
+        >
+          <span className="relative z-10 font-display text-xl tracking-tight text-[#070828] sm:text-2xl">
+            Begin with Nova
+          </span>
+        </button>
+      );
+    }
+
     return (
       <button
         type="button"
@@ -869,7 +964,7 @@ export function VoiceAgent({
           else void start();
         }}
         disabled={backend === "xai" && !xaiReady && !live}
-        aria-label={live ? "End conversation" : "Start conversation"}
+        aria-label={live ? "End conversation" : "Begin with Nova"}
         style={{ transform: `scale(${orbScale})` }}
         className={
           status === "speaking"

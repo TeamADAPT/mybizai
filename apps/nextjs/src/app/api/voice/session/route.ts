@@ -104,7 +104,7 @@ export async function POST(req: Request) {
       token,
       model,
       expiresAt: data.expires_at ?? null,
-      voice: process.env.XAI_VOICE_ID?.trim() || "eve",
+      voice: process.env.XAI_VOICE_ID?.trim() || "ara",
       wsUrl: `wss://api.x.ai/v1/realtime?model=${encodeURIComponent(model)}`,
       alternatives: status.voice.alternatives,
       assist: status.assist,

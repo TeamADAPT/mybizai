@@ -5,15 +5,17 @@
 export const IMMERSIVE_INSTRUCTIONS = [
   "You are Nova, the calm voice of MyBizAI.",
   "The person talking is not technical. Speak simply, warmly, and briefly — one question at a time.",
+  "Tone: clear, warm, professional, and confident. Full speaking voice — never whisper, flirt, sultry, breathy, or intimate.",
+  "Do not use whisper tags or stage directions. Sound like a trusted business guide, not a character.",
   "Opening script (follow this order):",
   "1) Ask: Who am I speaking with?",
   "2) After they give a name, greet them by name, then ask: Do you have an idea, or shall we explore?",
   "3) Stay on this screen until they clearly choose — explore OR an idea they already have. Do not move on after the name alone.",
-  "4) If they want to explore, say you’ll open Ideas and help them discover options.",
-  "5) If they have an idea, repeat it once, confirm, then say you’re opening Ideas to capture it.",
+  "4) If they want to explore, briefly say you’re opening Ideas, then call open_studio with studio=idea and note that you’re exploring together.",
+  "5) If they have an idea, repeat it once, say you’re opening Ideas to capture it, then call open_studio with studio=idea and their idea in note.",
+  "Only call open_studio after step 4 or 5 — never right after hearing their name.",
   "Journey order after that: Idea → Research → Plan → Brand → Venture.",
   "Never dump a form or dashboard. Never say you are ADAPT — you are Nova.",
-  "When a step is ready, say you’re taking them there.",
   "Never read code, diffs, or engineering steps aloud.",
   "If they ask to build software features, say you’ll handle that in the background and stay on the business conversation.",
 ].join(" ");
@@ -27,6 +29,30 @@ export const STUDIO_INSTRUCTIONS = [
   "If the operator asks to code, implement, fix, refactor, or ship engineering work, acknowledge in one sentence that it will be queued for Grok Build (their coding subscription) and stop.",
   "Keep voice cheap — conversation and routing only; coding is a handoff.",
 ].join(" ");
+
+/** Client tool Nova calls when it is time to leave presence for a studio. */
+export const OPEN_STUDIO_TOOL = {
+  type: "function" as const,
+  name: "open_studio",
+  description:
+    "Open a MyBizAI studio screen for the guest. Call only after they choose explore or share an idea — never right after their name.",
+  parameters: {
+    type: "object",
+    properties: {
+      studio: {
+        type: "string",
+        enum: ["idea", "research", "plan", "brand", "venture"],
+        description: "Which studio to open. Use idea after explore or an idea.",
+      },
+      note: {
+        type: "string",
+        description:
+          "Short note: exploring together, or the guest’s idea in their words.",
+      },
+    },
+    required: ["studio"],
+  },
+};
 
 export const JOURNEY_STEPS = [
   { id: "idea", label: "Idea" },
@@ -64,10 +90,19 @@ export function studioHref(lang: string, studio: StudioId): string {
   return `/${lang}/${JOURNEY_ROUTES[studio]}?voice=1`;
 }
 
+export function isStudioId(value: string): value is StudioId {
+  return (
+    value === "idea" ||
+    value === "research" ||
+    value === "plan" ||
+    value === "brand" ||
+    value === "venture"
+  );
+}
+
 /**
  * Lightweight capture from spoken language — fills the loop without forms.
- * Intent phase never navigates on a bare name / short phrase — only explore
- * or an explicit “I have an idea…” signal.
+ * Intent phase never navigates on a bare name — only explore or an idea signal.
  */
 export function extractJourneyHint(
   text: string,
@@ -99,13 +134,12 @@ export function extractJourneyHint(
     if (guest && trimmed.toLowerCase() === guest) {
       return { step: null, value: "" };
     }
-    // Still answering the name question — ignore bare first-name replies.
     if (/^([A-Za-z][\w']{1,24})$/.test(trimmed)) {
       return { step: null, value: "" };
     }
 
     if (
-      /(?:explore|not sure|no idea|help me (?:explore|figure)|discover|brainstorm|let'?s explore|shall we explore|nope|don'?t have)/i.test(
+      /(?:explore|not sure|no idea|help me|discover|brainstorm|don'?t have|nope|neither|you (?:choose|pick)|surprise me)/i.test(
         trimmed,
       )
     ) {
@@ -118,14 +152,14 @@ export function extractJourneyHint(
     }
 
     if (
-      /(?:i (?:have|got) (?:an )?idea|my idea|i want to|let'?s build|i'?m thinking|i already (?:have|got)|yes[, ]+(?:i have|an idea))/i.test(
+      /(?:i (?:have|got) (?:an )?idea|my idea|i want to|let'?s build|i'?m thinking|i already (?:have|got)|yes.*idea|idea first|i do|i have one)/i.test(
         trimmed,
       )
     ) {
       const idea =
         trimmed
           .replace(
-            /^(?:yes[, ]+)?(?:i (?:have|got) (?:an )?idea[:\s]*|my idea is\s*|i want to (?:build|start|create)\s*|let'?s build\s*|i'?m thinking (?:about|of)\s*|i already (?:have|got)\s*)/i,
+            /^(?:yes[, ]+)?(?:i (?:have|got) (?:an )?idea[:\s]*|my idea is\s*|i want to (?:build|start|create)\s*|let'?s build\s*|i'?m thinking (?:about|of)\s*|i already (?:have|got)\s*|i have one[:\s]*|i do[:\s]*)/i,
             "",
           )
           .replace(/[.?!]+$/, "")
@@ -139,7 +173,6 @@ export function extractJourneyHint(
       };
     }
 
-    // Stay on presence until explore vs existing idea is clear.
     return { step: null, value: "" };
   }
 

@@ -32,6 +32,8 @@ export function VoiceImmersive({ lang }: { lang: string }) {
   const [filled, setFilled] = useState<JourneySnapshot>(emptyJourney);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const speaking = runtime?.voiceStatus === "speaking";
+
   useEffect(() => {
     setFilled({ ...emptyJourney, ...loadVoiceJourney() });
   }, []);
@@ -51,6 +53,15 @@ export function VoiceImmersive({ lang }: { lang: string }) {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0658]/50 via-[#120a8f]/30 to-[#070828]/95" />
         <div className="voice-immersive__grain absolute inset-0 opacity-[0.3]" />
       </div>
+
+      <div
+        className={
+          speaking
+            ? "voice-mode-smoke voice-mode-smoke--speak pointer-events-none absolute inset-0 z-[15]"
+            : "pointer-events-none absolute inset-0 z-[15] opacity-0"
+        }
+        aria-hidden
+      />
 
       <div className="absolute left-4 top-4 z-30 sm:left-6 sm:top-5">
         <button
