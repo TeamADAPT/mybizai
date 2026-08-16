@@ -1006,7 +1006,7 @@ export function VoiceAgent({
     status === "speaking" ||
     status === "connecting";
   const orbScale =
-    status === "speaking" ? 1 + speakLevel * 0.28 : live ? 1.02 : 1;
+    status === "speaking" ? 1 + speakLevel * 0.22 : live ? 1.02 : 1;
 
   const orbLabel = live
     ? status === "speaking"
@@ -1047,26 +1047,42 @@ export function VoiceAgent({
         }}
         disabled={backend === "xai" && !xaiReady && !live}
         aria-label={live ? "End conversation" : "Begin with Nova"}
-        style={{ transform: `scale(${orbScale})` }}
+        style={
+          {
+            transform: `scale(${orbScale})`,
+            ["--speak-level" as string]: String(speakLevel),
+          } as CSSProperties
+        }
         className={
           status === "speaking"
-            ? `voice-orb voice-orb--speak relative flex ${box} items-center justify-center rounded-full border border-[#e8c547]/50 bg-white/10 backdrop-blur-md transition-transform duration-75`
+            ? `voice-orb voice-orb--speak relative flex ${box} items-center justify-center rounded-full border border-[#ff8c00]/60 bg-white/10 backdrop-blur-md`
             : live
               ? `voice-orb relative flex ${box} items-center justify-center rounded-full border border-white/25 bg-white/10 backdrop-blur-md transition-transform duration-300`
               : `voice-orb relative flex ${box} items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md transition hover:border-[#ff8c00]/55 hover:bg-white/15`
         }
       >
+        {status === "speaking" ? (
+          <span
+            className="voice-orb__ring voice-orb__ring--outer voice-orb__ring--speak-outer"
+            style={{
+              transform: `scale(${1 + speakLevel * 0.4})`,
+              opacity: 0.35 + speakLevel * 0.55,
+            }}
+          />
+        ) : null}
         <span
           className={
             status === "speaking"
               ? "voice-orb__ring voice-orb__ring--speak"
-              : "voice-orb__ring"
+              : live
+                ? "voice-orb__ring voice-orb__ring--listen"
+                : "voice-orb__ring"
           }
           style={
             status === "speaking"
               ? {
-                  transform: `scale(${1 + speakLevel * 0.35})`,
-                  opacity: 0.45 + speakLevel * 0.55,
+                  transform: `scale(${1 + speakLevel * 0.45})`,
+                  opacity: 0.5 + speakLevel * 0.5,
                 }
               : undefined
           }

@@ -284,16 +284,35 @@
       opacity 400ms ease;
   }
 
+  .voice-orb__ring--outer {
+    inset: -28%;
+    border-color: rgba(18, 10, 143, 0.35);
+  }
+
   .voice-orb__ring--listen {
     animation: voice-orb-pulse 2.2s ease-in-out infinite;
     border-color: rgba(255, 140, 0, 0.55);
   }
 
   .voice-orb__ring--speak {
-    border-color: rgba(232, 197, 71, 0.65);
-    transition:
-      transform 80ms linear,
-      opacity 80ms linear;
+    border-color: rgba(255, 140, 0, 0.7);
+    box-shadow:
+      0 0 18px 2px rgba(255, 140, 0, 0.35),
+      0 0 36px 6px rgba(18, 10, 143, 0.25);
+    animation: voice-orb-speak-glow 0.95s ease-in-out infinite;
+  }
+
+  .voice-orb__ring--speak-outer {
+    border-color: rgba(18, 10, 143, 0.55);
+    box-shadow: 0 0 28px 4px rgba(18, 10, 143, 0.3);
+    animation: voice-orb-speak-glow-outer 1.15s ease-in-out infinite;
+  }
+
+  .voice-orb--speak {
+    box-shadow:
+      0 0 24px 4px rgba(255, 140, 0, 0.4),
+      0 0 52px 12px rgba(18, 10, 143, 0.32);
+    animation: voice-orb-speak-glow 0.95s ease-in-out infinite;
   }
 }
 
@@ -336,8 +355,30 @@
     opacity: 0.45;
   }
   50% {
-    transform: scale(1.12);
+    transform: scale(1.14);
     opacity: 1;
+  }
+}
+
+@keyframes voice-orb-speak-outer {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.85;
+  }
+}
+
+@keyframes voice-orb-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
   }
 }
 
@@ -350,55 +391,120 @@
 }
 
 .voice-speak-frame {
-  box-shadow: inset 0 0 0 2px rgba(255, 140, 0, 0.14);
-  opacity: 0.25;
-  transition:
-    opacity 200ms ease,
-    box-shadow 200ms ease;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  background: transparent;
 }
 
 .voice-speak-frame--on {
   opacity: 1;
-  animation: voice-speak-frame-pulse 0.85s ease-in-out infinite;
+  animation: voice-speak-smoke-alt 2.8s ease-in-out infinite;
+  /* Soft four-edge smoke — not a hard line */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255, 140, 0, 0.42) 0%,
+      rgba(255, 140, 0, 0.12) 10%,
+      transparent 28%
+    ),
+    linear-gradient(
+      to top,
+      rgba(18, 10, 143, 0.48) 0%,
+      rgba(18, 10, 143, 0.14) 10%,
+      transparent 28%
+    ),
+    linear-gradient(
+      to right,
+      rgba(18, 10, 143, 0.36) 0%,
+      rgba(18, 10, 143, 0.1) 8%,
+      transparent 22%
+    ),
+    linear-gradient(
+      to left,
+      rgba(255, 140, 0, 0.36) 0%,
+      rgba(255, 140, 0, 0.1) 8%,
+      transparent 22%
+    );
 }
 
-@keyframes voice-speak-frame-pulse {
+@keyframes voice-speak-smoke-alt {
   0%,
   100% {
-    box-shadow:
-      inset 0 0 0 5px rgba(255, 140, 0, 0.55),
-      inset 0 0 42px 10px rgba(255, 140, 0, 0.14);
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255, 140, 0, 0.48) 0%,
+        rgba(255, 140, 0, 0.14) 12%,
+        transparent 32%
+      ),
+      linear-gradient(
+        to top,
+        rgba(18, 10, 143, 0.5) 0%,
+        rgba(18, 10, 143, 0.16) 12%,
+        transparent 32%
+      ),
+      linear-gradient(
+        to right,
+        rgba(18, 10, 143, 0.4) 0%,
+        rgba(18, 10, 143, 0.12) 10%,
+        transparent 26%
+      ),
+      linear-gradient(
+        to left,
+        rgba(255, 140, 0, 0.4) 0%,
+        rgba(255, 140, 0, 0.12) 10%,
+        transparent 26%
+      );
+    filter: saturate(1.05);
   }
   50% {
-    box-shadow:
-      inset 0 0 0 10px rgba(255, 179, 71, 0.9),
-      inset 0 0 72px 18px rgba(255, 140, 0, 0.28);
+    /* Swap orange ↔ cobalt so all four edges breathe color */
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(18, 10, 143, 0.5) 0%,
+        rgba(18, 10, 143, 0.16) 12%,
+        transparent 32%
+      ),
+      linear-gradient(
+        to top,
+        rgba(255, 140, 0, 0.48) 0%,
+        rgba(255, 140, 0, 0.14) 12%,
+        transparent 32%
+      ),
+      linear-gradient(
+        to right,
+        rgba(255, 140, 0, 0.4) 0%,
+        rgba(255, 140, 0, 0.12) 10%,
+        transparent 26%
+      ),
+      linear-gradient(
+        to left,
+        rgba(18, 10, 143, 0.4) 0%,
+        rgba(18, 10, 143, 0.12) 10%,
+        transparent 26%
+      );
+    filter: saturate(1.2);
   }
 }
 
 .voice-mode-smoke {
-  box-shadow: inset 0 0 0 3px rgba(255, 140, 0, 0.22);
   background:
-    radial-gradient(
-      120% 80% at 100% 0%,
-      rgba(255, 140, 0, 0.12),
-      transparent 55%
+    linear-gradient(
+      to bottom,
+      rgba(255, 140, 0, 0.16) 0%,
+      transparent 18%
     ),
-    radial-gradient(
-      90% 70% at 0% 100%,
-      rgba(18, 10, 143, 0.2),
-      transparent 50%
-    );
-  opacity: 0.85;
+    linear-gradient(to top, rgba(18, 10, 143, 0.2) 0%, transparent 18%),
+    linear-gradient(to right, rgba(18, 10, 143, 0.14) 0%, transparent 14%),
+    linear-gradient(to left, rgba(255, 140, 0, 0.14) 0%, transparent 14%);
+  opacity: 0.7;
   animation: voice-smoke-drift 6s ease-in-out infinite alternate;
 }
 
 .voice-mode-smoke--speak {
-  box-shadow:
-    inset 0 0 0 5px rgba(255, 140, 0, 0.55),
-    inset 0 0 48px 8px rgba(255, 140, 0, 0.12);
   opacity: 1;
-  animation: voice-smoke-pulse 1.05s ease-in-out infinite;
+  animation: voice-speak-smoke-alt 2.8s ease-in-out infinite;
 }
 
 .voice-mode-studio {
