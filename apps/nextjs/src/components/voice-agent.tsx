@@ -619,15 +619,10 @@ export function VoiceAgent({
       nameIntroSentRef.current = true;
       const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
       appendLine("assistant", line);
-      // Never send response.cancel — it can make the model speak
-      // “cancelled / no reply” glitches. Flush local audio only.
-      flushPlayback();
       const ws = wsRef.current;
       if (ws && ws.readyState === WebSocket.OPEN) {
-        setStatus("speaking");
-        ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
-        // Drop late PCM from the prior turn until the new response starts.
-        dropRemoteAudioRef.current = true;
+        // No flush / no response.cancel — those chopped and distorted audio.
+        // Queue the intro as a non-interruptible line after the current turn.
         ws.send(
           JSON.stringify({
             type: "conversation.item.create",
@@ -643,7 +638,7 @@ export function VoiceAgent({
       }
       speakBrowser(line);
     },
-    [appendLine, flushPlayback, speakBrowser],
+    [appendLine, speakBrowser],
   );
 
   const deliverNameIntroRef = useRef(deliverNameIntro);
@@ -924,7 +919,7 @@ export function VoiceAgent({
           case "response.output_audio.delta":
           case "response.audio.delta":
             if (event.delta) {
-              dropRemoteAudioRef.current = false;
+              if (dropRemoteAudioRef.current) break;
               if (listeningReturnRef.current) {
                 clearTimeout(listeningReturnRef.current);
                 listeningReturnRef.current = null;
