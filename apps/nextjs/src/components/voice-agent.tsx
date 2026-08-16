@@ -478,6 +478,40 @@ export function VoiceAgent({
     window.speechSynthesis.speak(utter);
   }, []);
 
+  const deliverNameIntro = useCallback(
+    (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed) return;
+      const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
+      appendLine("assistant", line);
+      const ws = wsRef.current;
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        try {
+          ws.send(JSON.stringify({ type: "response.cancel" }));
+        } catch {
+          /* ignore */
+        }
+        ws.send(
+          JSON.stringify({
+            type: "conversation.item.create",
+            item: {
+              type: "force_message",
+              role: "assistant",
+              interruptible: true,
+              content: [{ type: "output_text", text: line }],
+            },
+          }),
+        );
+        return;
+      }
+      speakBrowser(line);
+    },
+    [appendLine, speakBrowser],
+  );
+
+  const deliverNameIntroRef = useRef(deliverNameIntro);
+  deliverNameIntroRef.current = deliverNameIntro;
+
   const openingLine = useCallback(() => {
     if (guideMode) return "Who am I speaking with?";
     return "ADAPT voice online. What should we move next in the loop?";
