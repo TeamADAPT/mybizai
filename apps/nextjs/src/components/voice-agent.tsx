@@ -188,6 +188,10 @@ export function VoiceAgent({
   const transcriptionDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
+  const nameIntroSentRef = useRef(false);
+  const ignoreUserUntilRef = useRef(0);
+  const activeSourcesRef = useRef<AudioBufferSourceNode[]>([]);
+  const statusRef = useRef(status);
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -201,6 +205,19 @@ export function VoiceAgent({
   useEffect(() => {
     onJourneyRef.current = onJourney;
   }, [onJourney]);
+
+  useEffect(() => {
+    statusRef.current = status;
+    if (status === "speaking" || status === "connecting") {
+      // Block user-transcript handling while Nova is producing audio.
+      ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
+    } else if (status === "listening") {
+      // Short tail so speaker echo does not get treated as the next turn.
+      ignoreUserUntilRef.current = Date.now() + 700;
+    } else {
+      ignoreUserUntilRef.current = 0;
+    }
+  }, [status]);
 
   useEffect(() => {
     void fetch("/api/providers")
@@ -245,9 +262,49 @@ export function VoiceAgent({
     [],
   );
 
+  const shouldIgnoreUserTranscript = useCallback((transcript: string) => {
+    const normalized = transcript.trim().toLowerCase();
+    if (!normalized) return true;
+    if (Date.now() < ignoreUserUntilRef.current) return true;
+    if (statusRef.current === "speaking" || statusRef.current === "connecting") {
+      return true;
+    }
+    // Drop cancel/echo/telephony-glitch fragments that loop the agent.
+    if (
+      /(?:cancel+ed|no reply|busy signal|hang ?up|\bphone\b.*\breply\b|\breply\b.*\bphone\b)/i.test(
+        normalized,
+      )
+    ) {
+      return true;
+    }
+    return false;
+  }, []);
+
+  const flushPlayback = useCallback(() => {
+    for (const source of activeSourcesRef.current) {
+      try {
+        source.stop();
+      } catch {
+        /* already stopped */
+      }
+    }
+    activeSourcesRef.current = [];
+    const ctx = audioContextRef.current;
+    if (ctx) {
+      playTimeRef.current = ctx.currentTime + 0.03;
+    } else {
+      playTimeRef.current = 0;
+    }
+    if (listeningReturnRef.current) {
+      clearTimeout(listeningReturnRef.current);
+      listeningReturnRef.current = null;
+    }
+  }, []);
+
   const applyJourneyCapture = useCallback(
     (transcript: string) => {
       if (!guideMode) return;
+      if (shouldIgnoreUserTranscript(transcript)) return;
       const normalized = transcript.trim().toLowerCase();
       if (!normalized) return;
       // Same utterance can arrive twice (transcript + item.created) after
@@ -356,6 +413,7 @@ export function VoiceAgent({
       pushResearchToPlan,
       saveBrandKit,
       setPlanVision,
+      shouldIgnoreUserTranscript,
     ],
   );
 
@@ -404,11 +462,12 @@ export function VoiceAgent({
 
   const maybeHandoff = useCallback(
     (transcript: string) => {
+      if (shouldIgnoreUserTranscript(transcript)) return;
       applyJourneyCapture(transcript);
       if (!looksLikeCodingRequest(transcript)) return;
       void handoffCoding(transcript);
     },
-    [applyJourneyCapture, handoffCoding],
+    [applyJourneyCapture, handoffCoding, shouldIgnoreUserTranscript],
   );
 
   const stop = useCallback(() => {
@@ -486,6 +545,12 @@ export function VoiceAgent({
       playTimeRef.current = ctx.currentTime + 0.04;
     }
     const startAt = playTimeRef.current;
+    source.onended = () => {
+      activeSourcesRef.current = activeSourcesRef.current.filter(
+        (node) => node !== source,
+      );
+    };
+    activeSourcesRef.current.push(source);
     source.start(startAt);
     playTimeRef.current = startAt + buffer.duration;
   }, []);
@@ -503,16 +568,17 @@ export function VoiceAgent({
   const deliverNameIntro = useCallback(
     (name: string) => {
       const trimmed = name.trim();
-      if (!trimmed) return;
+      if (!trimmed || nameIntroSentRef.current) return;
+      nameIntroSentRef.current = true;
       const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
       appendLine("assistant", line);
+      // Never send response.cancel — it can make the model speak
+      // “cancelled / no reply” glitches. Flush local audio only.
+      flushPlayback();
       const ws = wsRef.current;
       if (ws && ws.readyState === WebSocket.OPEN) {
-        try {
-          ws.send(JSON.stringify({ type: "response.cancel" }));
-        } catch {
-          /* ignore */
-        }
+        setStatus("speaking");
+        ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
         ws.send(
           JSON.stringify({
             type: "conversation.item.create",
@@ -528,7 +594,7 @@ export function VoiceAgent({
       }
       speakBrowser(line);
     },
-    [appendLine, speakBrowser],
+    [appendLine, flushPlayback, speakBrowser],
   );
 
   const deliverNameIntroRef = useRef(deliverNameIntro);
@@ -820,24 +886,29 @@ export function VoiceAgent({
               transcriptionDebounceRef.current = null;
             }
             if (event.transcript) {
+              if (shouldIgnoreUserTranscript(event.transcript)) break;
               appendLine("user", event.transcript);
               maybeHandoff(event.transcript);
             }
             break;
           case "conversation.item.input_audio_transcription.updated":
             if (!event.transcript) break;
+            if (shouldIgnoreUserTranscript(event.transcript)) break;
             if (transcriptionDebounceRef.current) {
               clearTimeout(transcriptionDebounceRef.current);
             }
             transcriptionDebounceRef.current = setTimeout(() => {
               transcriptionDebounceRef.current = null;
               const text = event.transcript?.trim();
-              if (!text) return;
+              if (!text || shouldIgnoreUserTranscript(text)) return;
               appendLine("user", text);
               maybeHandoff(text);
             }, 750);
             break;
           case "conversation.item.created":
+            // Guide mode uses grok-transcribe events only — item.created
+            // duplicates caused double handoffs / reply loops.
+            if (guideMode) break;
             if (event.item?.role === "user") {
               const text = event.item.content
                 ?.map((part) => part.text ?? part.transcript ?? "")
@@ -847,6 +918,12 @@ export function VoiceAgent({
                 maybeHandoff(text);
               }
             }
+            break;
+          case "response.cancelled":
+          case "response.canceled":
+            flushPlayback();
+            assistantBufferRef.current = "";
+            scheduleListening();
             break;
           case "response.function_call_arguments.done": {
             if (event.name !== "open_studio" || !event.call_id) break;
@@ -920,6 +997,7 @@ export function VoiceAgent({
   }, [
     addIdea,
     appendLine,
+    flushPlayback,
     guideMode,
     instructions,
     maybeHandoff,
@@ -928,6 +1006,7 @@ export function VoiceAgent({
     openingLine,
     playPcmChunk,
     scheduleListening,
+    shouldIgnoreUserTranscript,
     stop,
   ]);
 
@@ -939,13 +1018,16 @@ export function VoiceAgent({
     ) {
       return;
     }
+    nameIntroSentRef.current = false;
+    ignoreUserUntilRef.current = 0;
+    flushPlayback();
     stop();
     if (backend === "browser") {
       await startBrowser();
       return;
     }
     await startXai();
-  }, [backend, startBrowser, startXai, stop]);
+  }, [backend, flushPlayback, startBrowser, startXai, stop]);
 
   const sendChatText = useCallback(
     async (raw: string) => {
