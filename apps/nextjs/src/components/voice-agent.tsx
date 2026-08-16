@@ -222,6 +222,8 @@ export function VoiceAgent({
   const statusRef = useRef(status);
   const speakLevelRef = useRef(0);
   const dropRemoteAudioRef = useRef(false);
+  const pendingNameIntroRef = useRef<string | null>(null);
+  const lastAssistantSpokenRef = useRef("");
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -612,17 +614,20 @@ export function VoiceAgent({
     window.speechSynthesis.speak(utter);
   }, []);
 
-  const deliverNameIntro = useCallback(
-    (name: string) => {
-      const trimmed = name.trim();
-      if (!trimmed || nameIntroSentRef.current) return;
-      nameIntroSentRef.current = true;
-      const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
+  const speakForcedIntroIfNeeded = useCallback(
+    (spoken: string) => {
+      const name = pendingNameIntroRef.current;
+      if (!name) return;
+      pendingNameIntroRef.current = null;
+      if (/my name is nova|i(?:'?m| am) nova/i.test(spoken)) {
+        return;
+      }
+      const line = `Hi ${name}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
       appendLine("assistant", line);
       const ws = wsRef.current;
       if (ws && ws.readyState === WebSocket.OPEN) {
-        // No flush / no response.cancel — those chopped and distorted audio.
-        // Queue the intro as a non-interruptible line after the current turn.
+        flushPlayback();
+        dropRemoteAudioRef.current = true;
         ws.send(
           JSON.stringify({
             type: "conversation.item.create",
@@ -638,7 +643,22 @@ export function VoiceAgent({
       }
       speakBrowser(line);
     },
-    [appendLine, speakBrowser],
+    [appendLine, flushPlayback, speakBrowser],
+  );
+
+  const deliverNameIntro = useCallback(
+    (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed || nameIntroSentRef.current) return;
+      nameIntroSentRef.current = true;
+      pendingNameIntroRef.current = trimmed;
+      // If the model is already talking, wait for response.done so we don't
+      // stack a second voice. If she's idle, fill the intro now.
+      if (statusRef.current !== "speaking") {
+        speakForcedIntroIfNeeded("");
+      }
+    },
+    [speakForcedIntroIfNeeded],
   );
 
   const deliverNameIntroRef = useRef(deliverNameIntro);
@@ -914,7 +934,10 @@ export function VoiceAgent({
 
         switch (event.type) {
           case "response.created":
+            // Never layer two responses — stop the previous voice first.
+            flushPlayback();
             dropRemoteAudioRef.current = false;
+            assistantBufferRef.current = "";
             break;
           case "response.output_audio.delta":
           case "response.audio.delta":
@@ -937,16 +960,19 @@ export function VoiceAgent({
           case "response.output_audio_transcript.done":
           case "response.audio_transcript.done":
             if (assistantBufferRef.current) {
+              lastAssistantSpokenRef.current = assistantBufferRef.current;
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
             }
             break;
           case "response.done":
             if (assistantBufferRef.current) {
+              lastAssistantSpokenRef.current = assistantBufferRef.current;
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
             }
             scheduleListening();
+            speakForcedIntroIfNeeded(lastAssistantSpokenRef.current);
             break;
           case "conversation.item.input_audio_transcription.completed":
             if (transcriptionDebounceRef.current) {
@@ -1076,6 +1102,7 @@ export function VoiceAgent({
     playPcmChunk,
     scheduleListening,
     shouldIgnoreUserTranscript,
+    speakForcedIntroIfNeeded,
     stop,
   ]);
 
@@ -1088,6 +1115,7 @@ export function VoiceAgent({
       return;
     }
     nameIntroSentRef.current = false;
+    pendingNameIntroRef.current = null;
     ignoreUserUntilRef.current = 0;
     flushPlayback();
     stop();
