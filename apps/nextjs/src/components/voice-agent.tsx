@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 
 import { Button } from "@saasfly/ui/button";
 
@@ -271,6 +271,7 @@ export function VoiceAgent({
         onGuestName?.(hint.value);
         onPresencePhase?.("intent");
         presencePhaseRef.current = "intent";
+        deliverNameIntroRef.current(hint.value);
         return;
       }
 
@@ -429,6 +430,10 @@ export function VoiceAgent({
       wsRef.current.close();
       wsRef.current = null;
     }
+    if (listeningReturnRef.current) {
+      clearTimeout(listeningReturnRef.current);
+      listeningReturnRef.current = null;
+    }
     playTimeRef.current = 0;
     onSessionLive?.(false);
     setStatus((prev) => (prev === "unavailable" ? prev : "idle"));
@@ -439,6 +444,23 @@ export function VoiceAgent({
 
   // Tear down only on true unmount — never when callbacks/presentation change.
   useEffect(() => () => stopRef.current(), []);
+
+  const listeningReturnRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleListening = useCallback(() => {
+    if (listeningReturnRef.current) {
+      clearTimeout(listeningReturnRef.current);
+    }
+    const ctx = audioContextRef.current;
+    const remainingMs = ctx
+      ? Math.max(0, (playTimeRef.current - ctx.currentTime) * 1000) + 80
+      : 80;
+    listeningReturnRef.current = setTimeout(() => {
+      listeningReturnRef.current = null;
+      setStatus((prev) => (prev === "speaking" ? "listening" : prev));
+      setSpeakLevel(0);
+    }, remainingMs);
+  }, []);
 
   const playPcmChunk = useCallback((base64: string) => {
     const ctx = audioContextRef.current;
@@ -764,6 +786,10 @@ export function VoiceAgent({
           case "response.output_audio.delta":
           case "response.audio.delta":
             if (event.delta) {
+              if (listeningReturnRef.current) {
+                clearTimeout(listeningReturnRef.current);
+                listeningReturnRef.current = null;
+              }
               setStatus("speaking");
               playPcmChunk(event.delta);
             }
@@ -776,12 +802,17 @@ export function VoiceAgent({
             break;
           case "response.output_audio_transcript.done":
           case "response.audio_transcript.done":
+            if (assistantBufferRef.current) {
+              appendLine("assistant", assistantBufferRef.current);
+              assistantBufferRef.current = "";
+            }
+            break;
           case "response.done":
             if (assistantBufferRef.current) {
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
             }
-            setStatus("listening");
+            scheduleListening();
             break;
           case "conversation.item.input_audio_transcription.completed":
             if (transcriptionDebounceRef.current) {
@@ -896,6 +927,7 @@ export function VoiceAgent({
     onSessionLive,
     openingLine,
     playPcmChunk,
+    scheduleListening,
     stop,
   ]);
 
@@ -1095,39 +1127,65 @@ export function VoiceAgent({
       </div>
     ) : null;
 
+  const speakFrame =
+    guideMode && (presentation === "presence" || presentation === "dock") ? (
+      <div
+        className={
+          status === "speaking"
+            ? "voice-speak-frame voice-speak-frame--on pointer-events-none fixed inset-0 z-[55]"
+            : "voice-speak-frame pointer-events-none fixed inset-0 z-[55]"
+        }
+        style={
+          status === "speaking"
+            ? ({
+                ["--speak-level" as string]: String(0.35 + speakLevel * 0.65),
+              } as CSSProperties)
+            : undefined
+        }
+        aria-hidden
+      />
+    ) : null;
+
   if (presentation === "hidden") {
     return null;
   }
 
   if (presentation === "dock") {
-    // Studio chrome owns the Nova button + border pulse; keep socket only.
-    return chatPanel;
+    return (
+      <>
+        {speakFrame}
+        {chatPanel}
+      </>
+    );
   }
 
   if (presentation === "presence") {
     return (
-      <div className="pointer-events-none fixed inset-0 z-20 flex flex-col items-center justify-center px-4">
-        <div className="pointer-events-auto flex w-full max-w-xl flex-col items-center">
-          {renderOrb("lg")}
+      <>
+        {speakFrame}
+        <div className="pointer-events-none fixed inset-0 z-20 flex flex-col items-center justify-center px-4">
+          <div className="pointer-events-auto flex w-full max-w-xl flex-col items-center">
+            {renderOrb("lg")}
 
-          {error ? (
-            <p className="mt-6 max-w-sm text-center text-sm text-[#ffb347]">
-              {error}
-            </p>
-          ) : null}
+            {error ? (
+              <p className="mt-6 max-w-sm text-center text-sm text-[#ffb347]">
+                {error}
+              </p>
+            ) : null}
 
-          {!xaiReady ? (
-            <button
-              type="button"
-              className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
-              onClick={() => setBackend("browser")}
-            >
-              Use browser voice
-            </button>
-          ) : null}
+            {!xaiReady ? (
+              <button
+                type="button"
+                className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-white/40 underline-offset-4 hover:text-white/70 hover:underline"
+                onClick={() => setBackend("browser")}
+              >
+                Use browser voice
+              </button>
+            ) : null}
+          </div>
+          {chatPanel}
         </div>
-        {chatPanel}
-      </div>
+      </>
     );
   }
 

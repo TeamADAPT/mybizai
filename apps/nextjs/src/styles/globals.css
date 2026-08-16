@@ -349,6 +349,33 @@
   animation: voice-dock-speak 0.9s ease-in-out infinite;
 }
 
+.voice-speak-frame {
+  box-shadow: inset 0 0 0 2px rgba(255, 140, 0, 0.14);
+  opacity: 0.25;
+  transition:
+    opacity 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.voice-speak-frame--on {
+  opacity: 1;
+  animation: voice-speak-frame-pulse 0.85s ease-in-out infinite;
+}
+
+@keyframes voice-speak-frame-pulse {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 5px rgba(255, 140, 0, 0.55),
+      inset 0 0 42px 10px rgba(255, 140, 0, 0.14);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 10px rgba(255, 179, 71, 0.9),
+      inset 0 0 72px 18px rgba(255, 140, 0, 0.28);
+  }
+}
+
 .voice-mode-smoke {
   box-shadow: inset 0 0 0 3px rgba(255, 140, 0, 0.22);
   background:
