@@ -224,6 +224,7 @@ export function VoiceAgent({
   const dropRemoteAudioRef = useRef(false);
   const pendingNameIntroRef = useRef<string | null>(null);
   const lastAssistantSpokenRef = useRef("");
+  const greetingLockRef = useRef(false);
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -857,24 +858,6 @@ export function VoiceAgent({
           }),
         );
 
-        ws.send(
-          JSON.stringify({
-            type: "conversation.item.create",
-            item: {
-              type: "force_message",
-              role: "assistant",
-              // Don't let echo interrupt the greeting mid-word.
-              interruptible: false,
-              content: [
-                {
-                  type: "output_text",
-                  text: openingLine(),
-                },
-              ],
-            },
-          }),
-        );
-
         const source = audioContext.createMediaStreamSource(stream);
         const processor = audioContext.createScriptProcessor(4096, 1, 1);
         const silent = audioContext.createGain();
@@ -882,8 +865,10 @@ export function VoiceAgent({
         processorRef.current = processor;
         processor.onaudioprocess = (event) => {
           if (ws.readyState !== WebSocket.OPEN) return;
-          // Mute uplink while Nova talks — speaker echo cancels her mid-word.
+          // Mute uplink while Nova talks / during opening greeting —
+          // speaker echo otherwise starts a second overlapping reply.
           if (
+            greetingLockRef.current ||
             statusRef.current === "speaking" ||
             statusRef.current === "connecting"
           ) {
@@ -906,7 +891,28 @@ export function VoiceAgent({
         source.connect(processor);
         processor.connect(silent);
         silent.connect(audioContext.destination);
-        setStatus("listening");
+
+        // Lock mic before greeting so VAD cannot start a second voice.
+        greetingLockRef.current = true;
+        setStatus("speaking");
+        ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
+        dropRemoteAudioRef.current = true;
+        ws.send(
+          JSON.stringify({
+            type: "conversation.item.create",
+            item: {
+              type: "force_message",
+              role: "assistant",
+              interruptible: false,
+              content: [
+                {
+                  type: "output_text",
+                  text: openingLine(),
+                },
+              ],
+            },
+          }),
+        );
         if (!guideMode) {
           appendLine("system", "xAI grok-voice · server VAD listening");
         }
@@ -935,7 +941,10 @@ export function VoiceAgent({
         switch (event.type) {
           case "response.created":
             // Never layer two responses — stop the previous voice first.
-            flushPlayback();
+            // Keep greeting lock until the opening line finishes.
+            if (!greetingLockRef.current) {
+              flushPlayback();
+            }
             dropRemoteAudioRef.current = false;
             assistantBufferRef.current = "";
             break;
@@ -970,6 +979,9 @@ export function VoiceAgent({
               lastAssistantSpokenRef.current = assistantBufferRef.current;
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
+            }
+            if (greetingLockRef.current) {
+              greetingLockRef.current = false;
             }
             scheduleListening();
             speakForcedIntroIfNeeded(lastAssistantSpokenRef.current);
@@ -1116,6 +1128,7 @@ export function VoiceAgent({
     }
     nameIntroSentRef.current = false;
     pendingNameIntroRef.current = null;
+    greetingLockRef.current = false;
     ignoreUserUntilRef.current = 0;
     flushPlayback();
     stop();
@@ -1207,11 +1220,11 @@ export function VoiceAgent({
           type="button"
           onClick={() => void start()}
           disabled={backend === "xai" && !xaiReady}
-          className="voice-orb relative flex min-h-[3.5rem] items-center justify-center rounded-full border border-[#ff8c00]/55 bg-[#ff8c00] px-8 py-4 shadow-lg shadow-[#ff8c00]/25 transition hover:border-[#ffb347] hover:bg-[#ff9a26] sm:min-h-[4rem] sm:px-10 sm:py-5"
-          aria-label="Begin with Nova"
+          className="voice-orb relative flex min-h-[3.5rem] items-center justify-center rounded-full border-2 border-[#ff8c00] bg-transparent px-8 py-4 backdrop-blur-sm transition hover:border-[#ffb347] hover:bg-[#ff8c00]/10 sm:min-h-[4rem] sm:px-10 sm:py-5"
+          aria-label="Talk with Nova"
         >
-          <span className="relative z-10 font-display text-xl tracking-tight text-[#070828] sm:text-2xl">
-            Begin with Nova
+          <span className="relative z-10 font-display text-xl tracking-tight text-white sm:text-2xl">
+            Talk with Nova
           </span>
         </button>
       );
@@ -1225,7 +1238,7 @@ export function VoiceAgent({
           else void start();
         }}
         disabled={backend === "xai" && !xaiReady && !live}
-        aria-label={live ? "End conversation" : "Begin with Nova"}
+        aria-label={live ? "End conversation" : "Talk with Nova"}
         style={
           {
             transform: `scale(${orbScale})`,
