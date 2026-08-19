@@ -222,11 +222,12 @@ export function VoiceAgent({
   const statusRef = useRef(status);
   const speakLevelRef = useRef(0);
   const dropRemoteAudioRef = useRef(false);
-  /** Blocks mic + listening while a scripted force_message is playing. */
+  /** Blocks mic while the opening force_message plays. */
   const scriptLockRef = useRef(false);
   /** True while an xAI response is in flight. */
   const responseActiveRef = useRef(false);
-  /** Only play PCM for the latest response — drop barge-in leftovers. */
+  /** Drop audio from echo barge-in responses while playback is still queued. */
+  const ignoredResponseIdRef = useRef<string | null>(null);
   const activeResponseIdRef = useRef<string | null>(null);
   const [speakLevel, setSpeakLevel] = useState(0);
 
@@ -301,21 +302,16 @@ export function VoiceAgent({
   const shouldIgnoreUserTranscript = useCallback((transcript: string) => {
     const normalized = transcript.trim().toLowerCase();
     if (!normalized) return true;
+    if (Date.now() < ignoreUserUntilRef.current) return true;
+    if (statusRef.current === "speaking" || statusRef.current === "connecting") {
+      return true;
+    }
     // Drop cancel/echo/telephony-glitch fragments that loop the agent.
     if (
       /(?:cancel+ed|no reply|busy signal|hang ?up|\bphone\b.*\breply\b|\breply\b.*\bphone\b)/i.test(
         normalized,
       )
     ) {
-      return true;
-    }
-    // Name turn must always reach journey capture so we can replace any
-    // in-flight model reply with a single scripted intro.
-    if (presencePhaseRef.current === "name") {
-      return false;
-    }
-    if (Date.now() < ignoreUserUntilRef.current) return true;
-    if (statusRef.current === "speaking" || statusRef.current === "connecting") {
       return true;
     }
     return false;
@@ -369,7 +365,7 @@ export function VoiceAgent({
         onGuestName?.(hint.value);
         onPresencePhase?.("intent");
         presencePhaseRef.current = "intent";
-        speakNameIntroRef.current(hint.value);
+        nameIntroSentRef.current = true;
         return;
       }
 
@@ -622,57 +618,6 @@ export function VoiceAgent({
     utter.onend = () => setStatus("listening");
     window.speechSynthesis.speak(utter);
   }, []);
-
-  /**
-   * Scripted name intro via force_message (interruptible: false).
-   * The model is instructed to stay silent after the name — we cancel any
-   * in-flight model reply so only this one TTS line plays.
-   */
-  const speakNameIntro = useCallback(
-    (name: string) => {
-      const trimmed = name.trim();
-      if (!trimmed || nameIntroSentRef.current) return;
-      nameIntroSentRef.current = true;
-      const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
-      appendLine("assistant", line);
-      const ws = wsRef.current;
-      if (!ws || ws.readyState !== WebSocket.OPEN) {
-        speakBrowser(line);
-        return;
-      }
-      scriptLockRef.current = true;
-      responseActiveRef.current = true;
-      setStatus("speaking");
-      ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
-      flushPlayback();
-      dropRemoteAudioRef.current = true;
-      try {
-        ws.send(JSON.stringify({ type: "response.cancel" }));
-      } catch {
-        /* ignore */
-      }
-      try {
-        ws.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
-      } catch {
-        /* ignore */
-      }
-      ws.send(
-        JSON.stringify({
-          type: "conversation.item.create",
-          item: {
-            type: "force_message",
-            role: "assistant",
-            interruptible: false,
-            content: [{ type: "output_text", text: line }],
-          },
-        }),
-      );
-    },
-    [appendLine, flushPlayback, speakBrowser],
-  );
-
-  const speakNameIntroRef = useRef(speakNameIntro);
-  speakNameIntroRef.current = speakNameIntro;
 
   const openingLine = useCallback(() => {
     if (guideMode) return "Who am I speaking with?";
@@ -961,26 +906,29 @@ export function VoiceAgent({
 
         switch (event.type) {
           case "response.created": {
+            // Prefer the nested response id — top-level `id` can be the event id
+            // and would drop every audio delta (silence).
             const responseId =
-              event.response?.id ?? event.id ?? event.response_id ?? null;
-            // A newer response replaces an older one — never mix PCM streams.
+              event.response?.id ?? event.response_id ?? null;
+            const ctx = audioContextRef.current;
+            const remaining =
+              ctx != null ? playTimeRef.current - ctx.currentTime : 0;
+            // Echo barge-in while Nova is still playing — ignore the new stream.
             if (
-              activeResponseIdRef.current &&
-              responseId &&
-              responseId !== activeResponseIdRef.current
+              responseActiveRef.current &&
+              remaining > 0.3 &&
+              !scriptLockRef.current
             ) {
-              flushPlayback();
+              if (responseId) ignoredResponseIdRef.current = responseId;
+              break;
             }
-            activeResponseIdRef.current = responseId;
+            if (responseId) {
+              activeResponseIdRef.current = responseId;
+            }
+            ignoredResponseIdRef.current = null;
             responseActiveRef.current = true;
-            // Mute immediately — don't wait for the first audio delta.
             setStatus("speaking");
             ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
-            try {
-              ws.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
-            } catch {
-              /* ignore */
-            }
             if (!scriptLockRef.current) {
               flushPlayback();
             }
@@ -994,8 +942,8 @@ export function VoiceAgent({
               if (dropRemoteAudioRef.current) break;
               if (
                 event.response_id &&
-                activeResponseIdRef.current &&
-                event.response_id !== activeResponseIdRef.current
+                ignoredResponseIdRef.current &&
+                event.response_id === ignoredResponseIdRef.current
               ) {
                 break;
               }
@@ -1009,12 +957,26 @@ export function VoiceAgent({
             break;
           case "response.output_audio_transcript.delta":
           case "response.audio_transcript.delta":
+            if (
+              event.response_id &&
+              ignoredResponseIdRef.current &&
+              event.response_id === ignoredResponseIdRef.current
+            ) {
+              break;
+            }
             if (event.delta) {
               assistantBufferRef.current += event.delta;
             }
             break;
           case "response.output_audio_transcript.done":
           case "response.audio_transcript.done":
+            if (
+              event.response_id &&
+              ignoredResponseIdRef.current &&
+              event.response_id === ignoredResponseIdRef.current
+            ) {
+              break;
+            }
             if (assistantBufferRef.current) {
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
@@ -1023,9 +985,10 @@ export function VoiceAgent({
           case "response.done":
             if (
               event.response_id &&
-              activeResponseIdRef.current &&
-              event.response_id !== activeResponseIdRef.current
+              ignoredResponseIdRef.current &&
+              event.response_id === ignoredResponseIdRef.current
             ) {
+              ignoredResponseIdRef.current = null;
               break;
             }
             responseActiveRef.current = false;
@@ -1080,8 +1043,14 @@ export function VoiceAgent({
             break;
           case "response.cancelled":
           case "response.canceled":
-            // If we're replacing a model turn with a scripted intro, keep the
-            // mic locked and do not resume listening yet.
+            if (
+              event.response_id &&
+              ignoredResponseIdRef.current &&
+              event.response_id === ignoredResponseIdRef.current
+            ) {
+              ignoredResponseIdRef.current = null;
+              break;
+            }
             if (scriptLockRef.current) {
               assistantBufferRef.current = "";
               break;
@@ -1188,6 +1157,7 @@ export function VoiceAgent({
     scriptLockRef.current = false;
     responseActiveRef.current = false;
     activeResponseIdRef.current = null;
+    ignoredResponseIdRef.current = null;
     ignoreUserUntilRef.current = 0;
     flushPlayback();
     stop();
@@ -1394,42 +1364,17 @@ export function VoiceAgent({
       </div>
     ) : null;
 
-  const speakFrame =
-    guideMode && (presentation === "presence" || presentation === "dock") ? (
-      <div
-        className={
-          status === "speaking"
-            ? "voice-speak-frame voice-speak-frame--on pointer-events-none fixed inset-0 z-[55]"
-            : "voice-speak-frame pointer-events-none fixed inset-0 z-[55]"
-        }
-        style={
-          status === "speaking"
-            ? ({
-                ["--speak-level" as string]: String(0.35 + speakLevel * 0.65),
-              } as CSSProperties)
-            : undefined
-        }
-        aria-hidden
-      />
-    ) : null;
-
   if (presentation === "hidden") {
     return null;
   }
 
   if (presentation === "dock") {
-    return (
-      <>
-        {speakFrame}
-        {chatPanel}
-      </>
-    );
+    return <>{chatPanel}</>;
   }
 
   if (presentation === "presence") {
     return (
       <>
-        {speakFrame}
         <div className="pointer-events-none fixed inset-0 z-20 flex flex-col items-center justify-center px-4">
           <div className="pointer-events-auto flex w-full max-w-xl flex-col items-center">
             {renderOrb("lg")}

@@ -26,8 +26,7 @@ const emptyJourney: JourneySnapshot = {
 };
 
 /**
- * Mid-right Nova button + full-page border pulse while she talks.
- * Socket lives in VoiceRuntimeProvider — no second agent here.
+ * Mid-right Nova button. Socket lives in VoiceRuntimeProvider — no second agent.
  */
 export function VoiceModeDock({ lang }: { lang: string }) {
   const pathname = usePathname();
@@ -57,15 +56,6 @@ export function VoiceModeDock({ lang }: { lang: string }) {
 
   return (
     <>
-      <div
-        className={
-          speaking
-            ? "voice-mode-smoke voice-mode-smoke--speak pointer-events-none fixed inset-0 z-[60]"
-            : "voice-mode-smoke pointer-events-none fixed inset-0 z-[60]"
-        }
-        aria-hidden
-      />
-
       <div className="fixed right-4 top-[48%] z-[70] flex -translate-y-1/2 flex-col items-end gap-2 sm:right-6">
         <button
           type="button"
