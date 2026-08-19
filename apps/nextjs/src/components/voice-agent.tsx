@@ -222,9 +222,12 @@ export function VoiceAgent({
   const statusRef = useRef(status);
   const speakLevelRef = useRef(0);
   const dropRemoteAudioRef = useRef(false);
-  const greetingLockRef = useRef(false);
-  /** True while an xAI response is in flight — never stack another force_message. */
+  /** Blocks mic + listening while a scripted force_message is playing. */
+  const scriptLockRef = useRef(false);
+  /** True while an xAI response is in flight. */
   const responseActiveRef = useRef(false);
+  /** Only play PCM for the latest response — drop barge-in leftovers. */
+  const activeResponseIdRef = useRef<string | null>(null);
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -298,16 +301,21 @@ export function VoiceAgent({
   const shouldIgnoreUserTranscript = useCallback((transcript: string) => {
     const normalized = transcript.trim().toLowerCase();
     if (!normalized) return true;
-    if (Date.now() < ignoreUserUntilRef.current) return true;
-    if (statusRef.current === "speaking" || statusRef.current === "connecting") {
-      return true;
-    }
     // Drop cancel/echo/telephony-glitch fragments that loop the agent.
     if (
       /(?:cancel+ed|no reply|busy signal|hang ?up|\bphone\b.*\breply\b|\breply\b.*\bphone\b)/i.test(
         normalized,
       )
     ) {
+      return true;
+    }
+    // Name turn must always reach journey capture so we can replace any
+    // in-flight model reply with a single scripted intro.
+    if (presencePhaseRef.current === "name") {
+      return false;
+    }
+    if (Date.now() < ignoreUserUntilRef.current) return true;
+    if (statusRef.current === "speaking" || statusRef.current === "connecting") {
       return true;
     }
     return false;
@@ -361,9 +369,7 @@ export function VoiceAgent({
         onGuestName?.(hint.value);
         onPresencePhase?.("intent");
         presencePhaseRef.current = "intent";
-        // Name only advances the phase. Nova introduces herself in her own
-        // reply (IMMERSIVE_INSTRUCTIONS) — do not force a second line.
-        nameIntroSentRef.current = true;
+        speakNameIntroRef.current(hint.value);
         return;
       }
 
@@ -617,6 +623,57 @@ export function VoiceAgent({
     window.speechSynthesis.speak(utter);
   }, []);
 
+  /**
+   * Scripted name intro via force_message (interruptible: false).
+   * The model is instructed to stay silent after the name — we cancel any
+   * in-flight model reply so only this one TTS line plays.
+   */
+  const speakNameIntro = useCallback(
+    (name: string) => {
+      const trimmed = name.trim();
+      if (!trimmed || nameIntroSentRef.current) return;
+      nameIntroSentRef.current = true;
+      const line = `Hi ${trimmed}, my name is Nova — I’m here to be your business guide. It’s nice to meet you. Shall we get started? Do you have any current ideas you want to go through, or shall we explore?`;
+      appendLine("assistant", line);
+      const ws = wsRef.current;
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        speakBrowser(line);
+        return;
+      }
+      scriptLockRef.current = true;
+      responseActiveRef.current = true;
+      setStatus("speaking");
+      ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
+      flushPlayback();
+      dropRemoteAudioRef.current = true;
+      try {
+        ws.send(JSON.stringify({ type: "response.cancel" }));
+      } catch {
+        /* ignore */
+      }
+      try {
+        ws.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
+      } catch {
+        /* ignore */
+      }
+      ws.send(
+        JSON.stringify({
+          type: "conversation.item.create",
+          item: {
+            type: "force_message",
+            role: "assistant",
+            interruptible: false,
+            content: [{ type: "output_text", text: line }],
+          },
+        }),
+      );
+    },
+    [appendLine, flushPlayback, speakBrowser],
+  );
+
+  const speakNameIntroRef = useRef(speakNameIntro);
+  speakNameIntroRef.current = speakNameIntro;
+
   const openingLine = useCallback(() => {
     if (guideMode) return "Who am I speaking with?";
     return "ADAPT voice online. What should we move next in the loop?";
@@ -782,7 +839,12 @@ export function VoiceAgent({
             session: {
               voice: session.voice || "ara",
               instructions,
-              turn_detection: { type: "server_vad" },
+              turn_detection: {
+                type: "server_vad",
+                // Harder to barge in from speaker echo while Nova talks.
+                threshold: 0.9,
+                silence_duration_ms: 700,
+              },
               tools: guideMode ? [OPEN_STUDIO_TOOL] : [],
               audio: {
                 input: {
@@ -817,10 +879,11 @@ export function VoiceAgent({
         processorRef.current = processor;
         processor.onaudioprocess = (event) => {
           if (ws.readyState !== WebSocket.OPEN) return;
-          // Mute uplink while Nova talks / during opening greeting —
+          // Mute uplink while Nova talks / scripted lines play —
           // speaker echo otherwise starts a second overlapping reply.
           if (
-            greetingLockRef.current ||
+            scriptLockRef.current ||
+            responseActiveRef.current ||
             statusRef.current === "speaking" ||
             statusRef.current === "connecting"
           ) {
@@ -846,7 +909,7 @@ export function VoiceAgent({
 
         // Lock mic before greeting so VAD cannot start a second voice.
         // Only one opening force_message — never stack if a response is live.
-        greetingLockRef.current = true;
+        scriptLockRef.current = true;
         setStatus("speaking");
         ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
         if (!responseActiveRef.current) {
@@ -881,7 +944,10 @@ export function VoiceAgent({
           name?: string;
           call_id?: string;
           arguments?: string;
+          response_id?: string;
+          id?: string;
           error?: { message?: string };
+          response?: { id?: string };
           item?: {
             role?: string;
             content?: { type?: string; text?: string; transcript?: string }[];
@@ -894,20 +960,45 @@ export function VoiceAgent({
         }
 
         switch (event.type) {
-          case "response.created":
-            // Never layer two responses — stop the previous voice first.
-            // Keep greeting lock until the opening line finishes.
+          case "response.created": {
+            const responseId =
+              event.response?.id ?? event.id ?? event.response_id ?? null;
+            // A newer response replaces an older one — never mix PCM streams.
+            if (
+              activeResponseIdRef.current &&
+              responseId &&
+              responseId !== activeResponseIdRef.current
+            ) {
+              flushPlayback();
+            }
+            activeResponseIdRef.current = responseId;
             responseActiveRef.current = true;
-            if (!greetingLockRef.current) {
+            // Mute immediately — don't wait for the first audio delta.
+            setStatus("speaking");
+            ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
+            try {
+              ws.send(JSON.stringify({ type: "input_audio_buffer.clear" }));
+            } catch {
+              /* ignore */
+            }
+            if (!scriptLockRef.current) {
               flushPlayback();
             }
             dropRemoteAudioRef.current = false;
             assistantBufferRef.current = "";
             break;
+          }
           case "response.output_audio.delta":
           case "response.audio.delta":
             if (event.delta) {
               if (dropRemoteAudioRef.current) break;
+              if (
+                event.response_id &&
+                activeResponseIdRef.current &&
+                event.response_id !== activeResponseIdRef.current
+              ) {
+                break;
+              }
               if (listeningReturnRef.current) {
                 clearTimeout(listeningReturnRef.current);
                 listeningReturnRef.current = null;
@@ -930,13 +1021,21 @@ export function VoiceAgent({
             }
             break;
           case "response.done":
+            if (
+              event.response_id &&
+              activeResponseIdRef.current &&
+              event.response_id !== activeResponseIdRef.current
+            ) {
+              break;
+            }
             responseActiveRef.current = false;
+            activeResponseIdRef.current = null;
             if (assistantBufferRef.current) {
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
             }
-            if (greetingLockRef.current) {
-              greetingLockRef.current = false;
+            if (scriptLockRef.current) {
+              scriptLockRef.current = false;
             }
             scheduleListening();
             break;
@@ -981,9 +1080,14 @@ export function VoiceAgent({
             break;
           case "response.cancelled":
           case "response.canceled":
-            // Don't hard-stop already-queued PCM — that chops her mid-word
-            // when echo falsely interrupts. Just clear the transcript buffer.
+            // If we're replacing a model turn with a scripted intro, keep the
+            // mic locked and do not resume listening yet.
+            if (scriptLockRef.current) {
+              assistantBufferRef.current = "";
+              break;
+            }
             responseActiveRef.current = false;
+            activeResponseIdRef.current = null;
             assistantBufferRef.current = "";
             scheduleListening();
             break;
@@ -1081,8 +1185,9 @@ export function VoiceAgent({
       return;
     }
     nameIntroSentRef.current = false;
-    greetingLockRef.current = false;
+    scriptLockRef.current = false;
     responseActiveRef.current = false;
+    activeResponseIdRef.current = null;
     ignoreUserUntilRef.current = 0;
     flushPlayback();
     stop();
