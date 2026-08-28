@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "contentlayer2 build && bun with-env next build",
-    "build:railway": "contentlayer2 build && next build",
+    "build": "node init && contentlayer2 build && bun with-env next build",
+    "build:railway": "node init && contentlayer2 build && next build",
     "clean": "git clean -xdf .next .turbo node_modules",
-    "dev": "bun with-env next dev",
+    "dev": "node init && bun with-env next dev",
     "lint": " bun with-env next lint --quiet",
     "format": "prettier --write '**/*.{js,cjs,mjs,ts,tsx,md,json}'  --ignore-path .prettierignore",
-    "start": "bun with-env next start",
-    "start:railway": "next start --hostname 0.0.0.0",
+    "start": "node init && bun with-env next start",
+    "start:railway": "node init && next start --hostname 0.0.0.0",
     "with-env": "dotenv -e ../../.env.local --"
   },
   "dependencies": {
