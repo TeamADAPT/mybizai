@@ -33,7 +33,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
-.env.local
 
 # vercel
 .vercel
@@ -49,4 +48,7 @@ package-lock.json
 
 .idea/
 
-.env
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+config.bat

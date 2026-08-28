@@ -229,6 +229,10 @@ export function VoiceAgent({
   /** Drop audio from echo barge-in responses while playback is still queued. */
   const ignoredResponseIdRef = useRef<string | null>(null);
   const activeResponseIdRef = useRef<string | null>(null);
+  /** Keep the mic closed until queued PCM actually finishes. */
+  const holdUplinkRef = useRef(false);
+  /** Skip identical audio events (output_audio.delta + audio.delta aliases). */
+  const lastAudioDeltaRef = useRef("");
   const [speakLevel, setSpeakLevel] = useState(0);
 
   useEffect(() => {
@@ -547,10 +551,15 @@ export function VoiceAgent({
     }
     const ctx = audioContextRef.current;
     const remainingMs = ctx
-      ? Math.max(0, (playTimeRef.current - ctx.currentTime) * 1000) + 80
-      : 80;
+      ? Math.max(0, (playTimeRef.current - ctx.currentTime) * 1000) + 220
+      : 220;
     listeningReturnRef.current = setTimeout(() => {
       listeningReturnRef.current = null;
+      holdUplinkRef.current = false;
+      scriptLockRef.current = false;
+      responseActiveRef.current = false;
+      activeResponseIdRef.current = null;
+      lastAudioDeltaRef.current = "";
       setStatus((prev) => (prev === "speaking" ? "listening" : prev));
       setSpeakLevel(0);
     }, remainingMs);
@@ -587,12 +596,11 @@ export function VoiceAgent({
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(ctx.destination);
-    // Keep a small lead so chunks stitch; never jump far ahead (distortion/lag).
+    // Stitch chunks in order. Never pull the playhead backward — that
+    // stacks the same sentence on top of itself (lagged double voice).
     const now = ctx.currentTime;
     if (playTimeRef.current < now + 0.02) {
-      playTimeRef.current = now + 0.05;
-    } else if (playTimeRef.current > now + 0.75) {
-      playTimeRef.current = now + 0.05;
+      playTimeRef.current = now + 0.04;
     }
     const startAt = playTimeRef.current;
     source.onended = () => {
@@ -824,11 +832,15 @@ export function VoiceAgent({
         processorRef.current = processor;
         processor.onaudioprocess = (event) => {
           if (ws.readyState !== WebSocket.OPEN) return;
-          // Mute uplink while Nova talks / scripted lines play —
+          // Mute uplink while Nova talks or queued PCM is still playing —
           // speaker echo otherwise starts a second overlapping reply.
+          const remaining =
+            playTimeRef.current - audioContext.currentTime;
           if (
+            holdUplinkRef.current ||
             scriptLockRef.current ||
             responseActiveRef.current ||
+            remaining > 0.08 ||
             statusRef.current === "speaking" ||
             statusRef.current === "connecting"
           ) {
@@ -855,6 +867,7 @@ export function VoiceAgent({
         // Lock mic before greeting so VAD cannot start a second voice.
         // Only one opening force_message — never stack if a response is live.
         scriptLockRef.current = true;
+        holdUplinkRef.current = true;
         setStatus("speaking");
         ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
         if (!responseActiveRef.current) {
@@ -913,25 +926,26 @@ export function VoiceAgent({
             const ctx = audioContextRef.current;
             const remaining =
               ctx != null ? playTimeRef.current - ctx.currentTime : 0;
-            // Echo barge-in while Nova is still playing — ignore the new stream.
+            const alreadyPlaying =
+              Boolean(activeResponseIdRef.current) || remaining > 0.12;
+            // Echo / barge-in while Nova is still playing — drop the new stream.
             if (
-              responseActiveRef.current &&
-              remaining > 0.3 &&
-              !scriptLockRef.current
+              alreadyPlaying &&
+              responseId &&
+              responseId !== activeResponseIdRef.current
             ) {
-              if (responseId) ignoredResponseIdRef.current = responseId;
+              ignoredResponseIdRef.current = responseId;
               break;
             }
             if (responseId) {
               activeResponseIdRef.current = responseId;
             }
             ignoredResponseIdRef.current = null;
+            lastAudioDeltaRef.current = "";
             responseActiveRef.current = true;
+            holdUplinkRef.current = true;
             setStatus("speaking");
             ignoreUserUntilRef.current = Number.POSITIVE_INFINITY;
-            if (!scriptLockRef.current) {
-              flushPlayback();
-            }
             dropRemoteAudioRef.current = false;
             assistantBufferRef.current = "";
             break;
@@ -947,11 +961,14 @@ export function VoiceAgent({
               ) {
                 break;
               }
+              if (event.delta === lastAudioDeltaRef.current) break;
+              lastAudioDeltaRef.current = event.delta;
               if (listeningReturnRef.current) {
                 clearTimeout(listeningReturnRef.current);
                 listeningReturnRef.current = null;
               }
               setStatus("speaking");
+              holdUplinkRef.current = true;
               playPcmChunk(event.delta);
             }
             break;
@@ -991,15 +1008,11 @@ export function VoiceAgent({
               ignoredResponseIdRef.current = null;
               break;
             }
-            responseActiveRef.current = false;
-            activeResponseIdRef.current = null;
             if (assistantBufferRef.current) {
               appendLine("assistant", assistantBufferRef.current);
               assistantBufferRef.current = "";
             }
-            if (scriptLockRef.current) {
-              scriptLockRef.current = false;
-            }
+            // Keep the active response + mic lock until queued PCM finishes.
             scheduleListening();
             break;
           case "conversation.item.input_audio_transcription.completed":
@@ -1051,12 +1064,10 @@ export function VoiceAgent({
               ignoredResponseIdRef.current = null;
               break;
             }
-            if (scriptLockRef.current) {
+            if (scriptLockRef.current || holdUplinkRef.current) {
               assistantBufferRef.current = "";
               break;
             }
-            responseActiveRef.current = false;
-            activeResponseIdRef.current = null;
             assistantBufferRef.current = "";
             scheduleListening();
             break;
@@ -1132,7 +1143,6 @@ export function VoiceAgent({
   }, [
     addIdea,
     appendLine,
-    flushPlayback,
     guideMode,
     instructions,
     maybeHandoff,
@@ -1155,9 +1165,11 @@ export function VoiceAgent({
     }
     nameIntroSentRef.current = false;
     scriptLockRef.current = false;
+    holdUplinkRef.current = false;
     responseActiveRef.current = false;
     activeResponseIdRef.current = null;
     ignoredResponseIdRef.current = null;
+    lastAudioDeltaRef.current = "";
     ignoreUserUntilRef.current = 0;
     flushPlayback();
     stop();
